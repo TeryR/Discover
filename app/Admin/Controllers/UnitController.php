@@ -31,9 +31,9 @@ class UnitController extends AdminController
     {
         return Grid::make(new Unit(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('name');
-            $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
+            $grid->column('name',__('name'));
+            $grid->column('created_at',__('created_at'));
+            $grid->column('updated_at',__('updated_at'))->sortable();
 
             $grid->filter(function (Grid\Filter $filter) {
             });
@@ -51,9 +51,9 @@ class UnitController extends AdminController
     {
         return Show::make($id, new Unit(), function (Show $show) {
             $show->field('id');
-            $show->field('name');
-            $show->field('created_at');
-            $show->field('updated_at');
+            $show->field('name',__('name'));
+            $show->field('created_at',__('created_at'));
+            $show->field('updated_at',__('updated_at'));
         });
     }
 
@@ -66,10 +66,10 @@ class UnitController extends AdminController
     {
         return Form::make(new Unit(), function (Form $form) {
             $form->display('id');
-            $form->text('name');
+            $form->text('name',__('name'));
 
-            $form->display('created_at');
-            $form->display('updated_at');
+            $form->display('created_at',__('created_at'));
+            $form->display('updated_at',__('updated_at'));
         });
     }
 }

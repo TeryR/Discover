@@ -4,7 +4,9 @@
     "name":"名称/이름",
     "unit.name":"单位/단위",
     "unit_id":"单位/단위",
+
     
+    "actions":"操作/작업",
     "created_at":"创建时间/생성 시간",
     "updated_at":"更新时间/업데이트 시간"
 }
