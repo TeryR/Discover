@@ -88,3 +88,9 @@ JS;
 Admin::script($script);
 
 app('view')->prependNamespace('admin', resource_path('views/vendor/laravel-admin'));
+
+Dcat\Admin\Color::extend('red',[
+    'primary'=>'#F34D37',
+    'primary-darker'=>'#F34D37',
+    'link'=>'#F34D37'
+]);
