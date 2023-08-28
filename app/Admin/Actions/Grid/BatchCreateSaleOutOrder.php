@@ -22,7 +22,7 @@ class BatchCreateSaleOutOrder extends BatchAction
     /**
      * @return string
      */
-    protected $title = '选择单据出库';
+    protected $title = '选择单据出库/영수증 출고 선택';
 
     public function html()
     {

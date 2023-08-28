@@ -32,13 +32,13 @@ class SupplierController extends AdminController
     {
         return Grid::make(new Supplier(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('link')->emp();
-            $grid->column('name')->emp();
+            $grid->column('link',__('link'))->emp();
+            $grid->column('name',__('name'))->emp();
 
-            $grid->column('pay_method')->using(SupplierModel::PAY_METHOD);
-            $grid->column('phone')->emp();
-            $grid->column('other')->emp();
-            $grid->column('created_at');
+            $grid->column('pay_method',__('pay_method'))->using(SupplierModel::PAY_METHOD);
+            $grid->column('phone',__('phone'))->emp();
+            $grid->column('other',__('other'))->emp();
+            $grid->column('created_at',__('created_at'));
 
             $grid->filter(function (Grid\Filter $filter) {
             });
@@ -49,13 +49,13 @@ class SupplierController extends AdminController
     {
         return Grid::make(new Supplier(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('link')->emp();
-            $grid->column('name')->emp();
+            $grid->column('link',__('link'))->emp();
+            $grid->column('name',__('name'))->emp();
 
-            $grid->column('pay_method')->using(SupplierModel::PAY_METHOD);
-            $grid->column('phone')->emp();
-            $grid->column('other')->emp();
-            $grid->column('created_at');
+            $grid->column('pay_method',__('pay_method'))->using(SupplierModel::PAY_METHOD);
+            $grid->column('phone',__('phone'))->emp();
+            $grid->column('other',__('other'))->emp();
+            $grid->column('created_at',__('created_at'));
             $grid->tools(Statement::make());
 
             $grid->disableCreateButton();
@@ -71,11 +71,11 @@ class SupplierController extends AdminController
     protected function form()
     {
         return Form::make(new Supplier(), function (Form $form) {
-            $form->text('link')->required();
-            $form->text('name')->required();
-            $form->select('pay_method')->options(SupplierModel::PAY_METHOD)->default(0)->required();
-            $form->text('phone')->rules('phone:CN,mobile')->required();
-            $form->text('other')->saveAsString();
+            $form->text('link',__('link'))->required();
+            $form->text('name',__('name'))->required();
+            $form->select('pay_method',__('pay_method'))->options(SupplierModel::PAY_METHOD)->default(0)->required();
+            $form->text('phone',__('phone'))->rules('phone:CN,mobile')->required();
+            $form->text('other',__('other'))->saveAsString();
         });
     }
 }

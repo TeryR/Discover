@@ -22,7 +22,7 @@ class BatchCreatePurInOrder extends BatchAction
     /**
      * @return string
      */
-    protected $title = '选择单据入库';
+    protected $title = '选择单据入库/자격 증명 입고 선택';
 
     public function html()
     {

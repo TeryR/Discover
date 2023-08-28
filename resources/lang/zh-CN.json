@@ -4,6 +4,26 @@
     "name":"名称/이름",
     "unit.name":"单位/단위",
     "unit_id":"单位/단위",
+    
+    "link":"联系人/연락처",
+    "pay_method":"支付方式/지불 방식",
+    "phone":"手机号/핸드폰 번호",
+    "other":"备注/설명",
+
+    "order_no":"订单编号/주문 번호",
+    "status":"状态/상태",
+    "review_status":"审核状态/감사 상태",
+    "supplier.name":"供应商名称/공급업체 이름",
+    "supplier_id":"供应商名称/공급업체 이름",
+    "user.username":"创建用户/운영자",
+    "finished_at":"订单完成时间/주문 완료 시간",
+    "product_id":"产品名称/제품 이름",
+    "sku.product.name":"产品名称/제품 이름",
+    "unit":"单位/단위",
+    "sku.product.unit.name":"单位/단위",
+    "should_num":"采购数量/구매 수량",
+    "purchase.price":"购买价格/구매 수량",
+    "_":"合计/합계",
 
     
     "actions":"操作/작업",

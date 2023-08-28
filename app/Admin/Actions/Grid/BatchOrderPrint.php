@@ -23,7 +23,7 @@ class BatchOrderPrint extends BatchAction
     /**
      * @return string
      */
-    protected $title = '单据打印';
+    protected $title = '单据打印/서류 인쇄';
 
     /**
      * Handle the action request.
@@ -59,7 +59,7 @@ HTML;
 
     public function actionScript()
     {
-        $warning = "请选择打印的单据！";
+        $warning = "请选择打印的单据！/인쇄할 증빙서류를 선택하세요!";
 
         return <<<JS
 function (data, target, action) {

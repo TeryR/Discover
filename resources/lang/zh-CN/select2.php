@@ -18,6 +18,6 @@ return [
     'input_too_short'  => '请输入至少:num个字符',
     'loading_more'     => '载入更多结果…',
     'maximum_selected' => '最多只能选择:num个项目',
-    'no_results'       => '未找到结果',
+    'no_results'       => '未找到结果/결과를 찾을 수 없음',
     'searching'        => '搜索中…',
 ];
