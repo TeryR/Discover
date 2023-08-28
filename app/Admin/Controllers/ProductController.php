@@ -36,7 +36,9 @@ class ProductController extends AdminController
         return Grid::make(new Product(), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('item_no',__('item_no'))->emp();
-            $grid->column('name',__('name'))->emp();
+            $grid->column('name',__('name'))->emp()->display(function($name){
+                return;
+            });
             // $grid->column('py_code')->emp();
             $grid->column('attribute',__('attribute'));
             // $grid->column('type', __('type'))->using(ProductModel::TYPE);
@@ -60,7 +62,7 @@ class ProductController extends AdminController
             $grid->column('item_no',__('item_no'));
             $grid->column('name',__('name'));
             // $grid->column('py_code');
-            $grid->column('type', __('type'))->using(ProductModel::TYPE);
+            // $grid->column('type', __('type'))->using(ProductModel::TYPE);
             $grid->column('unit.name', __('unit.name'))->emp();
             $grid->column('created_at',__('created_at'));
             $grid->column('updated_at',__('updated_at'))->sortable();
@@ -89,7 +91,7 @@ class ProductController extends AdminController
                     ->updateRules(['unique:product,item_no,{{id}}'])
                     // ->help('用于商家内部管理所使用的自定义编码')
                     ->required();
-                $row->width(6)->text('name')->required();
+                $row->width(6)->text('name',__('name'))->required();
             });
 
             $form->row(function (Form\Row $row) use ($form) {
