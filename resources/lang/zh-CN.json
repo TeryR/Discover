@@ -10,23 +10,30 @@
     "phone":"手机号/핸드폰 번호",
     "other":"备注/설명",
 
-    "order_no":"订单编号/주문 번호",
-    "status":"状态/상태",
-    "review_status":"审核状态/감사 상태",
+    "order_no":"单号/주문 번호",
+    "with_order.order_no":"关联单号/연관된 단일 번호",
+    "batch_no":"批次号/배치 번호",
+    "position_id":"库位号/라이브러리 번호",
+    
     "supplier.name":"供应商名称/공급업체 이름",
     "supplier_id":"供应商名称/공급업체 이름",
     "user.username":"创建用户/운영자",
-    "finished_at":"订单完成时间/주문 완료 시간",
     "product_id":"产品名称/제품 이름",
     "sku.product.name":"产品名称/제품 이름",
     "unit":"单位/단위",
     "sku.product.unit.name":"单位/단위",
     "should_num":"采购数量/구매 수량",
+    "actual_num":"入库数量/입고 수량",
     "purchase.price":"购买价格/구매 수량",
     "_":"合计/합계",
 
     
+    "status":"状态/상태",
+    "review_status":"审核状态/감사 상태",
+
     "actions":"操作/작업",
     "created_at":"创建时间/생성 시간",
+    "apply_at":"审核时间/감사 시간",
+    "finished_at":"订单完成时间/주문 완료 시간",
     "updated_at":"更新时间/업데이트 시간"
 }
