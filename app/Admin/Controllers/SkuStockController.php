@@ -64,8 +64,7 @@ class SkuStockController extends AdminController
                     $group->ngt('不大于');
                     $group->equal('等于');
                 })->width(3);
-                $filter->like('percent', "含绒量")->decimal()->width(3);
-                $filter->equal('standard', "检验标准")->select(SkuStockBatchModel::STANDARD)->width(3);
+                
             });
             $grid->disableActions();
             $grid->disableCreateButton();

@@ -35,13 +35,14 @@ class ProductController extends AdminController
     {
         return Grid::make(new Product(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('item_no')->emp();
-            $grid->column('name')->emp();
-            $grid->column('py_code')->emp();
-            $grid->column('type', '类型')->using(ProductModel::TYPE);
-            $grid->column('unit.name', '单位')->emp();
-            $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
+            $grid->column('item_no',__('item_no'))->emp();
+            $grid->column('name',__('name'))->emp();
+            // $grid->column('py_code')->emp();
+            $grid->column('attribute',__('attribute'));
+            // $grid->column('type', __('type'))->using(ProductModel::TYPE);
+            $grid->column('unit.name', __('unit.name'))->emp();
+            $grid->column('created_at',__('created_at'));
+            $grid->column('updated_at',__('updated_at'))->sortable();
 
             $grid->filter(function (Grid\Filter $filter) {
             });
@@ -56,13 +57,13 @@ class ProductController extends AdminController
         return Grid::make(new Product(), function (Grid $grid) {
             $grid->model()->whereHas('sku');
             $grid->column('id')->sortable();
-            $grid->column('item_no');
-            $grid->column('name');
-            $grid->column('py_code');
-            $grid->column('type', '类型')->using(ProductModel::TYPE);
-            $grid->column('unit.name', '单位')->emp();
-            $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
+            $grid->column('item_no',__('item_no'));
+            $grid->column('name',__('name'));
+            // $grid->column('py_code');
+            $grid->column('type', __('type'))->using(ProductModel::TYPE);
+            $grid->column('unit.name', __('unit.name'))->emp();
+            $grid->column('created_at',__('created_at'));
+            $grid->column('updated_at',__('updated_at'))->sortable();
             $grid->disableCreateButton();
             $grid->disableActions();
 
@@ -82,32 +83,33 @@ class ProductController extends AdminController
     {
         return Form::make(new Product(['product_attr']), function (Form $form) {
             $form->row(function (Form\Row $row) use ($form) {
-                $row->width(6)->text('item_no')
+                $row->width(6)->text('item_no',__('item_no'))
                     ->default(ProductRepository::buildItemNo())
                     ->creationRules(['unique:product'])
                     ->updateRules(['unique:product,item_no,{{id}}'])
-                    ->help('用于商家内部管理所使用的自定义编码')
+                    // ->help('用于商家内部管理所使用的自定义编码')
                     ->required();
                 $row->width(6)->text('name')->required();
             });
 
             $form->row(function (Form\Row $row) use ($form) {
                 $units = UnitRepository::pluck('name', 'id');
-                $row->width(6)->select('unit_id', '单位')
+                $row->width(6)->select('unit_id', __('unit_id'))
                     ->options($units)
                     ->default(head($units->keys()->toArray()) ?? '')
                     ->required();
-                $row->width(6)->select('type', '类型')
-                    ->options(ProductModel::TYPE)
-                    ->default(ProductModel::TYPE_NOT_FINISH)
-                    ->required();
+                // $row->width(6)->select('type', '类型')
+                //     ->options(ProductModel::TYPE)
+                //     ->default(ProductModel::TYPE_NOT_FINISH)
+                //     ->required();
             });
 
             $form->row(function (Form\Row $row) use ($form) {
-                $row->hasMany('product_attr', '', function (Form\NestedForm $table) {
-                    $table->select('attr_id', '属性')->options(AttrModel::pluck('name', 'id'))->required()->load('attr_value_ids', route('api.attrvalue.find'));
-                    $table->multipleSelect('attr_value_ids', '属性值')->options();
-                })->width(12)->enableHorizontal()->useTable();
+                // $row->hasMany('product_attr', '', function (Form\NestedForm $table) {
+                //     $table->select('attr_id', '属性')->options(AttrModel::pluck('name', 'id'))->required()->load('attr_value_ids', route('api.attrvalue.find'));
+                //     $table->multipleSelect('attr_value_ids', '属性值')->options();
+                // })->width(12)->enableHorizontal()->useTable();
+                $row->text('attribute',__("attribute"))->required();
             });
             $form->saved(function (Form $form, $result) {
                 $id      = $form->getKey();

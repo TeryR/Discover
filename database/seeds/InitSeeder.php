@@ -191,7 +191,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 0,
                 'order'         => 8,
-                'title'         => '产品管理',
+                'title'         => '产品管理/제품 관리',
                 'icon'          => 'fa-product-hunt',
                 'uri'           => '',
                 'created_at'    => $createdAt,
@@ -199,7 +199,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 8,
                 'order'         => 9,
-                'title'         => '产品档案',
+                'title'         => '产品档案/제품 파일',
                 'icon'          => '',
                 'uri'           => 'products',
                 'created_at'    => $createdAt,
@@ -207,7 +207,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 8,
                 'order'         => 10,
-                'title'         => '产品单位',
+                'title'         => '产品单位/제품 단위',
                 'icon'          => '',
                 'uri'           => 'units',
                 'created_at'    => $createdAt,
@@ -215,7 +215,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 8,
                 'order'         => 11,
-                'title'         => '产品属性',
+                'title'         => '产品属性/제품 속성',
                 'icon'          => '',
                 'uri'           => 'attrs',
                 'created_at'    => $createdAt,
@@ -223,7 +223,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 0,
                 'order'         => 12,
-                'title'         => '采购管理',
+                'title'         => '采购管理/구매 관리',
                 'icon'          => 'fa-cart-plus',
                 'uri'           => '',
                 'created_at'    => $createdAt,
@@ -231,7 +231,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 12,
                 'order'         => 13,
-                'title'         => '供应商档案',
+                'title'         => '供应商档案/공급업체 파일',
                 'icon'          => '',
                 'uri'           => 'suppliers',
                 'created_at'    => $createdAt,
@@ -239,7 +239,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 12,
                 'order'         => 14,
-                'title'         => '采购订购单',
+                'title'         => '采购订购单/구매 주문서',
                 'icon'          => '',
                 'uri'           => 'purchase-orders',
                 'created_at'    => $createdAt,
@@ -247,7 +247,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 12,
                 'order'         => 15,
-                'title'         => '采购入库单',
+                'title'         => '采购入库单/구매 입고',
                 'icon'          => '',
                 'uri'           => 'purchase-in-orders',
                 'created_at'    => $createdAt,
@@ -255,7 +255,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 0,
                 'order'         => 16,
-                'title'         => '库存管理',
+                'title'         => '库存管理/재고 관리',
                 'icon'          => 'fa-ambulance',
                 'uri'           => '',
                 'created_at'    => $createdAt,
@@ -263,7 +263,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 16,
                 'order'         => 17,
-                'title'         => '产品库存',
+                'title'         => '产品库存/제품 재고',
                 'icon'          => '',
                 'uri'           => 'sku-stocks',
                 'created_at'    => $createdAt,
@@ -271,7 +271,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 16,
                 'order'         => 18,
-                'title'         => '批次库存',
+                'title'         => '批次库存/재고 차수',
                 'icon'          => '',
                 'uri'           => 'sku-stock-batchs',
                 'created_at'    => $createdAt,
@@ -279,7 +279,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 16,
                 'order'         => 19,
-                'title'         => '仓库库位',
+                'title'         => '仓库库位/창고 위치',
                 'icon'          => '',
                 'uri'           => 'positions',
                 'created_at'    => $createdAt,
@@ -287,7 +287,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 16,
                 'order'         => 20,
-                'title'         => '库存往来',
+                'title'         => '库存往来/재고 거래',
                 'icon'          => '',
                 'uri'           => 'stock-historys',
                 'created_at'    => $createdAt,
@@ -295,7 +295,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 16,
                 'order'         => 21,
-                'title'         => '期初建账',
+                'title'         => '期初建账/기초 장부 작성',
                 'icon'          => '',
                 'uri'           => 'init-stock-orders',
                 'created_at'    => $createdAt,
@@ -303,7 +303,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 0,
                 'order'         => 22,
-                'title'         => '销售管理',
+                'title'         => '销售管理/영업 관리',
                 'icon'          => 'fa-calendar-minus-o',
                 'uri'           => '',
                 'created_at'    => $createdAt,
@@ -311,7 +311,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 22,
                 'order'         => 23,
-                'title'         => '客户档案',
+                'title'         => '客户档案/고객 프로필',
                 'icon'          => '',
                 'uri'           => 'customers',
                 'created_at'    => $createdAt,
@@ -319,7 +319,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 22,
                 'order'         => 24,
-                'title'         => '付款人信息',
+                'title'         => '付款人信息/지불자 정보',
                 'icon'          => '',
                 'uri'           => 'drawees',
                 'created_at'    => $createdAt,
@@ -327,7 +327,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 22,
                 'order'         => 25,
-                'title'         => '客户要货单',
+                'title'         => '客户要货单/고객 주문서',
                 'icon'          => '',
                 'uri'           => 'sale-orders',
                 'created_at'    => $createdAt,
@@ -335,7 +335,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 22,
                 'order'         => 26,
-                'title'         => '客户出货单',
+                'title'         => '客户出货单/고객 배송 기록',
                 'icon'          => '',
                 'uri'           => 'sale-out-orders',
                 'created_at'    => $createdAt,
@@ -343,7 +343,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 22,
                 'order'         => 27,
-                'title'         => '客户退货单',
+                'title'         => '客户退货单/고객 반품 명세서',
                 'icon'          => '',
                 'uri'           => 'sale-in-orders',
                 'created_at'    => $createdAt,
@@ -455,7 +455,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 0,
                 'order'         => 41,
-                'title'         => '报表中心',
+                'title'         => '报表中心/보고서 센터',
                 'icon'          => 'fa-calendar',
                 'uri'           => 'report-centers',
                 'created_at'    => $createdAt,
