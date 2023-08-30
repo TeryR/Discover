@@ -32,12 +32,12 @@ class CustomerController extends AdminController
     {
         return Grid::make(new Customer(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('link')->emp();
-            $grid->column('name')->emp();
-            $grid->column('other')->emp();
-            $grid->column('pay_method')->using(CustomerModel::PAY);
-            $grid->column('phone');
-            $grid->column('created_at');
+            $grid->column('link',__('link'))->emp();
+            $grid->column('name',__('name'))->emp();
+            $grid->column('other',__('other'))->emp();
+            $grid->column('pay_method',__('pay_method'))->using(CustomerModel::PAY);
+            $grid->column('phone',__('phone'));
+            $grid->column('created_at',__('created_at'));
             $grid->filter(function (Grid\Filter $filter) {
             });
         });

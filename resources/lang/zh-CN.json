@@ -1,39 +1,79 @@
 {
     "item_no":"产品编号/제품 번호",
+    "sku.product.item_no":"产品编号/제품 번호",
     "attribute": "规格/사양",
     "name":"名称/이름",
     "unit.name":"单位/단위",
     "unit_id":"单位/단위",
     
+
+
     "link":"联系人/연락처",
     "pay_method":"支付方式/지불 방식",
     "phone":"手机号/핸드폰 번호",
     "other":"备注/설명",
+    "address_id":"地址/주소",
+    "drawee_id":"付款人/지불인",
+    "customer_id":"客户信息/고객 정보",
 
     "order_no":"单号/주문 번호",
+    "with_order_no":"相关单号<br>관련 단일 번호",
     "with_order.order_no":"关联单号/연관된 단일 번호",
     "batch_no":"批次号/배치 번호",
     "position_id":"库位号/라이브러리 번호",
     
     "supplier.name":"供应商名称/공급업체 이름",
     "supplier_id":"供应商名称/공급업체 이름",
+    "customer.name":"客户名称/고객 이름",
     "user.username":"创建用户/운영자",
+    "user_id":"创建订单用户/주문 사용자 만들기",
+    "user.name":"操作用户/업 사용자",
     "product_id":"产品名称/제품 이름",
     "sku.product.name":"产品名称/제품 이름",
+    "balance_num":"库存结余<br>재고 잔고",
+    "init_num":"期初库存<br>초기 재고",
+    "sku_stock_num":"库存参考数量/인벤토리 참조 수량",
     "unit":"单位/단위",
     "sku.product.unit.name":"单位/단위",
     "should_num":"采购数量/구매 수량",
+    "sale_should_num":"要货数量/고객 주문 수량",
     "actual_num":"入库数量/입고 수량",
-    "purchase.price":"购买价格/구매 수량",
-    "_":"合计/합계",
+    "sale_actual_num":"",
+    "origin_actual_num":"期初库存/초기 재고",
+    "in_num":"入库数量<br>입고 수량",
+    "in_price":"入库价格<br>입고 가격",
+    
+    "out_num":"出库数量<br>출고 수량",
+    "out_position.name":"出库位置<br>출고 위치",
+    "out_price":"出库价格<br>출고 가격",
+    "sku_num":"产品库存/제품 재고",
+    "batch_num":"批次库存/배치 재고",
 
+    "position.name":"库位/창고",
+    "in_position.name":"入库位置<br>입고 위치",
+    "flag":"出入库标志<br>출고 입고 플래그",
+    "type":"出入库类型<br>출고 입고 유형",
+
+    "cost_price":"成本价格/원가 가격",
+    "cost_single_price":"成本单价/원가 단가",
+    "purchase.price":"购买价格/구매 수량",
+    "sale_price":"客户要货价格/고객 주문 가격",
+    "cost_price_total":"合计成本/총 비용",
+    "_":"合计/합계",
     
     "status":"状态/상태",
     "review_status":"审核状态/감사 상태",
+    "apply_id":"审批人<br>승인자",
 
     "actions":"操作/작업",
     "created_at":"创建时间/생성 시간",
     "apply_at":"审核时间/감사 시간",
     "finished_at":"订单完成时间/주문 완료 시간",
-    "updated_at":"更新时间/업데이트 시간"
+    "updated_at":"更新时间/업데이트 시간",
+
+
+    "in_info":"入库信息<br>입고 정보",
+    "out_info":"出库信息<br>출고 정보",
+    "product_info":"产品信息<br>제품 정보",
+    "stock_info":"库存信息<br>인벤토리 정보"
 }

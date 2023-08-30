@@ -30,8 +30,8 @@ class DraweeController extends AdminController
     {
         return Grid::make(new Drawee(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('name');
-            $grid->column('created_at');
+            $grid->column('name',__('name'));
+            $grid->column('created_at',__('created_at'));
 
             $grid->filter(function (Grid\Filter $filter) {
             });
@@ -47,7 +47,7 @@ class DraweeController extends AdminController
     {
         return Form::make(new Drawee(), function (Form $form) {
 //            $form->display('id');
-            $form->text('name');
+            $form->text('name',__('name'));
 
 //            $form->display('created_at');
 //            $form->display('updated_at');

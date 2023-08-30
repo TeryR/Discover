@@ -93,6 +93,7 @@ class StockHistoryModel extends BaseModel
     const SCRAP_TYPE = 8;
     const CHECK_IN_TYPE = 9;
     const CHECK_OUT_TYPE = 10;
+    const IN_STOCK_SALE = 11;
 
     const TYPE = [
         self::OUT_STOCK_PUCHASE => "采购退货",
@@ -106,15 +107,20 @@ class StockHistoryModel extends BaseModel
         self::SCRAP_TYPE => '物料报废',
         self::CHECK_IN_TYPE => '检验入库',
         self::CHECK_OUT_TYPE => '检验出库',
+        self::IN_STOCK_SALE=>'销售退货',
     ];
 
     const OUT = 0;
     const IN = 1;
     const INVENTORY = 2;
     const TRANSFER = 3;
+    const DESTROY=4;
+    const BACK=5;
     const FLAG = [
-        self::IN => "入库",
-        self::OUT => "出库",
+        self::IN => "入库/입고",
+        self::OUT => "出库/출고",
+        self::DESTROY =>"损坏/손상",
+        self::BACK=>"退货/반품",
         self::INVENTORY => "盘点",
         self::TRANSFER => '调拨',
     ];

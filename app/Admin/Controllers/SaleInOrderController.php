@@ -31,14 +31,14 @@ class SaleInOrderController extends AdminController
     {
         return Grid::make(new SaleInOrder(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('customer_id');
-            $grid->column('finished_at');
-            $grid->column('order_no');
-            $grid->column('other');
-            $grid->column('status');
-            $grid->column('user_id');
-            $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
+            $grid->column('customer_id',__('customer_id'));
+            $grid->column('finished_at',__('finished_at'));
+            $grid->column('order_no',__('order_no'));
+            $grid->column('other',__('other'));
+            $grid->column('status',__('status'));
+            $grid->column('user_id',__('user_id'));
+            $grid->column('created_at',__('created_at'));
+            $grid->column('updated_at',__('updated_at'))->sortable();
             $grid->tools(BatchOrderPrint::make());
 
             $grid->filter(function (Grid\Filter $filter) {
@@ -55,12 +55,12 @@ class SaleInOrderController extends AdminController
     {
         return Form::make(new SaleInOrder(), function (Form $form) {
             $form->display('id');
-            $form->text('customer_id');
-            $form->text('finished_at');
-            $form->text('order_no');
-            $form->text('other');
-            $form->text('status');
-            $form->text('user_id');
+            $form->text('customer_id',__('customer_id'));
+            $form->date('finished_at',__('finished_at'));
+            $form->text('order_no',__('order_no'));
+            $form->text('other',__('other'));
+            $form->text('status',__('status'));
+            $form->text('user_id',__('user_id'));
 
             $form->display('created_at');
             $form->display('updated_at');

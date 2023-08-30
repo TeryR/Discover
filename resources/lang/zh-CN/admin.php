@@ -141,7 +141,7 @@ return [
     'method' =>' 方法/메소드',
     'user' =>' 用户/사용자',
     'pagination' =>[
-        'range' => '从 :first 到 :last ，总共 :total 条/:first에서:last까지, 합계:total 막대',
+        'range' => '从 :first 到 :last ，总共 :total 条<br>:first에서:last까지, 합계:total 막대',
     ],
     'role' =>' 角色/캐릭터',
     'permission' =>' 权限/권한',

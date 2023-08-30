@@ -51,9 +51,9 @@ class BaseModel extends Model
     ];
 
     const REVIEW_STATUS = [
-        self::REVIEW_STATUS_WAIT     => "待审核",
-        self::REVIEW_STATUS_OK       => "已审核",
-        self::REVIEW_STATUS_REREVIEW => "反审核",
+        self::REVIEW_STATUS_WAIT     => "待审核/보류 중",
+        self::REVIEW_STATUS_OK       => "已审核/감사 완료",
+        self::REVIEW_STATUS_REREVIEW => "反审核/반대 감사",
     ];
 
     const REVIEW_STATUS_COLOR = [

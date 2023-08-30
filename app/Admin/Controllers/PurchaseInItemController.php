@@ -31,15 +31,15 @@ class PurchaseInItemController extends AdminController
     {
         return Grid::make(new PurchaseInItem(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('actual_num');
-            $grid->column('batch_no');
-            $grid->column('order_id');
-            $grid->column('position_id');
-            $grid->column('price');
-            $grid->column('should_num');
-            $grid->column('sku_id');
-            $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
+            $grid->column('actual_num',__('actual_num'));
+            $grid->column('batch_no',__('batch_no'));
+            $grid->column('order_id',__('order_id'));
+            $grid->column('position_id',__('position_id'));
+            $grid->column('price',__('purchase_price'));
+            $grid->column('should_num',__('should_num'));
+            $grid->column('sku_id',__('sku_id'));
+            $grid->column('created_at',__('created_at'));
+            $grid->column('updated_at',__('updated_at'))->sortable();
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
@@ -58,15 +58,15 @@ class PurchaseInItemController extends AdminController
     {
         return Show::make($id, new PurchaseInItem(), function (Show $show) {
             $show->field('id');
-            $show->field('actual_num');
-            $show->field('batch_no');
-            $show->field('order_id');
-            $show->field('position_id');
-            $show->field('price');
-            $show->field('should_num');
-            $show->field('sku_id');
-            $show->field('created_at');
-            $show->field('updated_at');
+            $show->field('actual_num',__('actual_num'));
+            $show->field('batch_no',__('batch_no'));
+            $show->field('order_id',__('order_id'));
+            $show->field('position_id',__('position_id'));
+            $show->field('price',__('purchase_price'));
+            $show->field('should_num',__('should_num'));
+            $show->field('sku_id',__('sku_id'));
+            $show->field('created_at',__('created_at'));
+            $show->field('updated_at',__('updated_at'));
         });
     }
 
@@ -79,18 +79,18 @@ class PurchaseInItemController extends AdminController
     {
         return Form::make(new PurchaseInItem(), function (Form $form) {
             $form->display('id');
-            $form->text('actual_num');
-            $form->text('batch_no');
-            $form->text('order_id');
-            $form->text('position_id');
-            $form->text('price');
-            $form->text('should_num');
-            $form->text('sku_id');
-            $form->decimal('percent');
-            $form->number('standard');
+            $form->text('actual_num',__('actual_num'));
+            $form->text('batch_no',__('batch_no'));
+            $form->text('order_id',__('order_id'));
+            $form->text('position_id',__('position_id'));
+            $form->text('price',__('purchase_price'));
+            $form->text('should_num',__('should_num'));
+            $form->text('sku_id',__('sku_id'));
+            // $form->decimal('percent');
+            // $form->number('standard');
 
-            $form->display('created_at');
-            $form->display('updated_at');
+            $form->display('created_at',__('created_at'));
+            $form->display('updated_at',__('updated_at'));
         });
     }
 }

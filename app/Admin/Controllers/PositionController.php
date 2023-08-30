@@ -30,9 +30,9 @@ class PositionController extends AdminController
     {
         return Grid::make(new Position(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('name');
-            $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
+            $grid->column('name',__('name'));
+            $grid->column('created_at',__('created_at'));
+            $grid->column('updated_at',__('updated_at'))->sortable();
         });
     }
 
@@ -44,7 +44,7 @@ class PositionController extends AdminController
     protected function form()
     {
         return Form::make(new Position(), function (Form $form) {
-            $form->text('name');
+            $form->text('name',__('name'));
         });
     }
 }
