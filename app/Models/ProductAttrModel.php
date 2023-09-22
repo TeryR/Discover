@@ -37,7 +37,7 @@ class ProductAttrModel extends BaseModel
 {
     protected $table = 'product_attr';
     public $timestamps = false;
-
+    protected $with=['attr'];
     protected $casts = [
         'attr_value_ids' => 'json',
     ];

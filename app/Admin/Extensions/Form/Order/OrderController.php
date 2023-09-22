@@ -23,7 +23,7 @@ use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Exception;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Repositories\Repository;
 use Illuminate\Database\Eloquent\Model;
@@ -233,7 +233,7 @@ CSS
         });
         $form->disableFooter();
         $form->disableHeader();
-        $form->disableAjaxSubmit();
+        $form->ajax(false);
     }
 
     /**
@@ -255,7 +255,7 @@ CSS
      * @param int $id
      * @return Grid
      */
-    public function items(int $id): Grid
+    public function items(int $id):Grid
     {
         return Grid::make($this->item_repository, function (Grid $grid) use ($id) {
             $grid->setName(Str::random(16));
@@ -263,7 +263,7 @@ CSS
             $grid->model()->where('order_id', $id);
             $this->setItems($grid);
             $this->setItemsCommon($grid);
-        })->resource(Str::of($this->item_name)->kebab()->plural());
+        });//->resource(Str::of($this->item_name)->kebab()->plural());
     }
 
     /**

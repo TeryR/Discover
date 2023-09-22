@@ -21,8 +21,14 @@ class ProductRepository extends BaseRepository
 {
     public static function buildItemNo()
     {
-        $productId = ProductModel::orderBy('id', 'desc')->value('id') ?? 0;
-        return str_pad($productId + 1, 8, "0", STR_PAD_LEFT);
+
+        $title = 'PD';
+        $rand = rand(1000,9999);
+        $tail = date('yW');
+        $item_no = $title.$tail.$rand;
+        // $productId = ProductModel::orderBy('id', 'desc')->value('id') ?? 0;
+        // return str_pad($productId + 1, 8, "0", STR_PAD_LEFT);
+        return $item_no;
     }
 
     /**

@@ -38,13 +38,13 @@ HTML;
 
     public function script(): string
     {
-        $url = route('sku-stock-batchs.index', [
+        $url = admin_route('sku-stock-batchs.index', [
             Grid::IFRAME_QUERY_NAME => 1,
             'sku_id'                => request()->input('sku_id'),
             'item_id'               => request()->input('item_id'),
             'table'                 => admin_controller_name(),
-            'standard'              => request()->input('standard'),
-            'percent'               => request()->input('percent'),
+//            'standard'              => request()->input('standard'),
+//            'percent'               => request()->input('percent'),
             'order_id'              => $this->getOrderId(),
         ]);
         return <<<JS

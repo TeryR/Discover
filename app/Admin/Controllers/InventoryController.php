@@ -20,7 +20,7 @@ use App\Admin\Repositories\Inventory;
 use App\Models\InventoryModel;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class InventoryController extends AdminController
 {

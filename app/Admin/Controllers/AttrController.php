@@ -18,7 +18,7 @@ use App\Admin\Extensions\Expand\AttrValue;
 use App\Admin\Repositories\Attr;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class AttrController extends AdminController
 {
@@ -32,9 +32,9 @@ class AttrController extends AdminController
         return Grid::make(new Attr(), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('name');
-            $grid->column('value', '属性值')
-                ->display('查看')
-                ->expand(AttrValue::class);
+             $grid->column('value', '属性值')
+                 ->display('查看')
+                 ->expand(AttrValue::class);
             $grid->column('created_at');
         });
     }
@@ -52,10 +52,21 @@ class AttrController extends AdminController
     protected function form()
     {
         return Form::make(new Attr('values'), function (Form $form) {
-            $form->text('name')->help('例如：颜色，尺寸')->required();
-            $form->hasMany('values', '属性值', function (Form\NestedForm $table) {
-                $table->text('name', '名称')->help('属性的值（例如颜色的值：黄色，蓝色）');
+
+            $form->hidden('name');
+            $form->text('name_zh',__('name_zh'))->help('例如：颜色，尺寸')->required();
+            $form->text('name_ko',__('name_ko'))->help('예: 색상, 크기')->required();
+            $form->hasMany('values', __('attr_values'), function (Form\NestedForm $table) {
+                $table->text('name', __('name'));//->help('属性的值（例如颜色的值：黄色，蓝色）');
             })->useTable();
+            $form->saving(function (Form $form) {
+                $name_zh = $form->name_zh;
+                $name_ko = $form->name_ko;
+                $name = $name_zh . '__' . $name_ko;
+                $form->name = $name;
+                $form->deleteInput('name_zh');
+                $form->deleteInput('name_ko');
+            });
         });
     }
 }

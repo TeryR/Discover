@@ -34,7 +34,7 @@ class BatchOrderPrint extends BatchAction
      */
     public function handle(Request $request)
     {
-        $url = route('order.print', [
+        $url = admin_route('order.print', [
             'ids' => implode("-", $this->getKey()),
             'model' => $request->input('model'),
             'slug' => $request->input('slug'),

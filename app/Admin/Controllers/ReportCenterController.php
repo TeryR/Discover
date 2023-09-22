@@ -14,7 +14,7 @@
 
 namespace App\Admin\Controllers;
 
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Layout\Content;
 
 class ReportCenterController extends AdminController

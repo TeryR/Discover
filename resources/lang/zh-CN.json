@@ -1,14 +1,24 @@
 {
     "item_no":"产品编号/제품 번호",
+    "product_name": "产品名称/제품 이름",
     "sku.product.item_no":"产品编号/제품 번호",
-    "attribute": "规格/사양",
-    "name":"名称/이름",
+    "attr_id":"属性/속성",
+    "attr_value_ids": "属性值/속성 값",
+    "name":"名称",
+    "name_ko":"이름(Korean)",
+    "name_zh":"名称(Chinese)",
     "unit.name":"单位/단위",
     "unit_id":"单位/단위",
-    
+    "brand":"品牌/브랜드",
+    "package":"包装量/포장량",
+    "attr_values":"属性值/속성 값",
+    "product_type":"产品型号/제품 모델",
+    "customer_sku":"自订物料号/사용자 정의 재료 번호",
 
 
     "link":"联系人/연락처",
+    "link_zh":"联系人(Chinese)",
+    "link_ko":"연락처(Korean)",
     "pay_method":"支付方式/지불 방식",
     "phone":"手机号/핸드폰 번호",
     "other":"备注/설명",
@@ -21,7 +31,7 @@
     "with_order.order_no":"关联单号/연관된 단일 번호",
     "batch_no":"批次号/배치 번호",
     "position_id":"库位号/라이브러리 번호",
-    
+
     "supplier.name":"供应商名称/공급업체 이름",
     "supplier_id":"供应商名称/공급업체 이름",
     "customer.name":"客户名称/고객 이름",
@@ -38,32 +48,34 @@
     "should_num":"采购数量/구매 수량",
     "sale_should_num":"要货数量/고객 주문 수량",
     "actual_num":"入库数量/입고 수량",
-    "sale_actual_num":"",
+    "#sale_actual_num":"",
+    "current_num": "当前数量/현재 수량",
+    "operate_num": "执行数量/실행 수량",
     "origin_actual_num":"期初库存/초기 재고",
-    "in_num":"入库数量<br>입고 수량",
-    "in_price":"入库价格<br>입고 가격",
-    
+    "in_num":"入库数量/입고 수량",
+    "in_price":"入库价格/입고 가격",
+
     "out_num":"出库数量<br>출고 수량",
     "out_position.name":"出库位置<br>출고 위치",
     "out_price":"出库价格<br>출고 가격",
     "sku_num":"产品库存/제품 재고",
     "batch_num":"批次库存/배치 재고",
 
-    "position.name":"库位/창고",
+    "position.name":"仓库名称/저장소 이름",
     "in_position.name":"入库位置<br>입고 위치",
     "flag":"出入库标志<br>출고 입고 플래그",
     "type":"出入库类型<br>출고 입고 유형",
 
-    "cost_price":"成本价格/원가 가격",
-    "cost_single_price":"成本单价/원가 단가",
-    "purchase.price":"购买价格/구매 수량",
+    "cost_price":"采购单价/구매 단가",
+    "cost_single_price":"采购单价/구매 단가",
+    "purchase.price":"采购单价/구매 단가",
     "sale_price":"客户要货价格/고객 주문 가격",
     "cost_price_total":"合计成本/총 비용",
     "_":"合计/합계",
-    
+
     "status":"状态/상태",
     "review_status":"审核状态/감사 상태",
-    "apply_id":"审批人<br>승인자",
+    "apply_id":"审批人/승인자",
 
     "actions":"操作/작업",
     "created_at":"创建时间/생성 시간",

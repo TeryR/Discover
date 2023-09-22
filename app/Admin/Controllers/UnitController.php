@@ -14,11 +14,13 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\Delete;
 use App\Admin\Repositories\Unit;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Auth;
 
 class UnitController extends AdminController
 {
@@ -34,7 +36,7 @@ class UnitController extends AdminController
             $grid->column('name',__('name'));
             $grid->column('created_at',__('created_at'));
             $grid->column('updated_at',__('updated_at'))->sortable();
-
+            $grid->tools(Delete::make());
             $grid->filter(function (Grid\Filter $filter) {
             });
         });
@@ -66,10 +68,22 @@ class UnitController extends AdminController
     {
         return Form::make(new Unit(), function (Form $form) {
             $form->display('id');
-            $form->text('name',__('name'));
+            $form->hidden('name');
+            $form->text('name_zh',__('name_zh'))->required();
+            $form->text('name_ko',__('name_ko'))->required();
 
             $form->display('created_at',__('created_at'));
             $form->display('updated_at',__('updated_at'));
+
+
+            $form->saving(function (Form $form){
+                $name_zh=$form->name_zh;
+                $name_ko=$form->name_ko;
+                $name = $name_zh.'__'.$name_ko;
+                $form->name = $name;
+                $form->deleteInput('name_zh');
+                $form->deleteInput('name_ko');
+            });
         });
     }
 }

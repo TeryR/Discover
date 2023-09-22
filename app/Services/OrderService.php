@@ -21,6 +21,7 @@ use App\Models\PurchaseOrderModel;
 use App\Models\SaleItemModel;
 use App\Models\SaleOrderModel;
 use App\Models\SaleOutOrderModel;
+use App\Models\SkuStockBatchModel;
 use Yxx\LaravelQuick\Services\BaseService;
 
 class OrderService extends BaseService
@@ -61,7 +62,17 @@ class OrderService extends BaseService
                 'price'       => $purchaseItemModel->price,
                 'percent'     => $purchaseItemModel->percent,
                 'standard'    => $purchaseItemModel->standard,
-                'batch_no'    => 'PC' . date('Ymd'),
+                'batch_no'    => function(){
+                    $batch_no="PC".date('Ymd').rand(1000,9999);
+                    while (1){
+                        if(SkuStockBatchModel::whereBatchNo($batch_no)->exists()){
+                            $batch_no="PC".date('Ymd').rand(1000,9999);
+                            continue;
+                        }
+                        break;
+                    }
+                    return $batch_no;
+                },
                 'position_id' => $this->default_position_id,
             ];
         });

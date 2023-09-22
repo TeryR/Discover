@@ -90,16 +90,17 @@ class SaleOrderController extends OrderController
     protected function setItems(Grid &$grid): void
     {
         $order = $this->order;
+        dump($order);
         $grid->column('sku.product.name', __('sku.product.name'));
         $grid->column('sku.product.unit.name',__('sku.product.unit.name'));
         // $grid->column('sku.product.type_str',__('sku.product.type_str'));
-        // $grid->column('sku_id', '属性')->if(function () use ($order) {
-        //     return $order->review_status === SaleOrderModel::REVIEW_STATUS_OK;
-        // })->display(function () {
-        //     return $this->sku['attr_value_ids_str'] ?? '';
-        // })->else()->selectplus(function (Fluent $fluent) {
-        //     return $fluent->sku['product']['sku_key_value'];
-        // });
+//         $grid->column('sku_id', '属性')->if(function () use ($order) {
+//             return $order->review_status === SaleOrderModel::REVIEW_STATUS_OK;
+//         })->display(function () {
+//             return $this->sku['attr_value_ids_str'] ?? '';
+//         })->else()->selectplus(function ($order) {
+//             return $order->sku['product']['sku_key_value'];
+//         });
 
         // $grid->column('percent', '含绒百分比')->if(function () use ($order) {
         //     return $order->review_status !== SaleOrderModel::REVIEW_STATUS_OK;
@@ -146,7 +147,7 @@ class SaleOrderController extends OrderController
         $form->row(function (Form\Row $row) use ($customer) {
             $row->width(6)->select('customer_id',__('customer_id'))->options($customer)->loads(
                 ['address_id', 'drawee_id'],
-                [route('api.customer.address.find'), route('api.customer.drawee.find')]
+                [admin_route('api.customer.address.find'), admin_route('api.customer.drawee.find')]
             )->required();
             $row->width(6)->select('address_id', __('address_id'))->required();
         });
@@ -163,9 +164,9 @@ class SaleOrderController extends OrderController
     {
         $form->width(12)->row(function (Form\Row $row) {
             $row->hasMany('items', '', function (Form\NestedForm $table) {
-                $table->select('product_id', __('product_id'))->options(ProductModel::pluck('name', 'id'))->loadpku(route('api.product.find'))->required();
+                $table->select('product_id', __('product_id'))->options(ProductModel::pluck('name', 'id'))->loadpku(admin_route('api.product.find'))->required();
                 $table->ipt('unit', __('unit'))->rem(3)->default('-')->disable();
-                // $table->select('sku_id', '属性选择')->options()->required();
+                 $table->select('sku_id', '属性选择')->options()->required();
                 // $table->tableDecimal('percent', '含绒百分比')->default(0);
                 // $table->select('standard', '检验标准')->options(PurchaseOrderModel::STANDARD)->default(0);
                 $table->num('should_num', __('sale_should_num'))->required();

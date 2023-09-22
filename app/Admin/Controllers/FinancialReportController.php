@@ -20,7 +20,7 @@ use App\Models\CostOrderModel;
 use App\Models\CustomerModel;
 use App\Models\StatementOrderModel;
 use App\Models\SupplierModel;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Layout\Content;
 use Illuminate\Database\Eloquent\Builder;

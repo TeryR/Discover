@@ -114,13 +114,9 @@ class StockHistoryModel extends BaseModel
     const IN = 1;
     const INVENTORY = 2;
     const TRANSFER = 3;
-    const DESTROY=4;
-    const BACK=5;
     const FLAG = [
         self::IN => "入库/입고",
         self::OUT => "出库/출고",
-        self::DESTROY =>"损坏/손상",
-        self::BACK=>"退货/반품",
         self::INVENTORY => "盘点",
         self::TRANSFER => '调拨',
     ];

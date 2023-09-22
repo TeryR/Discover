@@ -15,6 +15,7 @@
 namespace App\Admin\Actions\Grid;
 
 use App\Models\ProductModel;
+use App\Models\SkuStockBatchModel;
 use Dcat\Admin\Grid\BatchAction;
 use Illuminate\Http\Request;
 
@@ -104,7 +105,17 @@ HTML;
         $this->order->items()->createMany($this->products->map(function (ProductModel $productModel) {
             return [
                 'sku_id'   => $productModel->sku_pluck->keys()->first(),
-                'batch_no' => 'PC' . date('Ymd'),
+                'batch_no' => function(){
+                    $batch_no="PC".date('Ymd').rand(1000,9999);
+                    while (1){
+                        if(SkuStockBatchModel::whereBatchNo($batch_no)->exists()){
+                            $batch_no="PC".date('Ymd').rand(1000,9999);
+                            continue;
+                        }
+                        break;
+                    }
+                    return $batch_no;
+                },
             ];
         }));
     }
@@ -117,7 +128,17 @@ HTML;
         $this->order->items()->createMany($this->products->map(function (ProductModel $productModel) {
             return [
                 'sku_id'   => $productModel->sku_pluck->keys()->first(),
-                'batch_no' => 'PC' . date('Ymd'),
+                'batch_no' => function(){
+                    $batch_no="PC".date('Ymd').rand(1000,9999);
+                    while (1){
+                        if(SkuStockBatchModel::whereBatchNo($batch_no)->exists()){
+                            $batch_no="PC".date('Ymd').rand(1000,9999);
+                            continue;
+                        }
+                        break;
+                    }
+                    return $batch_no;
+                },
             ];
         }));
     }

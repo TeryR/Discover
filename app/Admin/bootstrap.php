@@ -12,6 +12,7 @@
  * // +----------------------------------------------------------------------
  */
 
+use App\Admin\Extensions\Form\Input;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid\Filter;
@@ -48,7 +49,7 @@ Grid::resolving(function (Grid $grid) {
     $grid->disableBatchDelete();
     $grid->actions(function (\Dcat\Admin\Grid\Displayers\Actions $actions) {
         $actions->disableView();
-        $actions->disableDelete();
+//        $actions->disableDelete();
         $actions->disableEdit();
     });
     $grid->option("dialog_form_area", ["70%", "80%"]);
@@ -69,7 +70,7 @@ Dcat\Admin\Grid\Column::extend('batch_detail', \App\Admin\Extensions\Grid\BatchD
 Dcat\Admin\Form::extend('fee', \App\Admin\Extensions\Form\Fee::class);
 Dcat\Admin\Form::extend('num', \App\Admin\Extensions\Form\Num::class);
 Dcat\Admin\Form::extend('tableDecimal', \App\Admin\Extensions\Form\TableDecimal::class);
-Dcat\Admin\Form::extend('ipt', \App\Admin\Extensions\Form\Input::class);
+Dcat\Admin\Form::extend('ipt', Input::class);
 Dcat\Admin\Form::extend('reviewicon', \App\Admin\Extensions\Form\ReviewIcon::class);
 
 $script = <<<'JS'

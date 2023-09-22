@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Psy\Util\Str;
 
 /**
  * App\Models\ProductModel
@@ -60,7 +61,7 @@ use Illuminate\Support\Collection;
  * @property-read Collection $sku_pluck
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductSkuModel[] $sku
  * @property-read int|null $sku_count
- * @property int $type 类型
+ * @property string $type 类型
  * @property-read string $type_str
  * @method static \Illuminate\Database\Eloquent\Builder|ProductModel whereType($value)
  */
@@ -72,7 +73,7 @@ class ProductModel extends BaseModel
 
     protected $with = ['product_attr', 'unit', 'sku'];
 
-    protected $appends = ['attr_value_arr', 'sku_key_value', 'sku_pluck', 'sku_id_text', 'type_str'];
+    protected $appends = ['attr_value_arr', 'sku_key_value', 'sku_pluck', 'sku_id_text', 'type_str','sku_value'];
 
     const TYPE_FINISH = 1;
     const TYPE_NOT_FINISH = 0;
@@ -97,11 +98,14 @@ class ProductModel extends BaseModel
         return $this->hasMany(ProductAttrModel::class, 'product_id');
     }
 
+//    public function getTypeStrAttribute(): string
+//    {
+//        return self::TYPE[$this->type];
+//    }
     public function getTypeStrAttribute(): string
     {
-        return self::TYPE[$this->type];
+        return $this->type;
     }
-
     /**
      * @return BelongsTo
      */
@@ -113,7 +117,9 @@ class ProductModel extends BaseModel
     public function getAttrValueArrAttribute(): array
     {
         $attr_value_ids = $this->product_attr->pluck('attr_value_ids');
-        return $attr_value_ids ? attrCrossJoin($attr_value_ids) : [];
+        // var_dump(json_decode($attr_value_ids));
+        // return $attr_value_ids ? attrCrossJoin($attr_value_ids) : [];
+        return json_decode($attr_value_ids);
     }
 
     /**
@@ -131,7 +137,10 @@ class ProductModel extends BaseModel
     {
         return Arr::pluck($this->sku_id_text, 'text', 'id');
     }
-
+    public function getSkuValueAttribute(): string
+    {
+        return Arr::pluck($this->sku_id_text, 'text')[0];
+    }
     public function getSkuIdTextAttribute(): array
     {
         return $this->sku->map(function (ProductSkuModel $productSkuModel) {

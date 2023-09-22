@@ -18,7 +18,7 @@ use App\Admin\Actions\Grid\BatchOrderPrint;
 use App\Admin\Repositories\SaleInOrder;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class SaleInOrderController extends AdminController
 {

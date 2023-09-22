@@ -18,7 +18,7 @@ use App\Admin\Repositories\StockHistory;
 use App\Models\SkuStockBatchModel;
 use App\Models\StockHistoryModel;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 use Illuminate\Database\Eloquent\Builder;
 
 class StockHistoryController extends AdminController
@@ -40,8 +40,8 @@ class StockHistoryController extends AdminController
 
             $grid->column('flag',__('flag'))->using(StockHistoryModel::FLAG);
             $grid->column('type',__('type'))->using(StockHistoryModel::TYPE);
-            $grid->column('user.name', __('user.name'));
-            $grid->column('with_order_no',__('with_order_no'));
+            $grid->column('user.name', __('user.name'))->limit(5);
+            $grid->column('with_order_no',__('with_order_no'))->limit(5);
             $grid->column('in_num',__('in_num'));
             $grid->column('in_position.name', __("in_position.name"))->emp();
             $grid->column('in_price',__('in_price'));
@@ -49,7 +49,7 @@ class StockHistoryController extends AdminController
             $grid->column('out_num',__('out_num'));
             $grid->column('out_position.name', __('out_position.name'))->emp();
             $grid->column('out_price',__('out_price'));
-            $grid->column('sku.product.item_no', __('sku.product.item_no'));
+            $grid->column('sku.product.item_no', __('sku.product.item_no'))->limit(5);
             $grid->column('sku.product.name', __('sku.product.name'));
             $grid->column('sku.product.unit.name', __('sku.product.unit.name'));
             // $grid->column('sku.product.type_str', '类型');
@@ -57,7 +57,7 @@ class StockHistoryController extends AdminController
             // $grid->column('percent', '含绒量(%)');
             // $grid->column('standard_str', '检验标准');
             $grid->column('cost_price',__('cost_price'));
-            $grid->column('batch_no',__('batch_no'));
+            $grid->column('batch_no',__('batch_no'))->limit(5);
             $grid->column('init_num',__('init_num'));
             // $grid->column('inventory_num', "盘点数量");
             // $grid->column('inventory_diff_num', "盈亏数量");
@@ -66,7 +66,7 @@ class StockHistoryController extends AdminController
 
             $grid->disableActions();
             $grid->disableCreateButton();
-            $grid->disableRowSelector();
+            $grid->showColumnSelector();
 
 //            $grid->fixColumns(0);
 
@@ -79,7 +79,7 @@ class StockHistoryController extends AdminController
                             $query->orWhere('item_no', 'like', $this->getValue()."%");
                         });
                     });
-                })->placeholder("产品名称，编号")->width(3);
+                },__('product_name'))->placeholder("产品名称，编号")->width(3);
                 $filter->like('with_order_no',__('with_order_no'))->width(3);
                 $filter->equal('type',__('type'))->select(StockHistoryModel::TYPE)->width(3);
                 $filter->equal('flag',__('flag'))->select(StockHistoryModel::FLAG)->width(3);

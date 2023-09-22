@@ -19,7 +19,7 @@ use App\Admin\Repositories\AccountantDate;
 use App\Models\AccountantDateModel;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class AccountantDateController extends AdminController
 {

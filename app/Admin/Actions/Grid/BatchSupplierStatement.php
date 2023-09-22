@@ -34,10 +34,9 @@ HTML;
 
     public function script()
     {
-        $url = route('suppliers.index', [
+        $url = admin_route('suppliers.index', [
             Grid::IFRAME_QUERY_NAME => 1,
         ]);
-
         return <<<JS
         $("#batch-supplier-statement-select-resourc").on("click",function(){
             var url = "{$url}";

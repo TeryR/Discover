@@ -79,7 +79,7 @@ class CostOrderController extends OrderController
                         '公司名称' => $row['company_name'],
                         '费用月份' => $row['accountant_item']['year_month'],
                         '审核状态' => CostOrderModel::REVIEW_STATUS[$row['review_status']],
-                        '费用总金额' => $row['total_amount'],
+                        '费总金额' => $row['total_amount'],
                         '已付款金额' => $row['settlement_amount'],
                         '已优惠金额' => $row['discount_amount'],
                         '备注' => $row['other'],

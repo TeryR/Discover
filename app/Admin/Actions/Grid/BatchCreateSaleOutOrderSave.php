@@ -66,8 +66,8 @@ class BatchCreateSaleOutOrderSave extends BatchAction
                 'sku_id'      => $saleItemModel->sku_id,
                 'should_num'  => $saleItemModel->should_num,
                 'price'       => $saleItemModel->price,
-                'percent'     => $saleItemModel->percent,
-                'standard'    => $saleItemModel->standard,
+//                'percent'     => $saleItemModel->percent,
+//                'standard'    => $saleItemModel->standard,
             ];
         });
         $out_order->items()->createMany($items);

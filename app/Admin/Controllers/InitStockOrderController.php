@@ -21,6 +21,7 @@ use App\Admin\Repositories\InitStockOrder;
 use App\Models\InitStockOrderModel;
 use App\Models\PositionModel;
 use App\Models\ProductModel;
+use App\Models\SkuStockBatchModel;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Models\Administrator;
@@ -44,6 +45,7 @@ class InitStockOrderController extends OrderController
             $grid->column('created_at',__('created_at'));
             $grid->tools(BatchOrderPrint::make());
             $grid->disableQuickEditButton();
+            $grid->disableDeleteButton();
             $grid->actions(EditOrder::make());
         });
     }
@@ -70,16 +72,27 @@ class InitStockOrderController extends OrderController
     {
         $form->row(function (Form\Row $row) {
             $row->hasMany('items', '', function (Form\NestedForm $table) {
-                $table->select('product_id', __('product_id'))->options(ProductModel::pluck('name', 'id'))->loadpku(route('api.product.find'))->required();
-                $table->ipt('unit', __('unit'))->rem(3)->default('-')->disable();
-                // $table->ipt('type', '类型')->rem(5)->default('-')->disable();
-                // $table->select('sku_id', '属性选择')->options()->required();
+                $table->select('product_id', __('product_id'))->options(ProductModel::pluck('name', 'id'))->loadpku(admin_route('api.product.find'))->required();
+                $table->ipt('unit', __('unit'))->rem(6)->default('-')->disable();
+                 $table->ipt('type', '类型')->rem(5)->default('-')->disable();
+                 $table->select('sku_id', '属性选择')->options()->required();
                 // $table->tableDecimal('percent', '含绒百分比')->default(0);
                 // $table->select('standard', '检验标准')->options(InitStockOrderModel::STANDARD)->default(0);
                 $table->tableDecimal('actual_num', __('origin_actual_num'))->default(0.00)->required();
                 $table->tableDecimal('cost_price', __('cost_single_price'))->default(0.00)->required();
                 $table->select('position_id', __('position_id'))->options(PositionModel::orderBy('id', 'desc')->pluck('name', 'id'));
-                $table->ipt('batch_no',__('batch_no'))->rem(8)->default("PC".date('Ymd').rand(1000,9999))->required();
+                $table->ipt('batch_no',__('batch_no'))->rem(8)->default(function (){
+                    $batch_no="PC".date('Ymd').rand(1000,9999);
+                    while (1){
+                        if(SkuStockBatchModel::whereBatchNo($batch_no)->exists()){
+                            $batch_no="PC".date('Ymd').rand(1000,9999);
+                            continue;
+                        }
+                        break;
+                    }
+                    return $batch_no;
+
+                })->required();
             })->useTable()->width(12)->enableHorizontal();
         });
     }

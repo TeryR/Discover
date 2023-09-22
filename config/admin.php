@@ -1,18 +1,7 @@
 <?php
 
-/*
- * // +----------------------------------------------------------------------
- * // | erp
- * // +----------------------------------------------------------------------
- * // | Copyright (c) 2006~2020 erp All rights reserved.
- * // +----------------------------------------------------------------------
- * // | Licensed ( LICENSE-1.0.0 )
- * // +----------------------------------------------------------------------
- * // | Author: yxx <1365831278@qq.com>
- * // +----------------------------------------------------------------------
- */
-
 return [
+
     /*
     |--------------------------------------------------------------------------
     | dcat-admin name
@@ -22,7 +11,7 @@ return [
     | login page.
     |
     */
-    'name' => 'DGTCRM',
+    'name' => 'Dcat Admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -33,7 +22,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<img src="/vendors/dcat-admin/images/logo.png" width="35"> &nbsp;DGTCRM',
+    'logo' => '<img src="/vendor/dcat-admin/images/logo.png" width="35"> &nbsp;Dcat Admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -45,7 +34,15 @@ return [
     | '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo-mini' => '<img src="/vendors/dcat-admin/images/logo.png">',
+    'logo-mini' => '<img src="/vendor/dcat-admin/images/logo.png">',
+
+    /*
+    |--------------------------------------------------------------------------
+    | dcat-admin favicon
+    |--------------------------------------------------------------------------
+    |
+    */
+    'favicon' => null,
 
     /*
      |--------------------------------------------------------------------------
@@ -68,11 +65,15 @@ return [
     |
     */
     'route' => [
+        // 'domain' => env('ADMIN_ROUTE_DOMAIN'),
+
         'prefix' => env('ADMIN_ROUTE_PREFIX', 'admin'),
 
         'namespace' => 'App\\Admin\\Controllers',
 
         'middleware' => ['web', 'admin'],
+
+        // 'enable_session_middleware' => false,
     ],
 
     /*
@@ -95,7 +96,7 @@ return [
     | Html title for all pages.
     |
     */
-    'title' => 'DGTCRM',
+    'title' => 'Admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -156,15 +157,41 @@ return [
             'auth/login',
             'auth/logout',
         ],
+
+        // 'enable_session_middleware' => false,
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | The global Grid setting
+    |--------------------------------------------------------------------------
+    */
     'grid' => [
-        /*
-        |--------------------------------------------------------------------------
-        | The global Grid action display class.
-        |--------------------------------------------------------------------------
-        */
+
+        // The global Grid action display class.
         'grid_action_class' => Dcat\Admin\Grid\Displayers\DropdownActions::class,
+
+        // The global Grid batch action display class.
+        // 'batch_action_class' => Dcat\Admin\Grid\Tools\BatchActions::class,
+
+        // // The global Grid pagination display class.
+        // 'paginator_class' => Dcat\Admin\Grid\Tools\Paginator::class,
+
+        // 'actions' => [
+        //     'view' => Dcat\Admin\Grid\Actions\Show::class,
+        //     'edit' => Dcat\Admin\Grid\Actions\Edit::class,
+        //     'quick_edit' => Dcat\Admin\Grid\Actions\QuickEdit::class,
+        //     'delete' => Dcat\Admin\Grid\Actions\Delete::class,
+        //     'batch_delete' => Dcat\Admin\Grid\Tools\BatchDelete::class,
+        // ],
+
+        // // The global Grid column selector setting.
+        // 'column_selector' => [
+        //     'store' => Dcat\Admin\Grid\ColumnSelector\SessionStore::class,
+        //     'store_params' => [
+        //         'driver' => 'file',
+        //     ],
+        // ],
     ],
 
     /*
@@ -213,6 +240,14 @@ return [
 
         // Whether enable menu bind to a permission.
         'bind_permission' => true,
+
+        // Whether enable role bind to menu.
+        // 'role_bind_menu' => true,
+
+        // // Whether enable permission bind to menu.
+        // 'permission_bind_menu' => true,
+
+        // 'default_icon' => 'feather icon-circle',
     ],
 
     /*
@@ -225,14 +260,16 @@ return [
     |
     */
     'upload' => [
+
         // Disk in `config/filesystem.php`.
-        'disk' => 'qiniu',
+        'disk' => 'public',
 
         // Image and file upload path under the disk above.
         'directory' => [
             'image' => 'images',
             'file'  => 'files',
         ],
+
     ],
 
     /*
@@ -244,6 +281,7 @@ return [
     |
     */
     'database' => [
+
         // Database connection for following tables.
         'connection' => '',
 
@@ -264,12 +302,11 @@ return [
         'menu_model' => Dcat\Admin\Models\Menu::class,
 
         // Pivot table for table above.
-        'operation_log_table'    => 'admin_operation_log',
-        'role_users_table'       => 'admin_role_users',
+        // 'role_users_table'       => 'admin_role_users',
         'role_permissions_table' => 'admin_role_permissions',
         'role_menu_table'        => 'admin_role_menu',
         'permission_menu_table'  => 'admin_permission_menu',
-    ],
+        ],
 
     /*
     |--------------------------------------------------------------------------
@@ -359,11 +396,11 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Extension Directory
+    | Extension
     |--------------------------------------------------------------------------
     |
     | When you use command `php artisan admin:extend` to generate extensions,
-    | the extension files will be generated in this directory.
+        | the extension files will be generated in this directory.
     */
     'extension_dir' => app_path('Admin/Extensions'),
 

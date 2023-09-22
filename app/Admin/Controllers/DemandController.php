@@ -18,7 +18,7 @@ use App\Admin\Repositories\Demand;
 use App\Models\DemandModel;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class DemandController extends AdminController
 {

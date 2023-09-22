@@ -64,7 +64,7 @@ class ProductCheckForm extends Form implements LazyRenderable
             ]);
         });
 
-        return $this->success('添加检验成功！', route('sku-stock-batchs.index'));
+        return $this->success('添加检验成功！',admin_route('sku-stock-batchs.index'));
     }
 
     /**

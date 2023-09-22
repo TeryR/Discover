@@ -34,7 +34,7 @@ HTML;
 
     public function script()
     {
-        $url = route('customers.index', [
+        $url = admin_route('customers.index', [
             Grid::IFRAME_QUERY_NAME => 1,
         ]);
 

@@ -21,7 +21,7 @@ use App\Models\SaleOutItemModel;
 use App\Models\SaleOutOrderModel;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class SaleOutBatchController extends AdminController
 {
@@ -47,7 +47,6 @@ class SaleOutBatchController extends AdminController
             $grid->column('item.sku.product.type_str', '类型');
             $grid->column('item.sku.product.type_str', '类型');
             $grid->column('item.sku.attr_value_ids_str', '属性');
-            $grid->column('stock_batch.standard_str', '检验标准');
             $grid->column('stock_batch.batch_no');
             $grid->column('item.should_num', '要货数量');
             $grid->column('actual_num', '出库数量')->edit();

@@ -18,6 +18,7 @@ use App\Models\PositionModel;
 use App\Models\PurchaseInOrderModel;
 use App\Models\PurchaseItemModel;
 use App\Models\PurchaseOrderModel;
+use App\Models\SkuStockBatchModel;
 use Dcat\Admin\Actions\Response;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Grid\BatchAction;
@@ -65,21 +66,23 @@ class BatchCreatePurInOrderSave extends BatchAction
             'user_id'     => Admin::user()->id,
             'with_id'     => $purchaseOrderModel->id,
         ]);
+
         $items    = $purchaseOrderModel->items->map(function (PurchaseItemModel $purchaseItemModel) {
             return [
                 'sku_id'      => $purchaseItemModel->sku_id,
                 'should_num'  => $purchaseItemModel->should_num,
                 'actual_num'  => $purchaseItemModel->should_num,
                 'price'       => $purchaseItemModel->price,
-                'percent'     => $purchaseItemModel->percent,
-                'standard'    => $purchaseItemModel->standard,
-                'batch_no'    => 'PC' . date('Ymd'),
+//                'percent'     => $purchaseItemModel->percent,
+//                'standard'    => $purchaseItemModel->standard,
+                'batch_no'    => batch_no_create(),
                 'position_id' => $this->default_position_id,
             ];
         });
-        $in_order->items()->createMany($items);
-    }
+//        dump($items);
+        $in_order&&$in_order->items()->createMany($items);
 
+    }
     protected function html(): string
     {
         return <<<HTML

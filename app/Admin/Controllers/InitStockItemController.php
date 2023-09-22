@@ -18,7 +18,7 @@ use App\Admin\Repositories\InitStockItem;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class InitStockItemController extends AdminController
 {
@@ -33,8 +33,8 @@ class InitStockItemController extends AdminController
             $grid->column('id')->sortable();
             $grid->column('order_id');
             $grid->column('sku_id');
-            $grid->column('percent');
-            $grid->column('standard');
+//            $grid->column('percent');
+//            $grid->column('standard');
             $grid->column('actual_num');
             $grid->column('cost_price');
             $grid->column('position_id');
@@ -61,8 +61,8 @@ class InitStockItemController extends AdminController
             $show->field('id');
             $show->field('order_id');
             $show->field('sku_id');
-            $show->field('percent');
-            $show->field('standard');
+//            $show->field('percent');
+//            $show->field('standard');
             $show->field('actual_num');
             $show->field('cost_price');
             $show->field('position_id');
@@ -83,8 +83,8 @@ class InitStockItemController extends AdminController
             $form->display('id');
             $form->text('order_id');
             $form->text('sku_id');
-            $form->text('percent');
-            $form->text('standard');
+//            $form->text('percent');
+//            $form->text('standard');
             $form->text('actual_num');
             $form->text('cost_price');
             $form->text('position_id');

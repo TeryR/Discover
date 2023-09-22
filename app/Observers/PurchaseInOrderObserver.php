@@ -91,8 +91,7 @@ class PurchaseInOrderObserver
                 $init_num = SkuStockModel::query()
                     ->where([
                         'sku_id' => $purchaseInItemModel->sku_id,
-                        'percent' => $purchaseInItemModel->percent,
-                        'standard'       => $purchaseInItemModel->standard,
+
                     ])->value('num');
 
                 StockHistoryModel::create([

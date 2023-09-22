@@ -16,12 +16,13 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Grid\BatchStockSelectSave;
 use App\Admin\Actions\Grid\ProductCheck;
+use App\Admin\Actions\Grid\SunHuai;
 use App\Admin\Extensions\Grid\ProductCheckDetails;
 use App\Admin\Repositories\SkuStockBatch;
 use App\Models\PositionModel;
 use App\Models\SkuStockBatchModel;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 use Illuminate\Database\Eloquent\Builder;
 
 class SkuStockBatchController extends AdminController
@@ -46,7 +47,7 @@ class SkuStockBatchController extends AdminController
             // $grid->column('percent', '含绒量(%)');
             // $grid->column('standard_str', '检验标准');
             $grid->column('batch_no',__('batch_no'));
-            $grid->column('num',__('sku.num'));
+            $grid->column('num',__('actual_num'));
             $grid->column('cost_price', __('cost_price'));
             $grid->column("cost_price_total", __('cost_price_total'))->display(function () {
                 return bcmul($this->num, $this->cost_price, 2);
@@ -74,17 +75,27 @@ class SkuStockBatchController extends AdminController
                 // $filter->equal('standard', "检验标准")->select(SkuStockBatchModel::STANDARD)->width(3);
                 $filter->like('batch_no', __('batch_no'))->width(3);
                 $filter->equal('position_id', __('position_id'))->select(PositionModel::query()->latest()->pluck('name', 'id'))->width(2);
+                $filter->equal('cost_price',__('cost_price'));
             });
             // $grid->column("_id", "检验记录")->expand(ProductCheckDetails::make());
+//            $grid->actions(function (Grid\Displayers\Actions $actions) {
+//                if ($this->num > 0) {
+//                    $actions->append(new ProductCheck());
+//                }
+//                return $actions;
+//            });
             $grid->actions(function (Grid\Displayers\Actions $actions) {
-                if ($this->num > 0) {
-                    $actions->append(new ProductCheck());
-                }
-                return $actions;
+                // append一个操作
+                $actions->append(new SunHuai());
+//                $actions->append('<a href=""><i class="icon-trash-2"></i></a>');
+                // prepend一个操作
+//                $actions->prepend('<a href=""><i class="fa fa-paper-plane"></i></a>');
             });
+
+            $grid->disableDeleteButton();
             $grid->disableRowSelector();
             $grid->disableQuickEditButton();
-            // $grid->disableActions();
+//             $grid->disableActions();
             $grid->disableCreateButton();
         });
     }
@@ -97,8 +108,8 @@ class SkuStockBatchController extends AdminController
             } else {
                 $grid->model()->where([
                     'sku_id' => request()->input('sku_id'),
-                    'standard' => request()->input('standard'),
-                    'percent' => request()->input('percent'),
+//                    'standard' => request()->input('standard'),
+//                    'percent' => request()->input('percent'),
                 ])->where('num', ">", 0)->orderBy('id', 'desc');
             }
             $grid->column('id')->sortable();
@@ -107,8 +118,8 @@ class SkuStockBatchController extends AdminController
             $grid->column('sku.product.unit.name', '单位');
             $grid->column('sku.product.type_str', '类型');
             $grid->column('sku.attr_value_ids_str', '属性');
-            $grid->column('standard', '检验标准');
-            $grid->column('percent', '含绒量（%）');
+//            $grid->column('standard', '检验标准');
+//            $grid->column('percent', '含绒量（%）');
             $grid->column('batch_no');
             $grid->column('num');
             $grid->column('position.name', '库位');

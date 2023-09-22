@@ -16,15 +16,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\AttrModel
  *
  * @property int $id
  * @property string $name 属性名称
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AttrValueModel[] $values
  * @property-read int|null $values_count
  * @method static \Illuminate\Database\Eloquent\Builder|AttrModel newModelQuery()
@@ -45,6 +46,7 @@ class AttrModel extends BaseModel
     use SoftDeletes;
 
     protected $table = 'attr';
+    protected $with=['values'];
 
     public function values():HasMany
     {

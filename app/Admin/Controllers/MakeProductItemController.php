@@ -18,7 +18,7 @@ use App\Admin\Repositories\MakeProductItem;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class MakeProductItemController extends AdminController
 {
@@ -38,8 +38,8 @@ class MakeProductItemController extends AdminController
             $grid->column('cost_price');
             $grid->column('position_id');
             $grid->column('batch_no');
-            $grid->column('percent');
-            $grid->column('standard');
+//            $grid->column('percent');
+//            $grid->column('standard');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
 
@@ -67,8 +67,8 @@ class MakeProductItemController extends AdminController
             $show->field('cost_price');
             $show->field('position_id');
             $show->field('batch_no');
-            $show->field('percent');
-            $show->field('standard');
+//            $show->field('percent');
+//            $show->field('standard');
             $show->field('created_at');
             $show->field('updated_at');
         });
@@ -90,8 +90,8 @@ class MakeProductItemController extends AdminController
             $form->text('cost_price');
             $form->text('position_id');
             $form->text('batch_no');
-            $form->text('percent');
-            $form->text('standard');
+//            $form->text('percent');
+//            $form->text('standard');
 
             $form->display('created_at');
             $form->display('updated_at');

@@ -100,10 +100,9 @@ class SaleOutOrderObserver
                 $saleOutItemModel->batchs->each(function (SaleOutBatchModel $saleOutBatchModel) use ($saleOutItemModel, $saleOutOrderModel) {
                     $init_num = SkuStockModel::where([
                         'sku_id' => $saleOutItemModel->sku_id,
-                        'percent' => $saleOutItemModel->percent,
-                        'standard'       => $saleOutItemModel->standard,
                     ])->value('num');
-
+                    dump($init_num);
+                    exit();
                     StockHistoryModel::create([
                         'sku_id'          => $saleOutItemModel->sku_id,
                         'out_position_id' => $saleOutBatchModel->stock_batch->position_id,
@@ -115,8 +114,8 @@ class SaleOutOrderObserver
                         'out_num'         => $saleOutBatchModel->actual_num,
                         'out_price'       => $saleOutItemModel->price,
                         'balance_num'     => $init_num - $saleOutBatchModel->actual_num,
-                        'percent'         => $saleOutItemModel->percent,
-                        'standard'        => $saleOutItemModel->standard,
+//                        'percent'         => $saleOutItemModel->percent,
+//                        'standard'        => $saleOutItemModel->standard,
                         'user_id'         => Admin::user()->id,
                         'batch_no'        => $saleOutBatchModel->stock_batch->batch_no,
                     ]);

@@ -37,8 +37,8 @@ class OrderReview extends AbstractTool
     protected $model;
 
     const REVIEW_STATUS = [
-        BaseModel::REVIEW_STATUS_OK       => '审核',
-        BaseModel::REVIEW_STATUS_REREVIEW => '反审核',
+        BaseModel::REVIEW_STATUS_OK       => '审核/심사하다',
+        BaseModel::REVIEW_STATUS_REREVIEW => '反审核/기각하다',
     ];
 
     public function __construct($review_status = null)

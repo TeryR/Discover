@@ -25,7 +25,7 @@ use App\Models\SaleOrderAmountModel;
 use App\Models\SupplierModel;
 use Carbon\Carbon;
 use Dcat\Admin\Admin;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Form;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Traits\HasFormResponse;
@@ -69,7 +69,7 @@ class MonthSettlementController extends AdminController
                 ))->required();
             })->required();
         })->title("财务月结")
-            ->action(route('month-settlements.settlement'))
+            ->action(admin_route('month-settlements.settlement'))
             ->disableListButton()
             ->disableViewCheck()
             ->disableCreatingCheck()
@@ -176,6 +176,6 @@ class MonthSettlementController extends AdminController
                 });
             }
         }
-        return $this->ajaxResponse("月结成功", route('cost-orders.index'));
+        return $this->ajaxResponse("月结成功", admin_route('cost-orders.index'));
     }
 }

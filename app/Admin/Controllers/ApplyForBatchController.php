@@ -21,7 +21,7 @@ use App\Models\ApplyForItemModel;
 use App\Models\ApplyForOrderModel;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class ApplyForBatchController extends AdminController
 {

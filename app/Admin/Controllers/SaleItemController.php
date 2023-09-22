@@ -17,7 +17,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Repositories\SaleItem;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class SaleItemController extends AdminController
 {
@@ -39,7 +39,7 @@ class SaleItemController extends AdminController
             $grid->column('sku_id');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
-
+            $grid->disableDeleteButton();
             $grid->filter(function (Grid\Filter $filter) {
             });
         });
@@ -61,8 +61,8 @@ class SaleItemController extends AdminController
             $form->text('price');
             $form->text('should_num');
             $form->text('sku_id');
-            $form->decimal('percent');
-            $form->number('standard');
+//            $form->decimal('percent');
+//            $form->number('standard');
 
             $form->display('created_at');
             $form->display('updated_at');

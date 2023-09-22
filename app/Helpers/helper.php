@@ -15,6 +15,7 @@
 use App\Models\AttrValueModel;
 use App\Models\BaseModel;
 use App\Models\OrderNoGeneratorModel;
+use App\Models\SkuStockBatchModel;
 
 if (! file_exists("lower_pinyin_abbr")) {
     /**
@@ -116,4 +117,25 @@ if (! file_exists("store_order_img")) {
         }
         return $img;
     }
+
+}
+if (! file_exists("batch_no_create")) {
+    /**
+     * @param int $status
+     *
+     * @return string
+     */
+    function batch_no_create(): string
+    {
+        $batch_no="PC".date('Ymd').rand(1000,9999);
+        while (1){
+            if(SkuStockBatchModel::whereBatchNo($batch_no)->exists()){
+                $batch_no="PC".date('Ymd').rand(1000,9999);
+                continue;
+            }
+            break;
+        }
+        return $batch_no;
+    }
+
 }

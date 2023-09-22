@@ -18,7 +18,7 @@ use App\Admin\Renderables\SkuStockBatchTable;
 use App\Admin\Repositories\SkuStock;
 use App\Models\SkuStockBatchModel;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 use Illuminate\Database\Eloquent\Builder;
 
 class SkuStockController extends AdminController
@@ -42,7 +42,7 @@ class SkuStockController extends AdminController
             // $grid->column('standard_str', '检验标准');
             $grid->column('num',__('sku_num'));
             $grid->column('batch_num', __('batch_num'))->expand(function () {
-                return SkuStockBatchTable::make(['sku_id' => $this->sku_id, 'percent' => $this->percent]);
+                return SkuStockBatchTable::make(['sku_id' => $this->sku_id]);
             });
 //            $grid->column('created_at');
 //            $grid->column('updated_at')->sortable();
@@ -64,7 +64,7 @@ class SkuStockController extends AdminController
                     $group->ngt('不大于');
                     $group->equal('等于');
                 })->width(3);
-                
+
             });
             $grid->disableActions();
             $grid->disableCreateButton();

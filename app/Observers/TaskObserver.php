@@ -17,6 +17,7 @@ namespace App\Observers;
 use App\Models\MakeProductItemModel;
 use App\Models\MakeProductOrderModel;
 use App\Models\PositionModel;
+use App\Models\SkuStockBatchModel;
 use App\Models\TaskModel;
 use Dcat\Admin\Admin;
 
@@ -29,6 +30,7 @@ class TaskObserver
 
     public function saving(TaskModel $taskModel)
     {
+
         if ($taskModel->isDirty('status') && $taskModel->status === TaskModel::STATUS_DRAW) {
             $item = $taskModel->make_product_order->items;
             $avgCostPrice = bcdiv($taskModel->sum_cost_price, $item->actual_num, 2);
@@ -55,7 +57,17 @@ class TaskObserver
             [
                 'should_num' => $taskModel->plan_num,
                 'actual_num' => $taskModel->plan_num,
-                'batch_no' => "PC".date('Ymd'),
+                'batch_no' => function(){
+                    $batch_no="PC".date('Ymd').rand(1000,9999);
+                    while (1){
+                        if(SkuStockBatchModel::whereBatchNo($batch_no)->exists()){
+                            $batch_no="PC".date('Ymd').rand(1000,9999);
+                            continue;
+                        }
+                        break;
+                    }
+                    return $batch_no;
+                },
                 'percent' => $taskModel->percent,
                 'standard' => $taskModel->standard,
                 'sku_id' => $taskModel->sku_id,

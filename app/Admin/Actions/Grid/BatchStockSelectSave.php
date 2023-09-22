@@ -64,9 +64,9 @@ class BatchStockSelectSave extends BatchAction
 
         $this->item_id = $request->input('_item_id');
 
-        $this->standard = $request->input('_standard');
-
-        $this->percent = $request->input('_percent');
+//        $this->standard = $request->input('_standard');
+//
+//        $this->percent = $request->input('_percent');
 
         $this->order_id = $request->input('_order_id') ?? 0;
 
@@ -89,8 +89,8 @@ class BatchStockSelectSave extends BatchAction
                 'stock_batch_id' => $stock_batch_id,
                 'sku_id'         => $this->sku_id,
                 'item_id'        => $this->item_id,
-                'standard'       => $this->standard,
-                'percent'        => $this->percent,
+//                'standard'       => $this->standard,
+//                'percent'        => $this->percent,
                 'cost_price'     => $skuStockBatch->cost_price,
             ]);
         }
@@ -103,8 +103,8 @@ class BatchStockSelectSave extends BatchAction
                 'stock_batch_id' => $stock_batch_id,
                 'sku_id'         => $this->sku_id,
                 'item_id'        => $this->item_id,
-                'standard'       => $this->standard,
-                'percent'        => $this->percent,
+//                'standard'       => $this->standard,
+//                'percent'        => $this->percent,
             ]);
         }
     }
@@ -136,8 +136,8 @@ HTML;
         $table   = request()->input('table');
         $sku_id  = request()->input('sku_id');
         $item_id = request()->input('item_id');
-        $standard = request()->input('standard');
-        $percent = request()->input('percent');
+//        $standard = request()->input('standard');
+//        $percent = request()->input('percent');
         $order_id = request()->input('order_id');
 
         return <<<JS
@@ -152,8 +152,7 @@ function (data, target, action) {
     data["_table"] = "$table";
     data["_sku_id"] = "$sku_id";
     data['_item_id'] = "$item_id";
-    data['_standard'] = "$standard";
-    data['_percent'] = "$percent";
+
     data['_order_id'] = "$order_id";
 
     // 设置主键为复选框选中的行ID数组

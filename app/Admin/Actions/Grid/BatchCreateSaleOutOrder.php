@@ -34,7 +34,7 @@ HTML;
 
     public function script()
     {
-        $url = route('sale-orders.index', [Grid::IFRAME_QUERY_NAME => 1]);
+        $url = admin_route('sale-orders.index', [Grid::IFRAME_QUERY_NAME => 1]);
         return <<<JS
         $("#batch-sale-order-out-create-select-resourc").on("click",function(){
             var url = "{$url}";

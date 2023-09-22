@@ -17,7 +17,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Repositories\SaleOutItem;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class SaleOutItemController extends AdminController
 {
@@ -57,8 +57,8 @@ class SaleOutItemController extends AdminController
             $form->text('price');
             $form->text('should_num');
             $form->text('sku_id');
-            $form->decimal('percent');
-            $form->number('standard');
+//            $form->decimal('percent');
+//            $form->number('standard');
 
             $form->display('created_at');
             $form->display('updated_at');

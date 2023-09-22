@@ -80,7 +80,7 @@ class SaleOutOrderController extends OrderController
         $form->row(function (Form\Row $row) use ($customer) {
             $row->width(6)->select('customer_id',__('customer_id'))->options($customer)->loads(
                 ['address_id', 'drawee_id'],
-                [route('api.customer.address.find'), route('api.customer.drawee.find')]
+                [admin_route('api.customer.address.find'), admin_route('api.customer.drawee.find')]
             )->required();
             $row->width(6)->select('address_id',__('address_id'))->required();
         });
@@ -97,13 +97,13 @@ class SaleOutOrderController extends OrderController
         $grid->column('sku.product.name',__('sku.product.name'));
         $grid->column('sku.product.unit.name',__('sku.product.unit.name'));
         // $grid->column('sku.product.type_str', '类型');
-        // $grid->column('sku_id', '属性')->if(function () use ($order) {
-        //     return $order->review_status === SaleOutOrderModel::REVIEW_STATUS_OK;
-        // })->display(function () {
-        //     return $this->sku['attr_value_ids_str'] ?? '';
-        // })->else()->selectplus(function (Fluent $fluent) {
-        //     return $fluent->sku['product']['sku_key_value'];
-        // });
+//         $grid->column('sku_id', '属性')->if(function () use ($order) {
+//             return $order->review_status === SaleOutOrderModel::REVIEW_STATUS_OK;
+//         })->display(function () {
+//             return $this->sku['attr_value_ids_str'] ?? '';
+//         })->else()->selectplus(function ($order) {
+//             return $order->sku['product']['sku_key_value'];
+//         });
 
         // $grid->column('percent', '含绒百分比')->if(function () use ($order) {
         //     return $order->review_status !== SaleOutOrderModel::REVIEW_STATUS_OK;
@@ -127,12 +127,10 @@ class SaleOutOrderController extends OrderController
             return bcmul($this->actual_num, $this->price, 2);
         });
         $grid->column('pcxq', '批次详情')->batch_detail(function (BatchDeail $batchDeail) {
-            return route('sale-out-batchs.index', [
+            return admin_route('sale-out-batchs.index', [
                 Grid::IFRAME_QUERY_NAME => 1,
                 'item_id'               => $batchDeail->row->id,
                 'sku_id'                => $batchDeail->row->sku_id,
-                'standard'              => $batchDeail->row->standard,
-                'percent'               => $batchDeail->row->percent,
             ]);
         });
     }

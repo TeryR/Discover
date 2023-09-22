@@ -56,8 +56,8 @@ class SupplierModel extends BaseModel
     const PAY_METHOD_WECHAT = 2;
 
     const PAY_METHOD = [
-        self::PAY_METHOD_CASH   => '现金',
-        self::PAY_METHOD_ZFB    => '支付宝',
-        self::PAY_METHOD_WECHAT => '微信',
+        self::PAY_METHOD_CASH   => '现金/현금',
+        self::PAY_METHOD_ZFB    => 'AliPay',
+        self::PAY_METHOD_WECHAT => 'WeChat Pay',
     ];
 }

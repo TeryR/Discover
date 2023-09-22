@@ -17,7 +17,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Repositories\Drawee;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class DraweeController extends AdminController
 {

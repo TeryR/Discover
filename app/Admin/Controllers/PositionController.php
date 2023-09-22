@@ -17,7 +17,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Repositories\Position;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class PositionController extends AdminController
 {
@@ -30,7 +30,7 @@ class PositionController extends AdminController
     {
         return Grid::make(new Position(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('name',__('name'));
+            $grid->column('name',__('position.name'));
             $grid->column('created_at',__('created_at'));
             $grid->column('updated_at',__('updated_at'))->sortable();
         });
@@ -44,7 +44,7 @@ class PositionController extends AdminController
     protected function form()
     {
         return Form::make(new Position(), function (Form $form) {
-            $form->text('name',__('name'));
+            $form->text('name',__('position.name'));
         });
     }
 }

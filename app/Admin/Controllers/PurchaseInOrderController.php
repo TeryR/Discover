@@ -19,9 +19,13 @@ use App\Admin\Actions\Grid\BatchOrderPrint;
 use App\Admin\Actions\Grid\EditOrder;
 use App\Admin\Extensions\Form\Order\OrderController;
 use App\Admin\Repositories\PurchaseInOrder;
+use App\Admin\Support\PurchaseInOrderExpend;
+use App\Models\BaseModel;
 use App\Models\PositionModel;
 use App\Models\ProductModel;
+use App\Models\PurchaseInOrderModel;
 use App\Models\PurchaseOrderModel;
+use App\Models\SkuStockBatchModel;
 use App\Repositories\SupplierRepository;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -39,20 +43,23 @@ class PurchaseInOrderController extends OrderController
         return Grid::make(new PurchaseInOrder(['user', 'supplier', 'with_order']), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('order_no',__('order_no'));
-            $grid->column('with_order.order_no', __('with_order.order_no'))->emp();
+
+            $grid->column('with_order.order_no', __('with_order.order_no'))
+                ->expand(PurchaseInOrderExpend::make())->emp();
             $grid->column('other',__('other'))->emp();
             $grid->column('status', __('status'))->using($this->oredr_model::STATUS)->label($this->oredr_model::STATUS_COLOR);
             $grid->column('review_status', __('review_status'))->using($this->oredr_model::REVIEW_STATUS)->label($this->oredr_model::REVIEW_STATUS_COLOR);
-            $grid->column('supplier.name', __('suplier.name'))->emp();
+            $grid->column('supplier.name', __('supplier.name'))->emp();
             $grid->column('user.username',__('user.username'));
             $grid->column('created_at',__('created_at'));
             $grid->column('apply_at', __('apply_at'))->emp();
             $grid->disableQuickEditButton();
             $grid->disableCreateButton();
+            $grid->disableDeleteButton();
             $grid->actions(EditOrder::make());
             $grid->tools(BatchOrderPrint::make());
             $grid->tools(BatchCreatePurInOrder::make());
-
+            $grid->showRowSelector();
             $grid->filter(function (Grid\Filter $filter) {
             });
         });
@@ -92,7 +99,7 @@ class PurchaseInOrderController extends OrderController
     {
         $form->width(12)->row(function (Form\Row $row) {
             $row->hasMany('items', '', function (Form\NestedForm $table) {
-                $table->select('product_id', __('product_id'))->options(ProductModel::pluck('name', 'id'))->loadpku(route('api.product.find'))->required();
+                $table->select('product_id', __('product_id'))->options(ProductModel::pluck('name', 'id'))->loadpku(admin_route('api.product.find'))->required();
                 $table->ipt('unit', __('unit'))->rem(3)->default('-')->disable();
                 // $table->select('sku_id', '属性选择')->options()->required();
                 // $table->tableDecimal('percent', '含绒百分比')->default(0);
@@ -100,7 +107,18 @@ class PurchaseInOrderController extends OrderController
                 $table->num('should_num', __('should_num'))->required();
                 $table->tableDecimal('price',__('purchase.price'))->default(0.00)->required();
                 $table->select('position_id',__('position_id'))->options(PositionModel::orderBy('id', 'desc')->pluck('name', 'id'));
-                $table->ipt('batch_no', __('batch_no'))->rem(8)->default("PC".date('Ymd'))->required();
+                $table->ipt('batch_no', __('batch_no'))->rem(8)->default(function (){
+                    $batch_no="PC".date('Ymd').rand(1000,9999);
+                    while (1){
+                        if(SkuStockBatchModel::whereBatchNo($batch_no)->exists()){
+                            $batch_no="PC".date('Ymd').rand(1000,9999);
+                            continue;
+                        }
+                        break;
+                    }
+                    return $batch_no;
+
+                })->required();
             })->useTable()->width(12)->enableHorizontal();
         });
     }

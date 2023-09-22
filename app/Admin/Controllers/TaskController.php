@@ -24,7 +24,7 @@ use App\Models\SkuStockBatchModel;
 use App\Models\TaskModel;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Models\Administrator;
 use Yxx\LaravelQuick\Exceptions\Api\ApiUnAuthException;
 
@@ -41,7 +41,7 @@ class TaskController extends AdminController
             $grid->column('id')->sortable();
             $grid->column('order_no');
             $grid->column('info', '产品信息')->display(function () {
-                return $this->sku['product']['name']."|".$this->sku['attr_value_ids_str']."|".$this->percent."%|".$this->standard_str;
+                return $this->sku['product']['name']."|".$this->sku['attr_value_ids_str'];//."|".$this->percent."%|".$this->standard_str;
             });
             $grid->column('sum_cost_price', "领料总成本");
 //            $grid->column('craft.name', '生产工艺');
@@ -100,13 +100,13 @@ class TaskController extends AdminController
             });
             $form->row(function (Form\Row $row) {
                 $row->width(4)->text('order_no', '订单号')->default(build_order_no('SCRW'))->readOnly();
-                $row->width(4)->select('product_id', '名称')->options(ProductModel::pluck('name', 'id'))->loadpku(route('api.product.find'))->required();
+                $row->width(4)->select('product_id', '名称')->options(ProductModel::pluck('name', 'id'))->loadpku(admin_route('api.product.find'))->required();
                 $row->width(4)->ipt('unit', '单位')->rem(3)->default('-')->disable();
             });
             $form->row(function (Form\Row $row) {
                 $row->width(4)->select('sku_id', '属性选择')->options()->required();
-                $row->width(4)->select('standard', '检验标准')->options(SkuStockBatchModel::STANDARD)->required();
-                $row->width(4)->rate('percent', '含绒百分比')->default(0)->required();
+//                $row->width(4)->select('standard', '检验标准')->options(SkuStockBatchModel::STANDARD)->required();
+//                $row->width(4)->rate('percent', '含绒百分比')->default(0)->required();
             });
 
             $form->row(function (Form\Row $row) {

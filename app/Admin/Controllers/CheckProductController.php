@@ -19,7 +19,7 @@ use App\Models\ProductModel;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class CheckProductController extends AdminController
 {
@@ -109,7 +109,7 @@ class CheckProductController extends AdminController
 
             $form->row(function (Form\Row $row) {
                 $row->width(3)->text('check_no')->default(build_order_no('JY'))->readOnly();
-                $row->width(3)->select('product_id', '产品')->options(ProductModel::pluck('name', 'id'))->loadpku(route('api.product.find'))->required();
+                $row->width(3)->select('product_id', '产品')->options(ProductModel::pluck('name', 'id'))->loadpku(admin_route('api.product.find'))->required();
                 $row->width(3)->select('sku_id', '属性选择')->options()->required();
                 $row->width(3)->number('num')->default(0)->required();
             });

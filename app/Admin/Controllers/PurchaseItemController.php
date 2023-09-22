@@ -17,7 +17,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Repositories\PurchaseItem;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class PurchaseItemController extends AdminController
 {
@@ -36,7 +36,7 @@ class PurchaseItemController extends AdminController
             $grid->column('should_num');
             $grid->column('sku_id');
             $grid->column('created_at');
-            $grid->column('percent');
+//            $grid->column('percent');
             $grid->column('updated_at')->sortable();
 
             $grid->filter(function (Grid\Filter $filter) {
@@ -60,8 +60,8 @@ class PurchaseItemController extends AdminController
             $form->text('should_num');
             $form->text('sku.attr_value_ids');
             $form->text('sku_id');
-            $form->decimal('percent');
-            $form->number('standard');
+//            $form->decimal('percent');
+//            $form->number('standard');
 
             $form->display('created_at');
             $form->display('updated_at');

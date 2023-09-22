@@ -19,7 +19,7 @@ use App\Admin\Repositories\Customer;
 use App\Models\CustomerModel;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Controllers\AdminController;
+use Dcat\Admin\Http\Controllers\AdminController;
 
 class CustomerController extends AdminController
 {
