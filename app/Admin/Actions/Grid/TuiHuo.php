@@ -23,7 +23,10 @@ class TuiHuo extends RowAction
     /**
      * @return string
      */
-    protected $title = '退货';
+    protected $title = '<br>退货';
+    protected $button='<span class="grid-expand">
+   <a href="javascript:void(0)"><i class="feather icon-log-out grid-action-icon" title="退货/반품"></i></a>
+</span>';
 
     public function render()
     {

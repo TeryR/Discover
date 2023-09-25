@@ -17,17 +17,20 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\Grid\BatchStockSelectSave;
 use App\Admin\Actions\Grid\ProductCheck;
 use App\Admin\Actions\Grid\SunHuai;
+use App\Admin\Actions\Grid\TuiHuo;
 use App\Admin\Extensions\Grid\ProductCheckDetails;
+use App\Admin\Forms\TuiHuoForm;
 use App\Admin\Repositories\SkuStockBatch;
 use App\Models\PositionModel;
 use App\Models\SkuStockBatchModel;
+use App\Models\StockHistoryModel;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Http\Controllers\AdminController;
 use Illuminate\Database\Eloquent\Builder;
 
 class SkuStockBatchController extends AdminController
 {
-    public $title = "批次库存";
+    public $title = "批次库存/재고 차수";
 
     /**
      * Make a grid builder.
@@ -48,6 +51,18 @@ class SkuStockBatchController extends AdminController
             // $grid->column('standard_str', '检验标准');
             $grid->column('batch_no',__('batch_no'));
             $grid->column('num',__('actual_num'));
+            $grid->column('current_num',__('current_num'))->display(function (){
+                $in_num = StockHistoryModel::query()->where('batch_no',$this->batch_no)
+                    ->where('sku_id',$this->sku->id)
+                    ->where('flag',1)
+                    ->sum('in_num');
+                $out_num = StockHistoryModel::query()->where('batch_no',$this->batch_no)
+                    ->where('sku_id',$this->sku->id)
+                    ->where('flag',0)
+                    ->sum('out_num');
+                $current_num = $in_num-$out_num;
+                return $current_num;
+            });
             $grid->column('cost_price', __('cost_price'));
             $grid->column("cost_price_total", __('cost_price_total'))->display(function () {
                 return bcmul($this->num, $this->cost_price, 2);
@@ -87,6 +102,7 @@ class SkuStockBatchController extends AdminController
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 // append一个操作
                 $actions->append(new SunHuai());
+                $actions->append(new TuiHuo());
 //                $actions->append('<a href=""><i class="icon-trash-2"></i></a>');
                 // prepend一个操作
 //                $actions->prepend('<a href=""><i class="fa fa-paper-plane"></i></a>');

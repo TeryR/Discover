@@ -23,6 +23,7 @@ use Dcat\Admin\Http\Controllers\AdminController;
 
 class SupplierController extends AdminController
 {
+    protected $title="供应商列表/공급업체 목록";
     /**
      * Make a grid builder.
      *

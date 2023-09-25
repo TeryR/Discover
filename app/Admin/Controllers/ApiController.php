@@ -19,6 +19,7 @@ use App\Http\Requests\WithOrderRequest;
 use App\Http\Resources\ProductResource;
 use App\Repositories\AttrValueRepository;
 use App\Repositories\ProductRepository;
+use App\Repositories\StockHistoryRepository;
 use App\Repositories\UnitRepository;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
@@ -65,7 +66,10 @@ class ApiController extends Controller
         $product_id = $request->get('q');
         return ProductResource::make($repository->getInfoById($product_id));
     }
-
+    public function getBatchNoFromPurchaseInNo(Request $request, StockHistoryRepository $repository){
+        $purchaseInNo=$request->get('q');
+        return $repository->getBatchNoAccrodePurchaseIn($purchaseInNo);
+    }
     /**
      * @param WithOrderRequest $request
      * @param OrderService $service

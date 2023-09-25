@@ -50,6 +50,7 @@ class PurchaseOrderController extends OrderController
             $grid->column('finished_at',__('finished_at'))->emp();
             $grid->tools(BatchOrderPrint::make());
             $grid->disableQuickEditButton();
+            $grid->disableDeleteButton();
             $grid->actions(new EditOrder());
             $grid->filter(function (Grid\Filter $filter) {
             });

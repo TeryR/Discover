@@ -30,6 +30,7 @@ Route::group([
     $router->post('api/with/order', 'ApiController@withOrder')->name('api.with.order');
     $router->get('api/get-customer-address', 'ApiController@getCustomerAddress')->name('api.customer.address.find');
     $router->get('api/get-customer-drawee', 'ApiController@getCustomerDrawee')->name('api.customer.drawee.find');
+    $router->get('api/get-stockhistory-batchno', 'ApiController@getBatchNoFromPurchaseInNo')->name('api.stockhistory.findbatchno');
 
     $router->resource('attrs', 'AttrController');
     $router->resource('products', 'ProductController');
@@ -76,6 +77,9 @@ Route::group([
     $router->resource('demands', 'DemandController');
     $router->resource('inventorys', "InventoryController");
     $router->resource('checkout-products', 'CheckProductController');
+
+
+    $router->resource('return-order', 'ReturnOrderController');
 
     $router->get('report-centers', 'ReportCenterController@index');
     $router->get('settlement-history', 'FinancialReportController@settlementHistory')->name('financial.settlement-history');

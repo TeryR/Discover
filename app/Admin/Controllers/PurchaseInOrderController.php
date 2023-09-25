@@ -17,6 +17,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\Grid\BatchCreatePurInOrder;
 use App\Admin\Actions\Grid\BatchOrderPrint;
 use App\Admin\Actions\Grid\EditOrder;
+use App\Admin\Actions\Grid\TuiHuo;
 use App\Admin\Extensions\Form\Order\OrderController;
 use App\Admin\Repositories\PurchaseInOrder;
 use App\Admin\Support\PurchaseInOrderExpend;
@@ -56,6 +57,13 @@ class PurchaseInOrderController extends OrderController
             $grid->disableQuickEditButton();
             $grid->disableCreateButton();
             $grid->disableDeleteButton();
+//            $grid->actions(function (Grid\Displayers\Actions $actions) {
+//                // append一个操作
+//                if ($actions->row->status==1&&$actions->row->review_status==1) {
+//                    $actions->append(new TuiHuo());
+//                }
+//            });
+
             $grid->actions(EditOrder::make());
             $grid->tools(BatchOrderPrint::make());
             $grid->tools(BatchCreatePurInOrder::make());

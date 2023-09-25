@@ -20,6 +20,7 @@ use App\Models\AttrModel;
 use App\Models\AttrValueModel;
 use App\Models\ProductAttrModel;
 use App\Models\ProductModel;
+use App\Models\ProductSkuModel;
 use App\Repositories\ProductRepository;
 use App\Repositories\UnitRepository;
 use Dcat\Admin\Form;
@@ -95,6 +96,7 @@ class ProductController extends AdminController
     {
 //        DB::beginTransaction();
         return Form::make(new Product(['product_attr']), function (Form $form) {
+//            DB::beginTransaction();
             $form->row(function (Form\Row $row) use ($form) {
                 $row->width(6)->text('item_no',__('item_no'))
                     ->default(ProductRepository::buildItemNo())
@@ -106,9 +108,14 @@ class ProductController extends AdminController
             });
 
             $form->row(function (Form\Row $row) use ($form) {
-                $row->hidden('name');
-                $row->text('name_zh',__('name_zh'))->required()->placeholder("chinese name");
-                $row->text('name_ko',__('name_ko'))->required()->placeholder("korea name");
+                if ($form->isCreating()){
+                    $row->hidden('name');
+                    $row->text('name_zh',__('name_zh'))->required()->placeholder("chinese name");
+                    $row->text('name_ko',__('name_ko'))->required()->placeholder("korea name");
+                }elseif ($form->isEditing()){
+                    $row->ipt('name');
+                }
+
                 $row->width(4)->text('brand',__('brand'))->required();
                 $row->width(4)->text('type',__('product_type'))->required();
                 $row->width(4)->text('package',__('package'))->required();
@@ -132,18 +139,53 @@ class ProductController extends AdminController
 //                $row->text('attribute',__("attribute"))->required();
             });
             $form->saving(function (Form $form){
-               $form->name = $form->name_zh."_".$form->name_ko;
-               $form->deleteInput('name_zh');
-               $form->deleteInput('name_ko');
+                if ($form->isCreating()) {
+                    $form->name = $form->name_zh . "_" . $form->name_ko;
+                    $form->deleteInput('name_zh');
+                    $form->deleteInput('name_ko');
+                }
+//                dump($form->product_attr);
+//                $temp=$form->product_attr;
+//                foreach ($temp as $key=>&$value){
+//                    $value['attr_value_ids']='['.json_encode($value['attr_value_ids']).']';
+//                }
+//                $form->product_attr=$temp;
+//                dump($form->product_attr);
             });
             $form->saved(function (Form $form, $result) {
                 $id      = $form->getKey();
                 $product = ProductModel::findOrFail($id);
-                $attr    = collect($product->attr_value_arr)->keys()->diff($product->sku->pluck('attr_value_ids'))->map(function (string $val) {
+
+
+                //select
+                $attr=collect($product->attr_value_arr)->values()->diff($product->sku->pluck('attr_value_ids'))->map(function (array $val) {
+//                    dump($val);
                     return ['attr_value_ids' => $val];
                 })->values()->toArray();
-                $attr && $product->sku()->createMany($attr);
+                $attr_value='';
+                foreach ($attr as $value){
+                    foreach ($value['attr_value_ids'] as $item){
+
+                        $attrvalue=$item;
+//                        dump($attrvalue);
+                        $attr_value.=','.$attrvalue;
+                    }
+
+                }
+                $attr_value=explode(',',$attr_value);
+                array_shift($attr_value);
+                $attr_value=implode(',',$attr_value);
+                $res=['attr_value_ids'=>$attr_value,'product_id'=>$id];
+
+//                $attr    = collect($product->attr_value_arr)->keys()->diff($product->sku->pluck('attr_value_ids'))->map(function (string $val) {
+//                    return ['attr_value_ids' => $val];
+//                })->values()->toArray();
+
+                $res && ProductSkuModel::query()->create($res);
+//                $res && $product->sku()->createMany($res);
+//                DB::rollBack();
             });
+
 
         });
     }

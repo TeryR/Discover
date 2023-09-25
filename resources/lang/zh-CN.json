@@ -2,6 +2,7 @@
     "item_no":"产品编号/제품 번호",
     "product_name": "产品名称/제품 이름",
     "sku.product.item_no":"产品编号/제품 번호",
+
     "attr_id":"属性/속성",
     "attr_value_ids": "属性值/속성 값",
     "name":"名称",
@@ -14,9 +15,17 @@
     "attr_values":"属性值/속성 값",
     "product_type":"产品型号/제품 모델",
     "customer_sku":"自订物料号/사용자 정의 재료 번호",
-
+    "return_type": "退货类型/반품 유형",
+    "return_purchase": "采购订单退货/구매 주문 반품",
+    "return_sale": "销售订单退货/판매 주문 반품",
+    "return_num": "退货数量/반품 수량",
+    "return_price": "退货价格/반품 가격",
+    "ReturnOrder": "退货管理/반품 관리",
+    "purchase_order": "采购订单/구매 주문",
+    "sale_order": "销售订单/영업 주문",
 
     "link":"联系人/연락처",
+    "contactor": "相关人/관계자",
     "link_zh":"联系人(Chinese)",
     "link_ko":"연락처(Korean)",
     "pay_method":"支付方式/지불 방식",
@@ -27,9 +36,10 @@
     "customer_id":"客户信息/고객 정보",
 
     "order_no":"单号/주문 번호",
-    "with_order_no":"相关单号<br>관련 단일 번호",
-    "with_order.order_no":"关联单号/연관된 단일 번호",
+    "with_order_no":"相关单号<br>관련 주문 번호",
+    "with_order.order_no":"关联单号/연관된 주문 번호",
     "batch_no":"批次号/배치 번호",
+    "other_no": "相关单号/관련 주문 번호",
     "position_id":"库位号/라이브러리 번호",
 
     "supplier.name":"供应商名称/공급업체 이름",

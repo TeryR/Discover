@@ -29,7 +29,7 @@ class EditOrder extends RowAction
         parent::render();
         return <<<HTML
 <span class="grid-expand">
-   <a href="javascript:void(0)" id="{$this->id()}"><i class="feather icon-edit grid-action-icon"></i></a>
+   <a href="javascript:void(0)" id="{$this->id()}"><i class="feather icon-edit grid-action-icon" title="审核/감사"></i></a>
 </span>
 HTML;
     }
@@ -89,7 +89,7 @@ HTML;
                 };
             }
             layer.open(option)
-                
+
         })
 JS;
     }

@@ -48,6 +48,7 @@ class SaleOrderController extends OrderController
             $grid->column('finished_at',__('finished_at'))->emp();
 
             $grid->disableQuickEditButton();
+            $grid->disableDeleteButton();
             $grid->tools(BatchOrderPrint::make());
             $grid->actions(EditOrder::make());
 

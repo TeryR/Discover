@@ -101,8 +101,7 @@ class SaleOutOrderObserver
                     $init_num = SkuStockModel::where([
                         'sku_id' => $saleOutItemModel->sku_id,
                     ])->value('num');
-                    dump($init_num);
-                    exit();
+//                    dump($init_num);
                     StockHistoryModel::create([
                         'sku_id'          => $saleOutItemModel->sku_id,
                         'out_position_id' => $saleOutBatchModel->stock_batch->position_id,

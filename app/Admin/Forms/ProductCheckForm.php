@@ -121,4 +121,5 @@ class ProductCheckForm extends Form implements LazyRenderable
             $row->width(4)->rate('duck_ratio', '鸭比')->default(0);
         });
     }
+
 }

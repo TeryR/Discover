@@ -17,6 +17,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\Grid\BatchCreateSaleOutOrder;
 use App\Admin\Actions\Grid\BatchOrderPrint;
 use App\Admin\Actions\Grid\EditOrder;
+use App\Admin\Actions\Grid\SaleTuiHuo;
 use App\Admin\Extensions\Form\Order\OrderController;
 use App\Admin\Extensions\Grid\BatchDeail;
 use App\Admin\Repositories\SaleOutOrder;
@@ -29,6 +30,7 @@ use Illuminate\Support\Fluent;
 
 class SaleOutOrderController extends OrderController
 {
+    protected $title="出库订单/출고 주문";
     /**
      * Make a grid builder.
      *
@@ -49,6 +51,7 @@ class SaleOutOrderController extends OrderController
             $grid->column('apply_at', __('apply_at'))->emp();
             $grid->disableQuickEditButton();
             $grid->disableCreateButton();
+            $grid->disableDeleteButton();
             $grid->actions(EditOrder::make());
             $grid->tools(BatchOrderPrint::make());
             $grid->tools(BatchCreateSaleOutOrder::make());
@@ -67,8 +70,8 @@ class SaleOutOrderController extends OrderController
         $with_order = $this->order_repository->getWithOrder();
         $form->row(function (Form\Row $row) use ($with_order) {
             $order = $this->order;
-            $review_statu_ok = $this->oredr_model::REVIEW_STATUS_OK;
-            if ($order && $order->review_status === $review_statu_ok) {
+            $review_status_ok = $this->oredr_model::REVIEW_STATUS_OK;
+            if ($order && $order->review_status === $review_status_ok) {
                 $row->width(6)->select('status',__('status'))->options(SaleOutOrderModel::STATUS)->default($this->oredr_model::STATUS_SEND)->required();
                 $row->width(6)->select('with_id',__('with_id'))->options(SaleOrderModel::query()->pluck('order_no', 'id'))->disable();
             } else {

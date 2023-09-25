@@ -23,6 +23,7 @@ use App\Repositories\UnitRepository;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Contracts\LazyRenderable;
 use Dcat\Admin\Form\Row;
+use Dcat\Admin\Http\JsonResponse;
 use Dcat\Admin\Traits\LazyWidget;
 use Dcat\Admin\Widgets\Form;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +38,7 @@ class SunHuaiForm extends Form implements LazyRenderable
      *
      * @param array $input
      *
-     * @return Response
+     * @return \Dcat\Admin\Http\JsonResponse|Response
      */
     public function handle(array $input)
     {
@@ -46,10 +47,10 @@ class SunHuaiForm extends Form implements LazyRenderable
         }
         DB::transaction(function () use ($input) {
             $current_num=$input['num']-$input['operate_num'];
-            SkuStockBatchModel::query()->where(['id'=>$input['id']])->update(['num'=>$current_num]);
+//            SkuStockBatchModel::query()->where(['id'=>$input['id']])->update(['num'=>$current_num]);
             SkuStockModel::query()->where(['sku_id'=>$input['sku_id']])->update(['num'=>$current_num]);
             $destroyOrder=DestroyOrderModel::query()->create([
-                'order_no'=>build_order_no('SH'),
+                'order_no'=>'SH'.date('Ymd').rand(1000,9999),
                 'batch_no'=>$input['batch_no'],
                 'sku_id'=>$input['sku_id'],
                 'num'=>$input['operate_num'],
@@ -77,7 +78,7 @@ class SunHuaiForm extends Form implements LazyRenderable
             ]);
         });
 
-        return $this->success('success！', admin_route('sku-stock-batchs.index'));
+        return $this->response()->success('success' )->redirect(admin_route('sku-stock-batchs.index'));
     }
 
     /**
@@ -87,7 +88,15 @@ class SunHuaiForm extends Form implements LazyRenderable
     {
         $sku_stock_batch_id = $this->payload['id'];
         $skuStockBatch = SkuStockBatchModel::query()->findOrFail($sku_stock_batch_id);
-
+        $in_num = StockHistoryModel::query()->where('batch_no',$skuStockBatch->batch_no)
+            ->where('sku_id',$skuStockBatch->sku_id)
+            ->where('flag',1)
+            ->sum('in_num');
+        $out_num = StockHistoryModel::query()->where('batch_no',$skuStockBatch->batch_no)
+            ->where('sku_id',$skuStockBatch->sku_id)
+            ->where('flag',0)
+            ->sum('out_num');
+        $current_num = $in_num-$out_num;
         $this->row(function (Row $row) use ($skuStockBatch) {
             $row->width(4)->ipt('sku.name',__('product_name'))->default($skuStockBatch->sku->product->name)->readOnly();
             $row->width(4)->ipt('sku.type',__('product_type'))->default($skuStockBatch->sku->product->type)->readOnly();
@@ -96,15 +105,15 @@ class SunHuaiForm extends Form implements LazyRenderable
             $row->width(4)->ipt('package',__('package'))->default($skuStockBatch->sku->product->package)->readOnly();
             $row->width(4)->ipt('batch_no',__('batch_no'))->default($skuStockBatch->batch_no)->readOnly();
 
-            $row->width(4)->ipt('sku_id')->default($skuStockBatch->sku_id);
-            $row->width(4)->ipt('id')->default($skuStockBatch->id);
-            $row->width(4)->ipt('position_id')->default($skuStockBatch->position_id);
-            $row->width(4)->ipt('cost_price')->default($skuStockBatch->cost_price);
+            $row->width(4)->hidden('sku_id')->default($skuStockBatch->sku_id);
+            $row->width(4)->hidden('id')->default($skuStockBatch->id);
+            $row->width(4)->hidden('position_id')->default($skuStockBatch->position_id);
+            $row->width(4)->hidden('cost_price')->default($skuStockBatch->cost_price);
         });
 
-        $this->row(function (Row $row) use ($skuStockBatch){
-            $row->width(4)->ipt('num',__('current_num'))->default($skuStockBatch->num)->readOnly();
-            $row->width(4)->ipt('operate_num',__('operate_num'))->default($skuStockBatch->num)->required();
+        $this->row(function (Row $row) use ($skuStockBatch,$current_num){
+            $row->width(4)->ipt('num',__('current_num'))->default($current_num)->readOnly();
+            $row->width(4)->ipt('operate_num',__('operate_num'))->default($current_num)->required();
         });
     }
 }

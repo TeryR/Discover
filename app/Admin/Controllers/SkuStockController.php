@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class SkuStockController extends AdminController
 {
+    protected $title="产品库存/제품 재고";
     /**
      * Make a grid builder.
      *
@@ -36,8 +37,8 @@ class SkuStockController extends AdminController
             $grid->column('sku.product.item_no', __('sku.product.item_no'));
             $grid->column('sku.product.name', __('sku.product.name'));
             $grid->column('sku.product.unit.name', __('sku.product.unit.name'));
-            // $grid->column('sku.product.type_str', __(''));
-            // $grid->column('sku.attr_value_ids_str', '属性');
+             $grid->column('sku.product.type_str', __('product_type'));
+             $grid->column('sku.attr_value_ids_str', 'attr_id');
             // $grid->column('percent', '含绒量(%)');
             // $grid->column('standard_str', '检验标准');
             $grid->column('num',__('sku_num'));
@@ -54,9 +55,10 @@ class SkuStockController extends AdminController
                             $query->orWhere("name", "like", $this->getValue()."%");
                             // $query->orWhere("py_code", "like", $this->getValue()."%");
                             $query->orWhere('item_no', 'like', $this->getValue()."%");
+                            $query->orWhere('sku.attr_id', 'like', $this->getValue()."%");
                         });
                     });
-                }, "关键字")->placeholder("产品名称，编号")->width(3);
+                }, "keyword")->placeholder("name、order_no,attribute")->width(3);
                 $filter->group('num', function ($group) {
                     $group->gt('大于');
                     $group->lt('小于');
@@ -68,6 +70,7 @@ class SkuStockController extends AdminController
             });
             $grid->disableActions();
             $grid->disableCreateButton();
+            $grid->disableDeleteButton();
         });
     }
 }

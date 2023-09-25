@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class StockHistoryController extends AdminController
 {
+    protected $title="库存往来/인벤토리 변경 기록";
     /**
      * Make a grid builder.
      *
@@ -66,6 +67,7 @@ class StockHistoryController extends AdminController
 
             $grid->disableActions();
             $grid->disableCreateButton();
+            $grid->disableDeleteButton();
             $grid->showColumnSelector();
 
 //            $grid->fixColumns(0);
