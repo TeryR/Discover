@@ -46,7 +46,7 @@ class SunHuaiForm extends Form implements LazyRenderable
             return $this->error('Number cannot be less than available quantity');
         }
         DB::transaction(function () use ($input) {
-            $current_num=$input['num']-$input['operate_num'];
+            $current_num=$input['sku_in_num']-$input['operate_num'];
 //            SkuStockBatchModel::query()->where(['id'=>$input['id']])->update(['num'=>$current_num]);
             SkuStockModel::query()->where(['sku_id'=>$input['sku_id']])->update(['num'=>$current_num]);
             $destroyOrder=DestroyOrderModel::query()->create([
@@ -92,12 +92,15 @@ class SunHuaiForm extends Form implements LazyRenderable
             ->where('sku_id',$skuStockBatch->sku_id)
             ->where('flag',1)
             ->sum('in_num');
+        $sku_in_num=StockHistoryModel::query()->where('sku_id',$skuStockBatch->sku_id)
+            ->where('flag',1)
+            ->sum('in_num');
         $out_num = StockHistoryModel::query()->where('batch_no',$skuStockBatch->batch_no)
             ->where('sku_id',$skuStockBatch->sku_id)
             ->where('flag',0)
             ->sum('out_num');
         $current_num = $in_num-$out_num;
-        $this->row(function (Row $row) use ($skuStockBatch) {
+        $this->row(function (Row $row) use ($skuStockBatch,$sku_in_num) {
             $row->width(4)->ipt('sku.name',__('product_name'))->default($skuStockBatch->sku->product->name)->readOnly();
             $row->width(4)->ipt('sku.type',__('product_type'))->default($skuStockBatch->sku->product->type)->readOnly();
             $row->width(4)->ipt('sku.attr',__('attr_id'))->default($skuStockBatch->sku->product->sku_value)->readOnly();
@@ -109,6 +112,7 @@ class SunHuaiForm extends Form implements LazyRenderable
             $row->width(4)->hidden('id')->default($skuStockBatch->id);
             $row->width(4)->hidden('position_id')->default($skuStockBatch->position_id);
             $row->width(4)->hidden('cost_price')->default($skuStockBatch->cost_price);
+            $row->width(4)->hidden('sku_in_num')->default($sku_in_num);
         });
 
         $this->row(function (Row $row) use ($skuStockBatch,$current_num){
