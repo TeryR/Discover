@@ -22,6 +22,7 @@ use App\Admin\Extensions\Grid\ProductCheckDetails;
 use App\Admin\Forms\TuiHuoForm;
 use App\Admin\Repositories\SkuStockBatch;
 use App\Models\PositionModel;
+use App\Models\PurchaseInItemModel;
 use App\Models\PurchaseInOrderModel;
 use App\Models\SkuStockBatchModel;
 use App\Models\StockHistoryModel;
@@ -51,7 +52,12 @@ class SkuStockBatchController extends AdminController
             // $grid->column('percent', '含绒量(%)');
             // $grid->column('standard_str', '检验标准');
             $grid->column('batch_no',__('batch_no'));
-            $grid->column('num',__('actual_num'));
+            $grid->column('num',__('actual_num'))->display(function(){
+                $sku_id=$this->sku->id;
+//                $rk_order=StockHistoryModel::query()->where('batch_no',$this->batch_no)->where('sku_id',$sku_id)->first()->with_order_no;
+//                $rk_id=PurchaseInOrderModel::query()->where('order_no',$rk_order)->first()->id;
+                return PurchaseInItemModel::query()->where('batch_no',$this->batch_no)->where('sku_id',$sku_id)->first()->actual_num;
+            });
             $grid->column('current_num',__('current_num'))->display(function (){
                 $in_num = StockHistoryModel::query()->where('batch_no',$this->batch_no)
                     ->where('sku_id',$this->sku->id)
@@ -115,10 +121,10 @@ class SkuStockBatchController extends AdminController
             $grid->disableQuickEditButton();
 //             $grid->disableActions();
             $grid->disableCreateButton();
-
+            $grid->export()->xlsx();
             if (get_user_role_id()==3) {
                 $rk_id = PurchaseInOrderModel::query()->where('supplier_id',get_supplier_id())->value('order_no');
-                dump($rk_id);
+//                dump($rk_id);
 //                $pc_id = StockHistoryModel::query()->whereIn('with_order_no',$rk_id)->get('batch_no')->toArray();
 //                $grid->model()->whereIn('batch_no',$pc_id);
             }

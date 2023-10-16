@@ -14,8 +14,11 @@
 
 namespace App\Admin\Renderables;
 
+use App\Models\PurchaseInItemModel;
+use App\Models\PurchaseInOrderModel;
 use App\Models\SkuStockBatchModel;
 use App\Models\StockHistoryModel;
+use App\Models\SupplierModel;
 use Dcat\Admin\Support\LazyRenderable;
 use Dcat\Admin\Widgets\Table;
 
@@ -46,6 +49,9 @@ class SkuStockBatchTable extends LazyRenderable
                 ->where('sku_id',$batchModel->sku_id)
                 ->where('flag',0)
                 ->sum('out_num');
+            $supplier_id=PurchaseInOrderModel::query()->where('id',PurchaseInItemModel::query()->where('batch_no',$batchModel->batch_no)->first()->order_id)->first()->supplier_id;
+            $supplier=SupplierModel::whereId($supplier_id)->first()->name;
+            $rk_num=PurchaseInItemModel::query()->where('batch_no',$batchModel->batch_no)->where('sku_id',$batchModel->sku_id)->first()->actual_num;
             $current_num = $in_num-$out_num;
             return [
                 $key + 1,
@@ -55,10 +61,11 @@ class SkuStockBatchTable extends LazyRenderable
                 $batchModel->sku->product->type_str ?? '',
                 $batchModel->sku->attr_value_ids_str ?? '',
                 $batchModel->batch_no,
-                $batchModel->num,
+                $rk_num,
                 $current_num,
                 $batchModel->cost_price,
                 $batchModel->position->name ?? '',
+                $supplier,
             ];
         })->toArray();
 
@@ -73,7 +80,8 @@ class SkuStockBatchTable extends LazyRenderable
             __('actual_num'),
             __('current_num'),
             __('in_price'),
-            __('position_id')
+            __('position_id'),
+            __('supplier.name')
         ];
 
         return Table::make($titles, $batch_stock);
