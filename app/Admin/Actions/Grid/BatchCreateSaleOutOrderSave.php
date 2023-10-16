@@ -66,7 +66,7 @@ class BatchCreateSaleOutOrderSave extends BatchAction
                 'sku_id'      => $saleItemModel->sku_id,
                 'should_num'  => $saleItemModel->should_num,
                 'price'       => $saleItemModel->price,
-                'stock_name'=>$saleItemModel->actual_num
+                'stock_num'=>$saleItemModel->actual_num
 //                'percent'     => $saleItemModel->percent,
 //                'standard'    => $saleItemModel->standard,
             ];
