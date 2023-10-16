@@ -144,17 +144,17 @@ class SkuStockBatchController extends AdminController
                 ])->where('num', ">", 0)->orderBy('id', 'desc');
             }
             $grid->column('id')->sortable();
-            $grid->column('sku.product.item_no', '产品编号');
-            $grid->column('sku.product.name', '产品名称');
-            $grid->column('sku.product.unit.name', '单位');
-            $grid->column('sku.product.type_str', '类型');
-            $grid->column('sku.attr_value_ids_str', '属性');
+            $grid->column('sku.product.item_no', __('item_no'));
+            $grid->column('sku.product.name', __('product_name'));
+            $grid->column('sku.product.unit.name', __('unit.name'));
+            $grid->column('sku.product.type_str', __('product_type'));
+            $grid->column('sku.attr_value_ids_str', __('attr_id'));
 //            $grid->column('standard', '检验标准');
 //            $grid->column('percent', '含绒量（%）');
             $grid->column('batch_no');
             $grid->column('num');
             $grid->column('cost_price', __('cost_price'));
-            $grid->column('position.name', '库位');
+            $grid->column('position.name', __('position.name'));
 
             $grid->filter(function (Grid\Filter $filter) {
             });

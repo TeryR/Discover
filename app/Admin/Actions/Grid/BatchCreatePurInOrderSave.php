@@ -45,6 +45,7 @@ class BatchCreatePurInOrderSave extends BatchAction
      */
     public function handle(Request $request)
     {
+
         $index                     = $request->input('_index');
         $this->default_position_id = PositionModel::value('id') ?? 0;
         DB::transaction(function () {

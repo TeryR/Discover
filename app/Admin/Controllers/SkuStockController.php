@@ -41,6 +41,8 @@ class SkuStockController extends AdminController
              $grid->column('sku.attr_value_ids_str', __('attr_id'));
             // $grid->column('percent', '含绒量(%)');
             // $grid->column('standard_str', '检验标准');
+            $grid->column('sku.product.customer_sku',__('customer_sku'));
+
             $grid->column('num',__('sku_num'));
             $grid->column('batch_num', __('batch_num'))->expand(function () {
 //                dump(SkuStockBatchTable::make(['sku_id' => $this->sku_id]));
@@ -57,10 +59,11 @@ class SkuStockController extends AdminController
                             $query->orWhere("name", "like", $this->getValue()."%");
                             // $query->orWhere("py_code", "like", $this->getValue()."%");
                             $query->orWhere('item_no', 'like', $this->getValue()."%");
-                            $query->orWhere('sku.attr_id', 'like', $this->getValue()."%");
+                            $query->orWhere('type', 'like', $this->getValue()."%");
+                            $query->orWhere('customer_sku', 'like', $this->getValue()."%");
                         });
                     });
-                }, "keyword")->placeholder("name、order_no,attribute")->width(3);
+                }, "keyword")->placeholder("name、order_no,attribute,customer_sku")->width(3);
                 $filter->group('num', function ($group) {
                     $group->gt('大于');
                     $group->lt('小于');

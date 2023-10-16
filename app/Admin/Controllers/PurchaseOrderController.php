@@ -138,6 +138,7 @@ class PurchaseOrderController extends OrderController
                 $table->num('should_num', __("should_num"))->required();
                 $table->tableDecimal('price', __('purchase.price'))->default(0.00)->required();
                 $table->tableDecimal('msrp',__('msrp'))->default(0.00)->required();
+
             })->useTable()->width(12)->enableHorizontal();
         });
     }

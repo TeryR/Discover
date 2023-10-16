@@ -197,7 +197,7 @@ class TuiHuoForm extends Form implements LazyRenderable
                     $res=explode(',',$res);
                     array_shift($res);
                     $id=SaleOutOrderModel::query()->whereIn('order_no',$res)->get('id')->toArray();
-//                    dump($id);
+                    dump($id);
                     $shengyu =SaleOutItemModel::query()
                         ->join('sale_out_order','sale_out_order.id','=','order_id')
                         ->whereIn('order_id',$id)
@@ -208,7 +208,7 @@ class TuiHuoForm extends Form implements LazyRenderable
 
                         $new[$value['order_no']]=$value['stock_num'];
                     }
-            $sale_order=$row->width(4)->select('sale_order',__('sale_order'))->options(function ()use($skuStockBatch){
+                    $sale_order=$row->width(4)->select('sale_order',__('sale_order'))->options(function ()use($skuStockBatch){
                         $with_order_no=StockHistoryModel::query()->where('batch_no',$skuStockBatch->batch_no)
                             ->where('sku_id',$skuStockBatch->sku->id)
                             ->where('type',6)
@@ -228,7 +228,7 @@ class TuiHuoForm extends Form implements LazyRenderable
                     })->readOnly();
             $sale_order_arr=json_encode($new);
             $can_return_sale_num=$row->width(4)->ipt('can_return_sale_num',__('can_return_sale_num'))->default('-')->readOnly();
-//            dump($shengyu);
+            dump($shengyu);
             Admin::script(
                 <<<JS
                         $('{$sale_order->getElementClassSelector()}').on('change',function() {
