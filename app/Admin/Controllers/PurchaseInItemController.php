@@ -37,6 +37,7 @@ class PurchaseInItemController extends AdminController
             $grid->column('position_id',__('position_id'));
             $grid->column('price',__('purchase_price'));
             $grid->column('should_num',__('should_num'));
+            $grid->column('msrp',__('msrp'));
             $grid->column('sku_id',__('sku_id'));
             $grid->column('created_at',__('created_at'));
             $grid->column('updated_at',__('updated_at'))->sortable();
@@ -63,6 +64,7 @@ class PurchaseInItemController extends AdminController
             $show->field('order_id',__('order_id'));
             $show->field('position_id',__('position_id'));
             $show->field('price',__('purchase_price'));
+            $show->field('msrp',__('msrp'));
             $show->field('should_num',__('should_num'));
             $show->field('sku_id',__('sku_id'));
             $show->field('created_at',__('created_at'));
@@ -84,6 +86,7 @@ class PurchaseInItemController extends AdminController
             $form->text('order_id',__('order_id'));
             $form->text('position_id',__('position_id'));
             $form->text('price',__('purchase_price'));
+            $form->text('msrp',__('msrp'));
             $form->text('should_num',__('should_num'));
             $form->text('sku_id',__('sku_id'));
             // $form->decimal('percent');

@@ -48,6 +48,7 @@ class SkuStockController extends AdminController
 //            $grid->column('created_at');
 //            $grid->column('updated_at')->sortable();
             $grid->disableRowSelector();
+            $grid->showColumnSelector();
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->where("product_name", function (Builder $query) {
                     $query->whereHasIn("sku.product", function (Builder $query) {

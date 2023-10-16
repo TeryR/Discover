@@ -167,7 +167,7 @@ class SaleOrderController extends OrderController
             $row->hasMany('items', '', function (Form\NestedForm $table) {
                 $table->select('product_id', __('product_id'))->options(ProductModel::pluck('name', 'id'))->loadpku(admin_route('api.product.find'))->required();
                 $table->ipt('unit', __('unit'))->rem(3)->default('-')->disable();
-                 $table->select('sku_id', '属性选择')->options()->required();
+                 $table->select('sku_id', __('sku_id'))->options()->required();
                 // $table->tableDecimal('percent', '含绒百分比')->default(0);
                 // $table->select('standard', '检验标准')->options(PurchaseOrderModel::STANDARD)->default(0);
                 $table->num('should_num', __('sale_should_num'))->required();

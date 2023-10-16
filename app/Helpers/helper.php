@@ -16,6 +16,9 @@ use App\Models\AttrValueModel;
 use App\Models\BaseModel;
 use App\Models\OrderNoGeneratorModel;
 use App\Models\SkuStockBatchModel;
+use App\Models\SupplierModel;
+use Dcat\Admin\Admin;
+use Illuminate\Support\Facades\DB;
 
 if (! file_exists("lower_pinyin_abbr")) {
     /**
@@ -138,4 +141,23 @@ if (! file_exists("batch_no_create")) {
         return $batch_no;
     }
 
+}
+if (!file_exists("get_user_role_id")){
+    function get_user_role_id():int
+    {
+        $currentUserId=Admin::user()->id;
+        $role_id=DB::table('admin_role_users')->where('user_id',$currentUserId)->first()->role_id;
+        return $role_id;
+    }
+}
+if(!file_exists("get_supplier_id")){
+    function get_supplier_id():int
+    {
+        if (get_user_role_id()==3){
+            $supplierId=SupplierModel::query()->where('phone',Admin::user()->username)->first()->id;
+            return $supplierId;
+        }else{
+            return 0;
+        }
+    }
 }

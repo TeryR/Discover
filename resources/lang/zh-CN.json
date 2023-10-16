@@ -64,12 +64,14 @@
     "origin_actual_num":"期初库存/초기 재고",
     "in_num":"入库数量/입고 수량",
     "in_price":"入库价格/입고 가격",
+    "msrp": "建议零售价/권장 소매가",
 
     "out_num":"出库数量<br>출고 수량",
     "out_position.name":"出库位置<br>출고 위치",
     "out_price":"出库价格<br>출고 가격",
     "sku_num":"产品库存/제품 재고",
     "batch_num":"批次库存/배치 재고",
+    "can_return_sale_num": "销售单可退数量/판매 주문 반품 가능 수량",
 
     "position.name":"仓库名称/저장소 이름",
     "in_position.name":"入库位置<br>입고 위치",

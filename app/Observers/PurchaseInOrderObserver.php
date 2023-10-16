@@ -105,9 +105,9 @@ class PurchaseInOrderObserver
                     'in_num'         => $purchaseInItemModel->actual_num,
                     'in_price'       => $purchaseInItemModel->price,
                     'balance_num'    => $init_num + $purchaseInItemModel->actual_num,
-                    'standard'       => $purchaseInItemModel->standard,
+//                    'standard'       => $purchaseInItemModel->standard,
                     'user_id'        => Admin::user()->id,
-                    'percent'        => $purchaseInItemModel->percent,
+//                    'percent'        => $purchaseInItemModel->percent,
                     'batch_no'       => $purchaseInItemModel->batch_no,
                 ]);
             });

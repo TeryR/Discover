@@ -22,6 +22,7 @@ use App\Admin\Extensions\Grid\ProductCheckDetails;
 use App\Admin\Forms\TuiHuoForm;
 use App\Admin\Repositories\SkuStockBatch;
 use App\Models\PositionModel;
+use App\Models\PurchaseInOrderModel;
 use App\Models\SkuStockBatchModel;
 use App\Models\StockHistoryModel;
 use Dcat\Admin\Grid;
@@ -91,6 +92,7 @@ class SkuStockBatchController extends AdminController
                 $filter->like('batch_no', __('batch_no'))->width(3);
                 $filter->equal('position_id', __('position_id'))->select(PositionModel::query()->latest()->pluck('name', 'id'))->width(2);
                 $filter->equal('cost_price',__('cost_price'));
+                $filter->between('created_at', 'created_at')->datetime();
             });
             // $grid->column("_id", "检验记录")->expand(ProductCheckDetails::make());
 //            $grid->actions(function (Grid\Displayers\Actions $actions) {
@@ -113,6 +115,13 @@ class SkuStockBatchController extends AdminController
             $grid->disableQuickEditButton();
 //             $grid->disableActions();
             $grid->disableCreateButton();
+
+            if (get_user_role_id()==3) {
+                $rk_id = PurchaseInOrderModel::query()->where('supplier_id',get_supplier_id())->value('order_no');
+                dump($rk_id);
+//                $pc_id = StockHistoryModel::query()->whereIn('with_order_no',$rk_id)->get('batch_no')->toArray();
+//                $grid->model()->whereIn('batch_no',$pc_id);
+            }
         });
     }
 
@@ -138,6 +147,7 @@ class SkuStockBatchController extends AdminController
 //            $grid->column('percent', '含绒量（%）');
             $grid->column('batch_no');
             $grid->column('num');
+            $grid->column('cost_price', __('cost_price'));
             $grid->column('position.name', '库位');
 
             $grid->filter(function (Grid\Filter $filter) {

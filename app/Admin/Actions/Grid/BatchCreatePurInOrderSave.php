@@ -73,6 +73,7 @@ class BatchCreatePurInOrderSave extends BatchAction
                 'should_num'  => $purchaseItemModel->should_num,
                 'actual_num'  => $purchaseItemModel->should_num,
                 'price'       => $purchaseItemModel->price,
+                'msrp'        => $purchaseItemModel->msrp,
 //                'percent'     => $purchaseItemModel->percent,
 //                'standard'    => $purchaseItemModel->standard,
                 'batch_no'    => batch_no_create(),

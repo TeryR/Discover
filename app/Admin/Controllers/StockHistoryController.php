@@ -35,7 +35,7 @@ class StockHistoryController extends AdminController
             $grid->column('id')->sortable();
             $grid->combine(__('in_info'), ['in_num', 'in_position.name', 'in_price']);
             $grid->combine(__('out_info'), ['out_num', 'out_position.name', 'out_price']);
-            $grid->combine(__('product_info'), ['sku.product.item_no', 'sku.product.name', 'sku.product.unit.name',]);// 'sku.product.type_str', 'sku.attr_value_ids_str', 'percent', 'standard_str']);
+            $grid->combine(__('product_info'), ['sku.product.item_no', 'sku.product.name', 'sku.product.unit.name','sku.product.type_str', 'sku.attr_value_ids_str', ]);// 'percent', 'standard_str']);
             // $grid->combine("盘点信息", ["inventory_num", "inventory_diff_num"]);
             $grid->combine(__('stock_info'), ['init_num', 'balance_num', 'batch_no', 'cost_price']);
 
@@ -44,17 +44,17 @@ class StockHistoryController extends AdminController
             $grid->column('user.name', __('user.name'))->limit(5);
             $grid->column('with_order_no',__('with_order_no'))->limit(5);
             $grid->column('in_num',__('in_num'));
-            $grid->column('in_position.name', __("in_position.name"))->emp();
+            $grid->column('in_position.name', __("in_position.name"))->emp()->filter(Grid\Column\Filter\Equal::make());
             $grid->column('in_price',__('in_price'));
 
             $grid->column('out_num',__('out_num'));
             $grid->column('out_position.name', __('out_position.name'))->emp();
             $grid->column('out_price',__('out_price'));
             $grid->column('sku.product.item_no', __('sku.product.item_no'))->limit(5);
-            $grid->column('sku.product.name', __('sku.product.name'));
+            $grid->column('sku.product.name', __('sku.product.name'))->limit(5);
             $grid->column('sku.product.unit.name', __('sku.product.unit.name'));
-            // $grid->column('sku.product.type_str', '类型');
-            // $grid->column('sku.attr_value_ids_str', '属性');
+             $grid->column('sku.product.type_str', __('product_type'))->limit(5);
+             $grid->column('sku.attr_value_ids_str', __('attr_values'))->limit(5);
             // $grid->column('percent', '含绒量(%)');
             // $grid->column('standard_str', '检验标准');
             $grid->column('cost_price',__('cost_price'));
@@ -69,6 +69,35 @@ class StockHistoryController extends AdminController
             $grid->disableCreateButton();
             $grid->disableDeleteButton();
             $grid->showColumnSelector();
+            $grid->export()->xlsx()
+            ->rows(function ($rows){
+                $TYPE = [
+                    0 => "采购退货",
+                    1 => "采购入库",
+                    2 => "库存盘点",
+                    3 => "生产入库",
+                    4 => "物料申领",
+                    5 => "库存调拨",
+                    6 => "销售出库",
+                    7 => "期初建账",
+                    8 => '物料报废',
+                    9 => '检验入库',
+                    10 => '检验出库',
+                    11=>'销售退货',
+                ];
+                $FLAG = [
+                    1 => "入库/입고",
+                    0 => "出库/출고",
+                    2 => "盘点",
+                    3 => '调拨',
+                ];
+                foreach ($rows as $index => &$row) {
+                    $row['type'] = $TYPE[intval($row['type'])];
+                    $row['flag'] = $FLAG[intval($row['flag'])];
+                }
+
+                return $rows;
+            });
 
 //            $grid->fixColumns(0);
 
@@ -88,6 +117,7 @@ class StockHistoryController extends AdminController
                 // $filter->like('percent', "含绒量")->decimal()->width(3);
                 // $filter->equal('standard', "检验标准")->select(SkuStockBatchModel::STANDARD)->width(3);
                 $filter->like('batch_no', __('batch_no'))->width(3);
+                $filter->between('created_at', 'created_at')->datetime();
             });
         });
     }

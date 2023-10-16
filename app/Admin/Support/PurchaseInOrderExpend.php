@@ -3,6 +3,7 @@
 namespace App\Admin\Support;
 
 use App\Models\PurchaseInOrderModel ;
+use App\Models\SkuStockBatchModel;
 use App\Models\StockHistoryModel;
 use Dcat\Admin\Support\LazyRenderable;
 use Dcat\Admin\Widgets\Table;
@@ -25,12 +26,13 @@ class PurchaseInOrderExpend extends LazyRenderable
                 $stockHistory->sku->product()->value('brand'),
                 $stockHistory->sku->product()->value('package'),
                 $stockHistory->cost_price,
+                SkuStockBatchModel::whereBatchNo($stockHistory->batch_no)->where(['sku_id'=>$stockHistory->sku_id])->sum('num'),
                 $stockHistory->in_num,
                 $stockHistory->in_num*$stockHistory->cost_price,
             ];
         });
 //        dump($data);
-        $titles = [__('product_name'), __('product_type'),__('unit.name'),__('customer_sku'),__('brand'),__('package'),__('cost_price'), __('in_num'), __('_')];
+        $titles = [__('product_name'), __('product_type'),__('unit.name'),__('customer_sku'),__('brand'),__('package'),__('cost_price'), __('in_num'),__('current_num'), __('_')];
 
         return Table::make($titles, $data);
     }

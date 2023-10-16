@@ -242,10 +242,10 @@ return [
         'bind_permission' => true,
 
         // Whether enable role bind to menu.
-        // 'role_bind_menu' => true,
+         'role_bind_menu' => true,
 
         // // Whether enable permission bind to menu.
-        // 'permission_bind_menu' => true,
+         'permission_bind_menu' => true,
 
         // 'default_icon' => 'feather icon-circle',
     ],

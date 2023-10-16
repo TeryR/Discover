@@ -17,9 +17,12 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\Grid\Statement;
 use App\Admin\Repositories\Supplier;
 use App\Models\SupplierModel;
+use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Http\Controllers\AdminController;
+use Dcat\Admin\Models\Administrator;
+use Illuminate\Support\Facades\DB;
 
 class SupplierController extends AdminController
 {
@@ -40,7 +43,7 @@ class SupplierController extends AdminController
             $grid->column('phone',__('phone'))->emp();
             $grid->column('other',__('other'))->emp();
             $grid->column('created_at',__('created_at'));
-
+            $grid->disableDeleteButton();
             $grid->filter(function (Grid\Filter $filter) {
             });
         });
@@ -72,6 +75,7 @@ class SupplierController extends AdminController
     protected function form()
     {
         return Form::make(new Supplier(), function (Form $form) {
+            DB::transaction(function()use($form){
             $form->row(function (Form\Row $row) use ($form){
                 $row->hidden('link');
                 $row->hidden('name');
@@ -88,6 +92,8 @@ class SupplierController extends AdminController
             });
 
             $form->saving(function(Form $form){
+                if(SupplierModel::wherePhone($form->phone)->exists()) return $form->response()->info('phone exsits');
+
                 $name_zh = $form->name_zh;
                 $name_ko = $form->name_ko;
                 $name = $name_zh.'__'.$name_ko;
@@ -105,6 +111,18 @@ class SupplierController extends AdminController
                 $form->link = $link;
                 $form->deleteInput('link_zh');
                 $form->deleteInput('link_ko');
+            });
+            $form->saved(function (Form $form){
+                if($form->isCreating()){
+                    $data=[
+                        'username'=>$form->phone,
+                        'password'=>bcrypt($form->phone),
+                        'name'=>$form->name
+                    ];
+                    $userId=DB::table('admin_users')->insertGetId($data);
+                    DB::table('admin_role_users')->insert(['role_id'=>3,'user_id'=>$userId]);
+                }
+            });
             });
         });
     }

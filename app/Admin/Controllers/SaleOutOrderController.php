@@ -57,6 +57,7 @@ class SaleOutOrderController extends OrderController
             $grid->tools(BatchCreateSaleOutOrder::make());
 
             $grid->filter(function (Grid\Filter $filter) {
+                $filter->between('created_at', 'created_at')->datetime();
             });
         });
     }

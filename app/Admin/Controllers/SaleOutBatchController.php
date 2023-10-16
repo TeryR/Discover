@@ -64,6 +64,7 @@ class SaleOutBatchController extends AdminController
                 $grid->tools(BatchStockSelect::make());
             }
             $grid->filter(function (Grid\Filter $filter) {
+                $filter->between('created_at', 'created_at')->datetime();
             });
         });
     }

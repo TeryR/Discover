@@ -27,9 +27,13 @@ use App\Models\ProductModel;
 use App\Models\PurchaseInOrderModel;
 use App\Models\PurchaseOrderModel;
 use App\Models\SkuStockBatchModel;
+use App\Models\SupplierModel;
 use App\Repositories\SupplierRepository;
+use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
+use Dcat\Laravel\Database\Tests\Models\Supplier;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Fluent;
 
 class PurchaseInOrderController extends OrderController
@@ -41,7 +45,7 @@ class PurchaseInOrderController extends OrderController
      */
     protected function grid()
     {
-        return Grid::make(new PurchaseInOrder(['user', 'supplier', 'with_order']), function (Grid $grid) {
+        return Grid::make(new PurchaseInOrder(['user', 'supplier', 'with_order','amount']), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('order_no',__('order_no'));
 
@@ -70,6 +74,9 @@ class PurchaseInOrderController extends OrderController
             $grid->showRowSelector();
             $grid->filter(function (Grid\Filter $filter) {
             });
+            if (get_user_role_id()==3){
+                $grid->model()->where('supplier_id',get_supplier_id());
+            }
         });
     }
 
@@ -98,6 +105,7 @@ class PurchaseInOrderController extends OrderController
             $row->width(6)->select('supplier_id', __('supplier_id'))->options($supplier)->default(head($supplier->keys()->toArray()))->required();
             $row->width(6)->text('other', __('other'))->saveAsString();
         });
+
     }
 
     /**
@@ -114,6 +122,7 @@ class PurchaseInOrderController extends OrderController
                 // $table->select('standard', '检验标准')->options(PurchaseOrderModel::STANDARD)->default(0);
                 $table->num('should_num', __('should_num'))->required();
                 $table->tableDecimal('price',__('purchase.price'))->default(0.00)->required();
+                $table->tableDecimal('msrp',__('msrp'))->default(0.00)->required();
                 $table->select('position_id',__('position_id'))->options(PositionModel::orderBy('id', 'desc')->pluck('name', 'id'));
                 $table->ipt('batch_no', __('batch_no'))->rem(8)->default(function (){
                     $batch_no="PC".date('Ymd').rand(1000,9999);
@@ -171,16 +180,21 @@ class PurchaseInOrderController extends OrderController
         $grid->column('should_num', __('should_num'));
         $grid->column('actual_num', __('actual_num'))->if(function () use ($order,$review_statu_ok) {
             return $order->review_status !== $review_statu_ok;
-        })->edit();
+        });
         $grid->column('price', __('purchase.price'))->if(function () use ($order,$review_statu_ok) {
             return $order->review_status !== $review_statu_ok;
-        })->edit();
+        });
+        $grid->column('msrp',__('msrp'))->if(function () use ($order,$review_statu_ok) {
+            return $order->review_status !== $review_statu_ok;
+        });
         $grid->column("_", __('_'))->display(function () {
             return bcmul($this->actual_num, $this->price, 2);
         });
 
         $grid->column('batch_no', __('batch_no'))->if(function () use ($order,$review_statu_ok) {
             return $order->review_status !== $review_statu_ok;
-        })->edit();
+        });
+        $grid->disableColumnSelector();
+//        $grid->disableRowSelector();
     }
 }

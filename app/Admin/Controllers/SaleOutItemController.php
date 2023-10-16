@@ -39,6 +39,7 @@ class SaleOutItemController extends AdminController
             $grid->column('updated_at')->sortable();
 
             $grid->filter(function (Grid\Filter $filter) {
+                $filter->between('created_at', 'created_at')->datetime();
             });
         });
     }
@@ -57,11 +58,16 @@ class SaleOutItemController extends AdminController
             $form->text('price');
             $form->text('should_num');
             $form->text('sku_id');
+            $form->hidden('stock_num');
 //            $form->decimal('percent');
 //            $form->number('standard');
 
             $form->display('created_at');
             $form->display('updated_at');
+            $form->saving(function (Form $form){
+                $form->stock_num=$form->actual_num;
+            });
         });
+
     }
 }

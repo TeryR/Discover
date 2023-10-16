@@ -23,9 +23,14 @@ use App\Admin\Repositories\PurchaseOrder;
 use App\Models\AttrModel;
 use App\Models\ProductModel;
 use App\Models\PurchaseOrderModel;
+use App\Models\SupplierModel;
 use App\Repositories\SupplierRepository;
+use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
+use Dcat\Admin\Models\Role;
+use Dcat\Laravel\Database\Tests\Models\Supplier;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Fluent;
 
 class PurchaseOrderController extends OrderController
@@ -50,10 +55,19 @@ class PurchaseOrderController extends OrderController
             $grid->column('finished_at',__('finished_at'))->emp();
             $grid->tools(BatchOrderPrint::make());
             $grid->disableQuickEditButton();
-            $grid->disableDeleteButton();
+//            $grid->disableDeleteButton();
             $grid->actions(new EditOrder());
             $grid->filter(function (Grid\Filter $filter) {
             });
+            $grid->actions(function (Grid\Displayers\Actions $actions) use($grid){
+//                dump($actions->row->review_status);
+                if($actions->row->review_status==1){
+                    $actions->disableDelete();
+                }
+            });
+            if (get_user_role_id()==3){
+                $grid->model()->where('supplier_id',get_supplier_id());
+            }
         });
     }
 
@@ -74,6 +88,7 @@ class PurchaseOrderController extends OrderController
             $grid->column('review_status', __('review_status'))->using(PurchaseOrderModel::REVIEW_STATUS)->label(PurchaseOrderModel::REVIEW_STATUS_COLOR);
             $grid->column('supplier.name',__('supplier.name'))->emp();
             $grid->column('user.username', __('user.username'));
+
             $grid->column('created_at',__('created_at'));
             $grid->column('finished_at',__('finished_at'))->emp();
             $grid->disableQuickEditButton();
@@ -122,6 +137,7 @@ class PurchaseOrderController extends OrderController
 //                // $table->select('standard', '检验标准')->options(PurchaseOrderModel::STANDARD)->default(0);
                 $table->num('should_num', __("should_num"))->required();
                 $table->tableDecimal('price', __('purchase.price'))->default(0.00)->required();
+                $table->tableDecimal('msrp',__('msrp'))->default(0.00)->required();
             })->useTable()->width(12)->enableHorizontal();
         });
     }
@@ -130,7 +146,7 @@ class PurchaseOrderController extends OrderController
     {
 
         $order = $this->order;
-        dump($order);
+//        dump($order);
         $grid->column('sku.product.name', __('sku.product.name'));
         $grid->column('sku.product.unit.name', __('sku.product.unit.name'));
         // $grid->column('sku.product.type_str', '类型');
@@ -154,13 +170,16 @@ class PurchaseOrderController extends OrderController
 
         $grid->column('should_num', __('should_num'))->if(function () use ($order) {
             return $order->review_status !== PurchaseOrderModel::REVIEW_STATUS_OK;
-        })->edit();
+        });
         $grid->column('price', __('purchase.price'))->if(function () use ($order) {
             return $order->review_status !== PurchaseOrderModel::REVIEW_STATUS_OK;
-        })->edit();
+        });
+        $grid->column('msrp',__('msrp'))->if(function () use ($order) {
+            return $order->review_status !== PurchaseOrderModel::REVIEW_STATUS_OK;
+        });
         $grid->column("_", __('_'))->display(function () {
             return bcmul($this->should_num, $this->price, 2);
         });
-
+//        $grid->disableRowSelector();
     }
 }

@@ -21,6 +21,7 @@ use App\Models\CustomerModel;
 use App\Models\PurchaseOrderModel;
 use App\Models\ReturnOrderModel;
 use App\Models\SaleOrderModel;
+use App\Models\SaleOutOrderModel;
 use App\Models\SupplierModel;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -59,8 +60,9 @@ class ReturnOrderController extends AdminController
                 if(isset($temp)){
                     return SupplierModel::whereId($temp->supplier_id)->first()->name;
                 }else{
-                    $temp=SaleOrderModel::whereOrderNo($this->other_no)->first();
-                    return CustomerModel::whereId($temp->customer_id)->first()->name;
+                    $temp=SaleOutOrderModel::whereOrderNo($this->other_no)->first();
+//                    dump($this->other_no);
+//                    return CustomerModel::whereId($temp->customer_id)->first()->name;
                 }
             });
             $grid->column('created_at',__('created_at'));
