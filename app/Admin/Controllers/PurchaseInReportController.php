@@ -105,18 +105,18 @@ class PurchaseInReportController extends Controller
                 }, "关键字")->placeholder("产品名称，拼音码，编号")->width(3);
                 $filter->equal('order.supplier_id', '供应商')->select(SupplierModel::query()->latest()->pluck('name', 'id'))->width(3);
                 $filter->group('should_num', function ($group) {
-                    $group->gt('大于');
-                    $group->lt('小于');
-                    $group->nlt('不小于');
-                    $group->ngt('不大于');
-                    $group->equal('等于');
+                    $group->gt('>');
+                    $group->lt('<');
+                    $group->nlt('>=');
+                    $group->ngt('<=');
+                    $group->equal('=');
                 }, '采购数量')->width(3);
                 $filter->group('actual_num', function ($group) {
-                    $group->gt('大于');
-                    $group->lt('小于');
-                    $group->nlt('不小于');
-                    $group->ngt('不大于');
-                    $group->equal('等于');
+                    $group->gt('>');
+                    $group->lt('<');
+                    $group->nlt('>=');
+                    $group->ngt('<=');
+                    $group->equal('=');
                 }, '入库数量')->width(3);
 //                $filter->like('percent', "含绒量")->decimal()->width(3);
 //                $filter->equal('standard', "检验标准")->select(PurchaseInOrderModel::STANDARD)->width(3);

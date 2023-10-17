@@ -80,6 +80,7 @@ class InitStockOrderController extends OrderController
                 // $table->select('standard', '检验标准')->options(InitStockOrderModel::STANDARD)->default(0);
                 $table->tableDecimal('actual_num', __('origin_actual_num'))->default(0.00)->required();
                 $table->tableDecimal('cost_price', __('cost_single_price'))->default(0.00)->required();
+                $table->tableDecimal('msrp',__('msrp'))->default(0.00)->required();
                 $table->select('position_id', __('position_id'))->options(PositionModel::orderBy('id', 'desc')->pluck('name', 'id'));
                 $table->ipt('batch_no',__('batch_no'))->rem(8)->default(function (){
                     $batch_no="PC".date('Ymd').rand(1000,9999);

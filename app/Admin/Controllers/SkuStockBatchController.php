@@ -87,11 +87,11 @@ class SkuStockBatchController extends AdminController
                     });
                 }, "关键字")->placeholder("产品名称，编号")->width(3);
                 $filter->group('num', function ($group) {
-                    $group->gt('大于');
-                    $group->lt('小于');
-                    $group->nlt('不小于');
-                    $group->ngt('不大于');
-                    $group->equal('等于');
+                    $group->gt('>');
+                    $group->lt('<');
+                    $group->nlt('>=');
+                    $group->ngt('<=');
+                    $group->equal('=');
                 })->width(3);
                 // $filter->like('percent', "含绒量")->decimal()->width(3);
                 // $filter->equal('standard', "检验标准")->select(SkuStockBatchModel::STANDARD)->width(3);

@@ -14,6 +14,7 @@
 
 namespace App\Observers;
 
+use App\Models\PurchaseInItemModel;
 use App\Models\SkuStockBatchModel;
 use App\Models\StockHistoryModel;
 use Illuminate\Support\Facades\DB;
@@ -27,27 +28,33 @@ class StockHistoryObserver
             case StockHistoryModel::IN_STOCK_PUCHASE:
             case StockHistoryModel::PRO_STOCK_TYPE:
             case StockHistoryModel::INIT_TYPE:
-            SkuStockBatchModel::updateOrCreate([
-                'position_id' => $stockHistoryModel->in_position_id,
-                'batch_no'    => $stockHistoryModel->batch_no,
-                'sku_id'      => $stockHistoryModel->sku_id,
-            ], [
-                'num'        => DB::raw("num + $stockHistoryModel->in_num"),
-                'cost_price' => $stockHistoryModel->cost_price,
-            ]);
-            break;
+                $msrp=PurchaseInItemModel::whereBatchNo($stockHistoryModel->batch_no)
+                    ->where('sku_id',$stockHistoryModel->sku_id)
+                    ->where('order_id',$stockHistoryModel->with_order_no)
+                    ->first()
+                    ->msrp;
+                SkuStockBatchModel::updateOrCreate([
+                    'position_id' => $stockHistoryModel->in_position_id,
+                    'batch_no'    => $stockHistoryModel->batch_no,
+                    'sku_id'      => $stockHistoryModel->sku_id,
+                ], [
+                    'num'        => DB::raw("num + $stockHistoryModel->in_num"),
+                    'cost_price' => $stockHistoryModel->cost_price,
+                    'msrp'=>$msrp
+                ]);
+                break;
             // 采购退货
             case StockHistoryModel::OUT_STOCK_PUCHASE:
-                dump($stockHistoryModel);
-            SkuStockBatchModel::updateOrCreate([
-                'position_id' => $stockHistoryModel->out_position_id,
-                'batch_no'    => $stockHistoryModel->batch_no,
-                'sku_id'      => $stockHistoryModel->sku_id,
-            ],[
+//                dump($stockHistoryModel);
+                SkuStockBatchModel::updateOrCreate([
+                    'position_id' => $stockHistoryModel->out_position_id,
+                    'batch_no'    => $stockHistoryModel->batch_no,
+                    'sku_id'      => $stockHistoryModel->sku_id,
+                ],[
                     'num'=>DB::raw("num-$stockHistoryModel->out_num"),
                     'cost_price'=>$stockHistoryModel->cost_price,
-                ]
-            );
+                    ]
+                );
                 break;
             // 销售退货
             case $stockHistoryModel::IN_STOCK_SALE:

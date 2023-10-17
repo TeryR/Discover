@@ -65,11 +65,11 @@ class SkuStockController extends AdminController
                     });
                 }, "keyword")->placeholder("name、order_no,attribute,customer_sku")->width(3);
                 $filter->group('num', function ($group) {
-                    $group->gt('大于');
-                    $group->lt('小于');
-                    $group->nlt('不小于');
-                    $group->ngt('不大于');
-                    $group->equal('等于');
+                    $group->gt('>');
+                    $group->lt('<');
+                    $group->nlt('>=');
+                    $group->ngt('<=');
+                    $group->equal('=');
                 })->width(3);
 
             });

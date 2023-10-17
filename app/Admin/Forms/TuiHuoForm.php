@@ -87,8 +87,10 @@ class TuiHuoForm extends Form implements LazyRenderable
 //                DB::rollBack();
             }elseif($input['return_type']==1&&$input['sale_order']!="——"){
                 $return_num=$input['can_return_sale_num']-$input['operate_num'];
+//                dump($return_num,$input['can_return_sale_num']);
                 if ($return_num<0&&$input['can_return_sale_num']!=0){
-                    return $this->response()->error('可退数量不足');
+//                    dump($return_num,$input['can_return_sale_num']);
+                    return $this->response()->warning('可退数量不足');
                 }
                 $current_num=$input['sku_current_num']+$input['operate_num'];
                 SkuStockModel::query()->where(['sku_id'=>$input['sku_id']])->update(['num'=>$current_num]);
@@ -138,7 +140,6 @@ class TuiHuoForm extends Form implements LazyRenderable
      */
     public function form()
     {
-//        dump($this);
         $sku_stock_batch_id = $this->payload['id'];
         $skuStockBatch = SkuStockBatchModel::query()->findOrFail($sku_stock_batch_id);
         $in_num = StockHistoryModel::query()->where('batch_no',$skuStockBatch->batch_no)
@@ -197,7 +198,7 @@ class TuiHuoForm extends Form implements LazyRenderable
                     $res=explode(',',$res);
                     array_shift($res);
                     $id=SaleOutOrderModel::query()->whereIn('order_no',$res)->get('id')->toArray();
-                    dump($id);
+//                    dump($id);
                     $shengyu =SaleOutItemModel::query()
                         ->join('sale_out_order','sale_out_order.id','=','order_id')
                         ->whereIn('order_id',$id)
@@ -228,7 +229,7 @@ class TuiHuoForm extends Form implements LazyRenderable
                     })->readOnly();
             $sale_order_arr=json_encode($new);
             $can_return_sale_num=$row->width(4)->ipt('can_return_sale_num',__('can_return_sale_num'))->default('-')->readOnly();
-            dump($shengyu);
+//            dump($shengyu);
             Admin::script(
                 <<<JS
                         $('{$sale_order->getElementClassSelector()}').on('change',function() {

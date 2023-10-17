@@ -42,14 +42,14 @@ class SaleOutBatchController extends AdminController
         return Grid::make(new SaleOutBatch(['item.sku.product', 'stock_batch']), function (Grid $grid) use ($order) {
             $grid->model()->where('item_id', request()->input('item_id'))->orderBy('id', 'desc');
             $grid->column('id')->sortable();
-            $grid->column('item.sku.product.name', '产品名称');
-            $grid->column('item.sku.product.unit.name', '单位');
-            $grid->column('item.sku.product.type_str', '类型');
-            $grid->column('item.sku.product.type_str', '类型');
-            $grid->column('item.sku.attr_value_ids_str', '属性');
-            $grid->column('stock_batch.batch_no');
-            $grid->column('item.should_num', '要货数量');
-            $grid->column('actual_num', '出库数量')->edit();
+            $grid->column('item.sku.product.name', __('product_name'));
+            $grid->column('item.sku.product.unit.name', __('unit.name'));
+            $grid->column('item.sku.product.type_str', __('type'));
+//            $grid->column('item.sku.product.type_str', '类型');
+            $grid->column('item.sku.attr_value_ids_str', __('attr_id'));
+            $grid->column('stock_batch.batch_no',__('batch_no'));
+            $grid->column('item.should_num', __('should_num'));
+//            $grid->column('actual_num', '出库数量')->edit();
             $grid->column('actual_num', '实领数量')->if(function () use ($order) {
                 return $order->review_status !== SaleOutOrderModel::REVIEW_STATUS_OK;
             })->edit();
