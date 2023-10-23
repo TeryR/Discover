@@ -2,6 +2,7 @@
     "item_no":"产品编号/제품 번호",
     "product_name": "产品名称/제품 이름",
     "sku.product.item_no":"产品编号/제품 번호",
+    "keywords": "关键字/키워드",
 
     "attr_id":"属性/속성",
     "attr_value_ids": "属性值/속성 값",

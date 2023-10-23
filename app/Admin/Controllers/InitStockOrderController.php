@@ -22,6 +22,8 @@ use App\Models\InitStockOrderModel;
 use App\Models\PositionModel;
 use App\Models\ProductModel;
 use App\Models\SkuStockBatchModel;
+use App\Models\SupplierModel;
+use App\Repositories\SupplierRepository;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Models\Administrator;
@@ -41,11 +43,16 @@ class InitStockOrderController extends OrderController
             $grid->column('order_no',__('order_no'));
             $grid->column('user.username', __('user.username'));
             $grid->column('other',__('other'))->emp();
-            $grid->column('review_status', __('review.status'))->using($this->oredr_model::REVIEW_STATUS)->label($this->oredr_model::REVIEW_STATUS_COLOR);
+            $grid->column('review_status', __('review_status'))->using($this->oredr_model::REVIEW_STATUS)->label($this->oredr_model::REVIEW_STATUS_COLOR);
             $grid->column('created_at',__('created_at'));
             $grid->tools(BatchOrderPrint::make());
             $grid->disableQuickEditButton();
-            $grid->disableDeleteButton();
+            $grid->actions(function (Grid\Displayers\Actions $actions) use($grid){
+//                dump($actions->row->review_status);
+                if($actions->row->review_status==1){
+                    $actions->disableDelete();
+                }
+            });
             $grid->actions(EditOrder::make());
         });
     }
@@ -81,7 +88,9 @@ class InitStockOrderController extends OrderController
                 $table->tableDecimal('actual_num', __('origin_actual_num'))->default(0.00)->required();
                 $table->tableDecimal('cost_price', __('cost_single_price'))->default(0.00)->required();
                 $table->tableDecimal('msrp',__('msrp'))->default(0.00)->required();
-                $table->select('position_id', __('position_id'))->options(PositionModel::orderBy('id', 'desc')->pluck('name', 'id'));
+                $table->select('position_id', __('position_id'))->options(PositionModel::orderBy('id', 'desc')->pluck('name', 'id'))->required();
+                $supplier = SupplierRepository::pluck();
+                $table->width(6)->select('supplier_id', __('supplier_id'))->options($supplier)->default(head($supplier->keys()->toArray()))->required();
                 $table->ipt('batch_no',__('batch_no'))->rem(8)->default(function (){
                     $batch_no="PC".date('Ymd').rand(1000,9999);
                     while (1){
@@ -105,42 +114,32 @@ class InitStockOrderController extends OrderController
 
         $grid->column('sku.product.name', __('sku.product.name'));
         $grid->column('sku.product.unit.name', __('sku.product.unit.name'));
-        $grid->column('sku.product.type_str', __('sku.product.type_str'));
+        $grid->column('sku.product.type_str', __('product_type'));
 
-        // $grid->column('sku_id', '属性')->if(function () use ($order,$review_statu_ok) {
-        //     return $order->review_status === $review_statu_ok;
-        // })->display(function () {
-        //     return $this->sku['attr_value_ids_str'] ?? '';
-        // })->else()->selectplus(function (Fluent $fluent) {
-        //     return $fluent->sku['product']['sku_key_value'];
-        // });
+         $grid->column('sku_id', '属性')->if(function () use ($order,$review_statu_ok) {
+             return $order->review_status === $review_statu_ok;
+         })->display(function () {
+             return $this->sku['attr_value_ids_str'] ?? '';
+         })->else()->selectplus(function (Fluent $fluent) {
+             return $fluent->sku['product']['sku_key_value'];
+         });
 
-        // $grid->column('percent', '含绒百分比')->if(function () use ($order, $review_statu_ok) {
-        //     return $order->review_status !== $review_statu_ok;
-        // })->edit();
-        // $grid->column('standard', '检验标准')->if(function () use ($order) {
-        //     return $order->review_status === InitStockOrderModel::REVIEW_STATUS_OK;
-        // })->display(function () {
-        //     return InitStockOrderModel::STANDARD[$this->standard];
-        // })->else()->selectplus(InitStockOrderModel::STANDARD);
 
-        $grid->column('position_id', __('position_id'))->if(function () use ($order,$review_statu_ok) {
-            return $order->review_status === $review_statu_ok;
-        })->display(function ($val) {
+        $grid->column('position_id', __('position_id'))->display(function ($val) {
             return PositionModel::whereId($val)->value('name') ?? '-';
-        })->else()->selectplus(function () {
-            return PositionModel::orderBy('id', 'desc')->pluck('name', 'id');
         });
-
+        $grid->column('supplier_id',__('supplier_id'))->display(function ($val){
+            return SupplierModel::whereId($val)->first()->name;
+        });
         $grid->column('actual_num', __('origin_actual_num'))->if(function () use ($order,$review_statu_ok) {
             return $order->review_status !== $review_statu_ok;
-        })->edit();
+        });
         $grid->column('cost_price', __('cost_single_price'))->if(function () use ($order,$review_statu_ok) {
             return $order->review_status !== $review_statu_ok;
-        })->edit();
+        });
 
         $grid->column('batch_no', __('batch_no'))->if(function () use ($order,$review_statu_ok) {
             return $order->review_status !== $review_statu_ok;
-        })->edit();
+        });
     }
 }

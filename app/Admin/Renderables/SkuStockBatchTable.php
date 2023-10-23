@@ -14,6 +14,8 @@
 
 namespace App\Admin\Renderables;
 
+use App\Models\InitStockItemModel;
+use App\Models\InitStockOrderModel;
 use App\Models\PurchaseInItemModel;
 use App\Models\PurchaseInOrderModel;
 use App\Models\SkuStockBatchModel;
@@ -49,9 +51,19 @@ class SkuStockBatchTable extends LazyRenderable
                 ->where('sku_id',$batchModel->sku_id)
                 ->where('flag',0)
                 ->sum('out_num');
-            $supplier_id=PurchaseInOrderModel::query()->where('id',PurchaseInItemModel::query()->where('batch_no',$batchModel->batch_no)->first()->order_id)->first()->supplier_id;
+            try {
+                $supplier_id=PurchaseInOrderModel::query()->where('id',PurchaseInItemModel::query()->where('batch_no',$batchModel->batch_no)->first()->order_id)->first()->supplier_id;
+            }catch (\Exception $exception){
+                $supplier_id=InitStockItemModel::query()->where('batch_no',$batchModel->batch_no)->first()->supplier_id;
+            }
+//            dump($supplier_id);
             $supplier=SupplierModel::whereId($supplier_id)->first()->name;
-            $rk_num=PurchaseInItemModel::query()->where('batch_no',$batchModel->batch_no)->where('sku_id',$batchModel->sku_id)->first()->actual_num;
+            try {
+                $rk_num=PurchaseInItemModel::query()->where('batch_no',$batchModel->batch_no)->where('sku_id',$batchModel->sku_id)->first()->actual_num;
+            }catch (\Exception $exception){
+                $rk_num=InitStockItemModel::query()->where('batch_no',$batchModel->batch_no)->where('sku_id',$batchModel->sku_id)->first()->actual_num;
+            }
+
             $current_num = $in_num-$out_num;
             return [
                 $key + 1,

@@ -51,11 +51,13 @@ class TuiHuoForm extends Form implements LazyRenderable
      */
     public function handle(array $input)
     {
+        $type=1;
         if ($input['num'] < $input['operate_num']) {
             return $this->response()->warning('Number cannot be less than available quantity');
         }
         DB::transaction(function () use ($input) {
             if ($input['return_type']==0&&$input['purchase_order']!="——"){
+                $type=2;
                 $current_num=$input['sku_current_num']-$input['operate_num'];
                 SkuStockModel::query()->where(['sku_id'=>$input['sku_id']])->update(['num'=>$current_num]);
                 $returnOrder=ReturnOrderModel::query()->create([
@@ -87,6 +89,7 @@ class TuiHuoForm extends Form implements LazyRenderable
                 ]);
 //                DB::rollBack();
             }elseif($input['return_type']==1&&$input['sale_order']!="——"){
+                $type=2;
                 $return_num=$input['can_return_sale_num']-$input['operate_num'];
 //                dump($return_num,$input['can_return_sale_num']);
                 if ($return_num<0&&$input['can_return_sale_num']!=0){
@@ -135,6 +138,11 @@ class TuiHuoForm extends Form implements LazyRenderable
             }
 
         });
+        switch ($type){
+            case 1:return $this->response()->warning('该类型没有可用明细');break;
+            case 2:return $this->response()->success('Success' )->redirect(admin_route('sku-stock-batchs.index'));break;
+
+        }
         return $this->response()->success('Success' )->redirect(admin_route('sku-stock-batchs.index'));
     }
 

@@ -14,6 +14,8 @@
 
 namespace App\Observers;
 
+use App\Models\InitStockItemModel;
+use App\Models\InitStockOrderModel;
 use App\Models\PurchaseInItemModel;
 use App\Models\PurchaseInOrderModel;
 use App\Models\SkuStockBatchModel;
@@ -30,11 +32,31 @@ class StockHistoryObserver
         switch ($stockHistoryModel->type) {
             // 采购入库单
             case StockHistoryModel::IN_STOCK_PUCHASE:
-            case StockHistoryModel::PRO_STOCK_TYPE:
-            case StockHistoryModel::INIT_TYPE:
                 $msrp=PurchaseInItemModel::whereBatchNo($stockHistoryModel->batch_no)
                     ->where('sku_id',$stockHistoryModel->sku_id)
                     ->where('order_id',PurchaseInOrderModel::whereOrderNo($stockHistoryModel->with_order_no)->first()->id)
+                    ->first();
+//                dump($msrp);
+                try {
+                    $msrp=$msrp->msrp;
+                }catch (\Exception $exception){
+                    $msrp=0;
+                }
+                SkuStockBatchModel::updateOrCreate([
+                    'position_id' => $stockHistoryModel->in_position_id,
+                    'batch_no'    => $stockHistoryModel->batch_no,
+                    'sku_id'      => $stockHistoryModel->sku_id,
+                ], [
+                    'num'        => DB::raw("num + $stockHistoryModel->in_num"),
+                    'cost_price' => $stockHistoryModel->cost_price,
+                    'msrp'=>$msrp
+                ]);
+                break;
+            case StockHistoryModel::PRO_STOCK_TYPE:
+            case StockHistoryModel::INIT_TYPE:
+                $msrp=InitStockItemModel::whereBatchNo($stockHistoryModel->batch_no)
+                    ->where('sku_id',$stockHistoryModel->sku_id)
+                    ->where('order_id',InitStockOrderModel::whereOrderNo($stockHistoryModel->with_order_no)->first()->id)
                     ->first();
 //                dump($msrp);
                 try {

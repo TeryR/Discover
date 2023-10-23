@@ -21,6 +21,7 @@ use App\Admin\Actions\Grid\TuiHuo;
 use App\Admin\Extensions\Grid\ProductCheckDetails;
 use App\Admin\Forms\TuiHuoForm;
 use App\Admin\Repositories\SkuStockBatch;
+use App\Models\InitStockItemModel;
 use App\Models\PositionModel;
 use App\Models\PurchaseInItemModel;
 use App\Models\PurchaseInOrderModel;
@@ -56,7 +57,12 @@ class SkuStockBatchController extends AdminController
                 $sku_id=$this->sku->id;
 //                $rk_order=StockHistoryModel::query()->where('batch_no',$this->batch_no)->where('sku_id',$sku_id)->first()->with_order_no;
 //                $rk_id=PurchaseInOrderModel::query()->where('order_no',$rk_order)->first()->id;
-                return PurchaseInItemModel::query()->where('batch_no',$this->batch_no)->where('sku_id',$sku_id)->first()->actual_num;
+                try {
+                    return PurchaseInItemModel::query()->where('batch_no',$this->batch_no)->where('sku_id',$sku_id)->first()->actual_num;
+                }catch (\Exception $exception){
+                    return InitStockItemModel::query()->where('batch_no',$this->batch_no)->where('sku_id',$sku_id)->first()->actual_num;
+                }
+
             });
             $grid->column('current_num',__('current_num'))->display(function (){
                 $in_num = StockHistoryModel::query()->where('batch_no',$this->batch_no)
@@ -84,20 +90,26 @@ class SkuStockBatchController extends AdminController
                             $query->orWhere('item_no', 'like', $this->getValue()."%");
                         });
                     });
-                }, "关键字")->placeholder("产品名称，编号")->width(3);
-                $filter->group('num', function ($group) {
+                }, __('keywords'))->placeholder("产品名称，编号")->width(3);
+//                $filter->group('num', function ($group) {
+//                    $group->gt('>');
+//                    $group->lt('<');
+//                    $group->nlt('>=');
+//                    $group->ngt('<=');
+//                    $group->equal('=');
+//                },__('balance_num'))->width(3);
+                // $filter->like('percent', "含绒量")->decimal()->width(3);
+                // $filter->equal('standard', "检验标准")->select(SkuStockBatchModel::STANDARD)->width(3);
+                $filter->like('batch_no', __('batch_no'))->width(3);
+                $filter->equal('position_id', __('position_id'))->select(PositionModel::query()->latest()->pluck('name', 'id'))->width(3);
+                $filter->group('cost_price',function ($group) {
                     $group->gt('>');
                     $group->lt('<');
                     $group->nlt('>=');
                     $group->ngt('<=');
                     $group->equal('=');
-                })->width(3);
-                // $filter->like('percent', "含绒量")->decimal()->width(3);
-                // $filter->equal('standard', "检验标准")->select(SkuStockBatchModel::STANDARD)->width(3);
-                $filter->like('batch_no', __('batch_no'))->width(3);
-                $filter->equal('position_id', __('position_id'))->select(PositionModel::query()->latest()->pluck('name', 'id'))->width(2);
-                $filter->equal('cost_price',__('cost_price'));
-                $filter->between('created_at', 'created_at')->datetime();
+                },__('cost_price'))->width(3);
+                $filter->between('created_at', 'created_at')->datetime()->width(5);
             });
             // $grid->column("_id", "检验记录")->expand(ProductCheckDetails::make());
 //            $grid->actions(function (Grid\Displayers\Actions $actions) {

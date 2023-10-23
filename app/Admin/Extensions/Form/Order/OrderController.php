@@ -275,7 +275,7 @@ CSS
         if ($this->order && $this->order->review_status !== $this->oredr_model::REVIEW_STATUS_OK) {
             $grid->tools(OrderReview::make(show_order_review($this->order->review_status)));
             $grid->tools(OrderDelete::make());
-            $grid->tools(BatchCreatePro::make());
+//            $grid->tools(BatchCreatePro::make());
         }
         $grid->disableActions();
         $grid->disablePagination();
