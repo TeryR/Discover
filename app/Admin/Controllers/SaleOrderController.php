@@ -48,10 +48,15 @@ class SaleOrderController extends OrderController
             $grid->column('finished_at',__('finished_at'))->emp();
 
             $grid->disableQuickEditButton();
-            $grid->disableDeleteButton();
+//            $grid->disableDeleteButton();
             $grid->tools(BatchOrderPrint::make());
             $grid->actions(EditOrder::make());
-
+            $grid->actions(function (Grid\Displayers\Actions $actions) use($grid){
+//                dump($actions->row->review_status);
+                if($actions->row->review_status==1){
+                    $actions->disableDelete();
+                }
+            });
             $grid->filter(function (Grid\Filter $filter) {
             });
         });
@@ -91,7 +96,7 @@ class SaleOrderController extends OrderController
     protected function setItems(Grid &$grid): void
     {
         $order = $this->order;
-        dump($order);
+//        dump($order);
         $grid->column('sku.product.name', __('sku.product.name'));
         $grid->column('sku.product.unit.name',__('sku.product.unit.name'));
         // $grid->column('sku.product.type_str',__('sku.product.type_str'));

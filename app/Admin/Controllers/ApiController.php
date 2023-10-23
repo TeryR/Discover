@@ -17,6 +17,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Repositories\Customer;
 use App\Http\Requests\WithOrderRequest;
 use App\Http\Resources\ProductResource;
+use App\Models\PurchaseInItemModel;
 use App\Repositories\AttrValueRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\StockHistoryRepository;
@@ -105,4 +106,9 @@ class ApiController extends Controller
         $data        = $customer->draweeIdText($customer_id)->textIdtoArray('id', 'name');
         return Response::json($data);
     }
+//    public function editPurchaseInItemPosition($purchaseInOrdersId,$purchaseInItemId,Request $request):void
+//    {
+//        $res= PurchaseInItemModel::whereOrderId($purchaseInOrdersId)->where('id','=',$purchaseInItemId)->update(['position_id'=>$request->get('position_id')]);
+//
+//    }
 }

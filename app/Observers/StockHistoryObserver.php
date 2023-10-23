@@ -15,6 +15,7 @@
 namespace App\Observers;
 
 use App\Models\PurchaseInItemModel;
+use App\Models\PurchaseInOrderModel;
 use App\Models\SkuStockBatchModel;
 use App\Models\StockHistoryModel;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +24,9 @@ class StockHistoryObserver
 {
     public function saved(StockHistoryModel $stockHistoryModel): void
     {
+        DB::transaction(function ()use($stockHistoryModel){
+
+
         switch ($stockHistoryModel->type) {
             // 采购入库单
             case StockHistoryModel::IN_STOCK_PUCHASE:
@@ -30,9 +34,14 @@ class StockHistoryObserver
             case StockHistoryModel::INIT_TYPE:
                 $msrp=PurchaseInItemModel::whereBatchNo($stockHistoryModel->batch_no)
                     ->where('sku_id',$stockHistoryModel->sku_id)
-                    ->where('order_id',$stockHistoryModel->with_order_no)
-                    ->first()
-                    ->msrp;
+                    ->where('order_id',PurchaseInOrderModel::whereOrderNo($stockHistoryModel->with_order_no)->first()->id)
+                    ->first();
+//                dump($msrp);
+                try {
+                    $msrp=$msrp->msrp;
+                }catch (\Exception $exception){
+                    $msrp=0;
+                }
                 SkuStockBatchModel::updateOrCreate([
                     'position_id' => $stockHistoryModel->in_position_id,
                     'batch_no'    => $stockHistoryModel->batch_no,
@@ -58,6 +67,7 @@ class StockHistoryObserver
                 break;
             // 销售退货
             case $stockHistoryModel::IN_STOCK_SALE:
+//                dump($stockHistoryModel);
                 SkuStockBatchModel::updateOrCreate([
                     'position_id' => $stockHistoryModel->in_position_id,
                     'batch_no'    => $stockHistoryModel->batch_no,
@@ -116,5 +126,8 @@ class StockHistoryObserver
                 break;
             default:
         }
+
+        });
+//        DB::rollBack();
     }
 }

@@ -21,6 +21,7 @@ use App\Admin\Extensions\Form\Order\OrderController;
 use App\Admin\Repositories\Attr;
 use App\Admin\Repositories\PurchaseOrder;
 use App\Models\AttrModel;
+use App\Models\PositionModel;
 use App\Models\ProductModel;
 use App\Models\PurchaseOrderModel;
 use App\Models\SupplierModel;
@@ -138,7 +139,7 @@ class PurchaseOrderController extends OrderController
                 $table->num('should_num', __("should_num"))->required();
                 $table->tableDecimal('price', __('purchase.price'))->default(0.00)->required();
                 $table->tableDecimal('msrp',__('msrp'))->default(0.00)->required();
-
+//                $table->select('position_id',__('position_id'))->options(PositionModel::pluck('name', 'id'));
             })->useTable()->width(12)->enableHorizontal();
         });
     }

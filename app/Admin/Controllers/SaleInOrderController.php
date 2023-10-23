@@ -39,7 +39,7 @@ class SaleInOrderController extends AdminController
             $grid->column('user_id',__('user_id'));
             $grid->column('created_at',__('created_at'));
             $grid->column('updated_at',__('updated_at'))->sortable();
-            $grid->tools(BatchOrderPrint::make());
+//            $grid->tools(BatchOrderPrint::make());
 
             $grid->filter(function (Grid\Filter $filter) {
             });

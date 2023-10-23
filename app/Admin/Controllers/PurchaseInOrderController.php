@@ -69,7 +69,7 @@ class PurchaseInOrderController extends OrderController
 //            });
 
             $grid->actions(EditOrder::make());
-            $grid->tools(BatchOrderPrint::make());
+//            $grid->tools(BatchOrderPrint::make());
             $grid->tools(BatchCreatePurInOrder::make());
             $grid->showRowSelector();
             $grid->filter(function (Grid\Filter $filter) {

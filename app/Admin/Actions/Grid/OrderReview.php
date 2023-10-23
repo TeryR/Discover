@@ -56,11 +56,13 @@ class OrderReview extends AbstractTool
         try {
             $this->check($request);
             DB::transaction(function () use ($request) {
+
                 $this->model->review_status = $request->input("review_status");
                 return $this->model->save();
             });
             return $this->response()->success("单据{$title}成功！")->refresh();
         } catch (\Exception $exception) {
+//            dump( $exception);
             return $this->response()->error("单据{$title}失败！". $exception->getMessage());
         }
     }

@@ -22,6 +22,7 @@ use App\Models\PurchaseInOrderModel;
 use App\Models\PurchaseOrderModel;
 use App\Models\ReturnOrderModel;
 use App\Models\SaleOrderModel;
+use App\Models\SaleOutBatchModel;
 use App\Models\SaleOutItemModel;
 use App\Models\SaleOutOrderModel;
 use App\Models\SkuStockBatchModel;
@@ -71,8 +72,8 @@ class TuiHuoForm extends Form implements LazyRenderable
                     'in_position_id'=>0,
                     'out_position_id'=>$input['position_id'],
                     'cost_price'=>$input['cost_price'],
-                    'type'=>0,
-                    'flag'=>0,
+                    'type'=>StockHistoryModel::OUT_STOCK_PUCHASE,
+                    'flag'=>StockHistoryModel::OUT,
                     'with_order_no'=>$returnOrder->order_no,
                     'init_num'=>StockHistoryModel::query()->where('sku_id',$input['sku_id'])->orderByDesc('id')->first()->balance_num,
                     'in_num'=>0,
@@ -95,10 +96,12 @@ class TuiHuoForm extends Form implements LazyRenderable
                 $current_num=$input['sku_current_num']+$input['operate_num'];
                 SkuStockModel::query()->where(['sku_id'=>$input['sku_id']])->update(['num'=>$current_num]);
                 $sale_price=SaleOutItemModel::query()->where('sku_id',$input['sku_id']);
-                SaleOutItemModel::query()->join('sale_out_order','sale_out_order.id','=','order_id')
+                $sale_item_id=SaleOutItemModel::query()->join('sale_out_order','sale_out_order.id','=','order_id')
                     ->where('sku_id',$input['sku_id'])
-                    ->where('sale_out_order.order_no',$input['sale_order'])
-                    ->update(['stock_num'=>$return_num]);
+                    ->where('sale_out_order.order_no',$input['sale_order'])->first()->id;
+//                    ->update(['stock_num'=>$return_num]);
+                SaleOutBatchModel::query()->where('stock_batch_id',SkuStockBatchModel::whereBatchNo($input['batch_no'])->first()->id)
+                    ->where('item_id',$sale_item_id)->update(['return_stock_num'=>$return_num]);
                 $returnOrder=ReturnOrderModel::query()->create([
                     'order_no'=>'TH'.date('Ymd').rand(1000,9999),
                     'batch_no'=>$input['batch_no'],
@@ -110,11 +113,11 @@ class TuiHuoForm extends Form implements LazyRenderable
                 ]);
                 StockHistoryModel::query()->create([
                     'sku_id'=>$input['sku_id'],
-             'in_position_id'=>0,
-                    'out_position_id'=>$input['position_id'],
+             'in_position_id'=>$input['position_id'],
+                    'out_position_id'=>0,
                     'cost_price'=>$input['cost_price'],
-                    'type'=>0,
-                    'flag'=>1,
+                    'type'=>StockHistoryModel::IN_STOCK_SALE,
+                    'flag'=>StockHistoryModel::IN,
                     'with_order_no'=>$returnOrder->order_no,
                     'init_num'=>StockHistoryModel::query()->where('sku_id',$input['sku_id'])->orderByDesc('id')->first()->balance_num,
                     'in_num'=>$input['operate_num'],
@@ -205,9 +208,17 @@ class TuiHuoForm extends Form implements LazyRenderable
                         ->select('order_no','stock_num')
                         ->distinct()
                         ->get();
-                    foreach ($shengyu as $value){
+                    $shengyu1=SaleOutBatchModel::query()
+                        ->join('sale_out_item','sale_out_item.id','=','item_id')
+                        ->join('sale_out_order','sale_out_order.id','=','sale_out_item.order_id')
+                        ->whereIn('sale_out_item.order_id',$id)
+                        ->where('stock_batch_id',$skuStockBatch->id)
+                        ->select('order_no','sale_out_batch.return_stock_num')
+                        ->distinct()
+                        ->get();
+                    foreach ($shengyu1 as $value){
 
-                        $new[$value['order_no']]=$value['stock_num'];
+                        $new[$value['order_no']]=$value['return_stock_num'];
                     }
                     $sale_order=$row->width(4)->select('sale_order',__('sale_order'))->options(function ()use($skuStockBatch){
                         $with_order_no=StockHistoryModel::query()->where('batch_no',$skuStockBatch->batch_no)

@@ -104,8 +104,8 @@ class MakeProductOrderController extends OrderController
                 $table->select('product_id', '名称')->options(ProductModel::pluck('name', 'id'))->loadpku(admin_route('api.product.find'))->required();
                 $table->ipt('unit', '单位')->rem(3)->default('-')->disable();
                 $table->select('sku_id', '属性选择')->options()->required();
-                $table->tableDecimal('percent', '含绒量')->default(0);
-                $table->select('standard', '检验标准')->options(MakeProductOrderModel::STANDARD)->default(0);
+//                $table->tableDecimal('percent', '含绒量')->default(0);
+//                $table->select('standard', '检验标准')->options(MakeProductOrderModel::STANDARD)->default(0);
                 $table->num('should_num', '计划入库数')->required();
                 $table->tableDecimal('price', '实际入库数')->default(0.00)->required();
                 $table->select('position_id', '入库位置')->options(PositionModel::orderBy('id', 'desc')->pluck('name', 'id'));

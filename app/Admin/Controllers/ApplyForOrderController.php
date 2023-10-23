@@ -100,8 +100,8 @@ class ApplyForOrderController extends OrderController
                 $table->select('product_id', '名称')->options(ProductModel::pluck('name', 'id'))->loadpku(admin_route('api.product.find'))->required();
                 $table->ipt('unit', '单位')->rem(3)->default('-')->disable();
                 $table->select('sku_id', '属性选择')->options()->required();
-                $table->tableDecimal('percent', '含绒百分比')->default(0);
-                $table->select('standard', '检验标准')->options(PurchaseOrderModel::STANDARD)->default(0);
+//                $table->tableDecimal('percent', '含绒百分比')->default(0);
+//                $table->select('standard', '检验标准')->options(PurchaseOrderModel::STANDARD)->default(0);
                 $table->num('should_num', '申领数量')->required();
             })->useTable()->width(12)->enableHorizontal();
         });
@@ -121,14 +121,14 @@ class ApplyForOrderController extends OrderController
             return $fluent->sku['product']['sku_key_value'];
         });
 
-        $grid->column('percent', '含绒百分比')->if(function () use ($order) {
-            return $order->review_status !== ApplyForOrderModel::REVIEW_STATUS_OK;
-        })->edit();
-        $grid->column('standard', '检验标准')->if(function () use ($order) {
-            return $order->review_status === ApplyForOrderModel::REVIEW_STATUS_OK;
-        })->display(function () {
-            return ApplyForOrderModel::STANDARD[$this->standard];
-        })->else()->selectplus(ApplyForOrderModel::STANDARD);
+//        $grid->column('percent', '含绒百分比')->if(function () use ($order) {
+//            return $order->review_status !== ApplyForOrderModel::REVIEW_STATUS_OK;
+//        })->edit();
+//        $grid->column('standard', '检验标准')->if(function () use ($order) {
+//            return $order->review_status === ApplyForOrderModel::REVIEW_STATUS_OK;
+//        })->display(function () {
+//            return ApplyForOrderModel::STANDARD[$this->standard];
+//        })->else()->selectplus(ApplyForOrderModel::STANDARD);
         $grid->column('cost_price', "成本总价");
         $grid->column('should_num', '申领数量');
         $grid->column('actual_num', '实领数量');
@@ -140,8 +140,8 @@ class ApplyForOrderController extends OrderController
                 Grid::IFRAME_QUERY_NAME => 1,
                 'item_id'               => $batchDeail->row->id,
                 'sku_id'                => $batchDeail->row->sku_id,
-                'standard'              => $batchDeail->row->standard,
-                'percent'               => $batchDeail->row->percent,
+//                'standard'              => $batchDeail->row->standard,
+//                'percent'               => $batchDeail->row->percent,
             ]);
         });
     }

@@ -41,9 +41,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|PurchaseItemModel whereUpdatedAt($value)
  * @mixin \Eloquent
  * @property-read \App\Models\ProductSkuModel $sku
- * @property string $percent 含绒量
- * @property int $standard 检验标准
- * @property-read mixed $standard_str
  * @method static \Illuminate\Database\Eloquent\Builder|PurchaseItemModel wherePercent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PurchaseItemModel whereStandard($value)
  */

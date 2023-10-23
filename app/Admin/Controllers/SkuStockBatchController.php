@@ -42,7 +42,7 @@ class SkuStockBatchController extends AdminController
     protected function grid()
     {
         return Grid::make(new SkuStockBatch(['sku.product']), function (Grid $grid) {
-            $grid->model()->where('num', ">", 0);
+            $grid->model()->where('num', ">=", 0);
             $grid->column('id')->sortable();
             $grid->column('sku.product.item_no', __('sku.product.item_no'));
             $grid->column('sku.product.name', __('sku.product.name'));
@@ -67,15 +67,14 @@ class SkuStockBatchController extends AdminController
                     ->where('sku_id',$this->sku->id)
                     ->where('flag',0)
                     ->sum('out_num');
-                $current_num = $in_num-$out_num;
-                return $current_num;
+                return $in_num-$out_num;
             });
             $grid->column('cost_price', __('cost_price'));
             $grid->column("cost_price_total", __('cost_price_total'))->display(function () {
                 return bcmul($this->num, $this->cost_price, 2);
             });
             $grid->column('position.name', __('position.name'));
-
+            $grid->column('msrp',__('msrp'));
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->where("product_name", function (Builder $query) {
                     $query->whereHasIn("sku.product", function (Builder $query) {

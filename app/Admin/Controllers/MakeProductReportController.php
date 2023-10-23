@@ -76,7 +76,7 @@ class MakeProductReportController extends Controller
                     $group->ngt('不大于');
                     $group->equal('等于');
                 }, '实领数量')->width(3);
-                $filter->like('percent', "含绒量")->decimal()->width(3);
+//                $filter->like('percent', "含绒量")->decimal()->width(3);
                 $filter->equal('standard', "检验标准")->select(ApplyForOrderModel::STANDARD)->width(3);
             });
 

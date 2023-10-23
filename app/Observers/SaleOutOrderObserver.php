@@ -96,7 +96,9 @@ class SaleOutOrderObserver
             $saleOutOrderModel->items->each(function (SaleOutItemModel $saleOutItemModel) use ($saleOutOrderModel) {
                 $saleOutItemModel->sum_price = bcmul($saleOutItemModel->actual_num, $saleOutItemModel->price, 2);
                 $saleOutItemModel->profit = bcsub($saleOutItemModel->sum_price, $saleOutItemModel->sum_cost_price, 2);
+                $saleOutItemModel->stock_num=$saleOutItemModel->actual_num;
                 $saleOutItemModel->saveOrFail();
+//                dump($saleOutItemModel);
                 $saleOutItemModel->batchs->each(function (SaleOutBatchModel $saleOutBatchModel) use ($saleOutItemModel, $saleOutOrderModel) {
                     $init_num = SkuStockModel::where([
                         'sku_id' => $saleOutItemModel->sku_id,
@@ -118,6 +120,7 @@ class SaleOutOrderObserver
                         'user_id'         => Admin::user()->id,
                         'batch_no'        => $saleOutBatchModel->stock_batch->batch_no,
                     ]);
+                    SaleOutBatchModel::whereId($saleOutBatchModel->id)->update(['return_stock_num'=>$saleOutBatchModel->actual_num]);
                 });
             });
             $saleOutOrderModel->with_order->status = SaleOrderModel::STATUS_SEND;

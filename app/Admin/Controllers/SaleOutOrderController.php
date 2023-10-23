@@ -20,6 +20,7 @@ use App\Admin\Actions\Grid\EditOrder;
 use App\Admin\Actions\Grid\SaleTuiHuo;
 use App\Admin\Extensions\Form\Order\OrderController;
 use App\Admin\Extensions\Grid\BatchDeail;
+use App\Admin\Repositories\SaleOutItem;
 use App\Admin\Repositories\SaleOutOrder;
 use App\Models\PurchaseOrderModel;
 use App\Models\SaleOrderModel;
@@ -53,7 +54,7 @@ class SaleOutOrderController extends OrderController
             $grid->disableCreateButton();
             $grid->disableDeleteButton();
             $grid->actions(EditOrder::make());
-            $grid->tools(BatchOrderPrint::make());
+//            $grid->tools(BatchOrderPrint::make());
             $grid->tools(BatchCreateSaleOutOrder::make());
 
             $grid->filter(function (Grid\Filter $filter) {
@@ -123,7 +124,7 @@ class SaleOutOrderController extends OrderController
         });
 
         $grid->column('should_num', __('sale_should_num'));
-        $grid->column('actual_num', __('sale_actual_num'));
+        $grid->column('actual_num', __('#sale_actual_num'));
         $grid->column('price', __('sale_price'))->if(function () use ($order) {
             return $order->review_status !== SaleOutOrderModel::REVIEW_STATUS_OK;
         })->edit();
@@ -141,5 +142,12 @@ class SaleOutOrderController extends OrderController
 
     protected function creating(Form &$form): void
     {
+    }
+
+    protected function form(): Form
+    {
+        return Form::make(new SaleOutItem(), function (Form $form) {
+            $form->number('price');
+        });
     }
 }

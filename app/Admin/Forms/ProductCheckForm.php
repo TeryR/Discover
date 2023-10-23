@@ -44,7 +44,7 @@ class ProductCheckForm extends Form implements LazyRenderable
                 'prev_sku_stock_batch_id' => $this->payload['id'],
                 'standard' => $input['standard'],
                 'carbon_fiber' => $input['carbon_fiber'],
-                'percent' => $input['percent'],
+//                'percent' => $input['percent'],
                 'raw_footage' => $input['raw_footage'],
                 'velvet' => $input['velvet'],
                 'magazine' => $input['magazine'],
@@ -91,8 +91,8 @@ class ProductCheckForm extends Form implements LazyRenderable
             $row->width(12)->html('<hr/><h3>成份分析明细</h3>');
         });
         $this->row(function (Row $row) use ($skuStockBatch) {
-            $row->width(4)->select('standard', '检验标准')->options(SkuStockBatchModel::STANDARD)->default($skuStockBatch->standard);
-            $row->width(4)->rate('percent', '含绒百分比')->default($skuStockBatch->percent);
+//            $row->width(4)->select('standard', '检验标准')->options(SkuStockBatchModel::STANDARD)->default($skuStockBatch->standard);
+//            $row->width(4)->rate('percent', '含绒百分比')->default($skuStockBatch->percent);
             $row->width(4)->rate('carbon_fiber', '碳纤维')->default(0);
         });
         $this->row(function (Row $row) {

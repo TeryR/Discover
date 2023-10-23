@@ -28,12 +28,15 @@ class PrintController extends Controller
         /** @var Model $modelClass */
         $modelClass = "\\App\Models\\" . $model;
         $orders = $modelClass::query()->findOrFail($orderIds);
+
         $orderSlug = $request->input('slug');
         $orderField = collect(admin_trans($orderSlug.".fields"))->chunk(2)->toArray();
 
         $itemSlug = Str::replaceFirst("order", "item", $orderSlug);
         $itemField = admin_trans($itemSlug.".fields");
         $orderName = head(admin_trans($orderSlug . ".labels"));
+        $itemField=array_diff($itemField,['含绒量','检验标准']);
+//        dump($itemField);
         return view('print.print', compact("orders", 'orderField', 'itemField', 'orderName'));
     }
 }

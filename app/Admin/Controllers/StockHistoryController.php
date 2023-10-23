@@ -33,14 +33,15 @@ class StockHistoryController extends AdminController
     {
         return Grid::make(new StockHistory(['sku.product']), function (Grid $grid) {
             $grid->column('id')->sortable();
+            $grid->combine(__('base_info'),['flag','type','user.name','with_order_no']);
             $grid->combine(__('in_info'), ['in_num', 'in_position.name', 'in_price']);
             $grid->combine(__('out_info'), ['out_num', 'out_position.name', 'out_price']);
             $grid->combine(__('product_info'), ['sku.product.item_no', 'sku.product.name', 'sku.product.unit.name','sku.product.type_str', 'sku.attr_value_ids_str', ]);// 'percent', 'standard_str']);
             // $grid->combine("盘点信息", ["inventory_num", "inventory_diff_num"]);
             $grid->combine(__('stock_info'), ['init_num', 'balance_num', 'batch_no', 'cost_price']);
 
-            $grid->column('flag',__('flag'))->using(StockHistoryModel::FLAG);
-            $grid->column('type',__('type'))->using(StockHistoryModel::TYPE);
+            $grid->column('flag',__('flag'))->using(StockHistoryModel::FLAG)->width('200px');
+            $grid->column('type',__('type'))->using(StockHistoryModel::TYPE)->width('200px');
             $grid->column('user.name', __('user.name'))->limit(5);
             $grid->column('with_order_no',__('with_order_no'))->limit(5);
             $grid->column('in_num',__('in_num'));
@@ -64,7 +65,7 @@ class StockHistoryController extends AdminController
             // $grid->column('inventory_diff_num', "盈亏数量");
             $grid->column('balance_num',__('balance_num'));
             $grid->column('created_at',__('created_at'));
-
+            $grid->fixColumns(1);
             $grid->disableActions();
             $grid->disableCreateButton();
             $grid->disableDeleteButton();

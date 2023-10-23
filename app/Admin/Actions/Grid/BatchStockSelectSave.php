@@ -21,6 +21,7 @@ use App\Models\SkuStockBatchModel;
 use Dcat\Admin\Actions\Response;
 use Dcat\Admin\Grid\BatchAction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BatchStockSelectSave extends BatchAction
 {
@@ -85,14 +86,19 @@ class BatchStockSelectSave extends BatchAction
     {
         foreach ($this->getKey() as $stock_batch_id) {
             $skuStockBatch = SkuStockBatchModel::query()->findOrFail($stock_batch_id);
-            SaleOutBatchModel::create([
-                'stock_batch_id' => $stock_batch_id,
-                'sku_id'         => $this->sku_id,
-                'item_id'        => $this->item_id,
+            DB::transaction(function ()use($skuStockBatch,$stock_batch_id){
+                $saleOutBatch=SaleOutBatchModel::create([
+                    'stock_batch_id' => $stock_batch_id,
+                    'sku_id'         => $this->sku_id,
+                    'item_id'        => $this->item_id,
 //                'standard'       => $this->standard,
 //                'percent'        => $this->percent,
-                'cost_price'     => $skuStockBatch->cost_price,
-            ]);
+                    'cost_price'     => $skuStockBatch->cost_price,
+                ]);
+
+            });
+//            DB::rollBack();
+
         }
     }
 

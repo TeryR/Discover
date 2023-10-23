@@ -58,7 +58,7 @@
     "should_num":"采购数量/구매 수량",
     "sale_should_num":"要货数量/고객 주문 수량",
     "actual_num":"入库数量/입고 수량",
-    "#sale_actual_num":"",
+    "#sale_actual_num":"实领数量/실제 수령 수량",
     "current_num": "当前数量/현재 수량",
     "operate_num": "执行数量/실행 수량",
     "origin_actual_num":"期初库存/초기 재고",
@@ -99,5 +99,6 @@
     "in_info":"入库信息<br>입고 정보",
     "out_info":"出库信息<br>출고 정보",
     "product_info":"产品信息<br>제품 정보",
-    "stock_info":"库存信息<br>인벤토리 정보"
+    "stock_info":"库存信息<br>인벤토리 정보",
+    "base_info": "基础信息<br>기본 정보"
 }

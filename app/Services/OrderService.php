@@ -60,8 +60,8 @@ class OrderService extends BaseService
                 'should_num'  => $purchaseItemModel->should_num,
                 'actual_num'  => $purchaseItemModel->should_num,
                 'price'       => $purchaseItemModel->price,
-                'percent'     => $purchaseItemModel->percent,
-                'standard'    => $purchaseItemModel->standard,
+//                'percent'     => $purchaseItemModel->percent,
+//                'standard'    => $purchaseItemModel->standard,
                 'batch_no'    => function(){
                     $batch_no="PC".date('Ymd').rand(1000,9999);
                     while (1){
@@ -98,8 +98,8 @@ class OrderService extends BaseService
                 'sku_id'      => $saleItemModel->sku_id,
                 'should_num'  => $saleItemModel->should_num,
                 'price'       => $saleItemModel->price,
-                'percent'     => $saleItemModel->percent,
-                'standard'    => $saleItemModel->standard,
+//                'percent'     => $saleItemModel->percent,
+//                'standard'    => $saleItemModel->standard,
             ];
         });
 
