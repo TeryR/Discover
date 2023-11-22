@@ -14,17 +14,18 @@
 
 return [
     'labels' => [
-        'SaleOutOrder' => '客户出货单',
+        'SaleOutOrder' => '客户出货单/출고표',
     ],
     'fields' => [
-        'order_no' => '订单单号',
-        'created_at' => '业务日期',
-        'status_str' => '单据状态',
-        'with_order.order_no' => "相关单据",
-        'customer.name' => '客户',
-        'address.address' => '地址',
-        'drawee.name' => '付款人',
-        'other' => '备注',
+        'order_no' => __('order_no'),
+        'created_at' => __('created_at'),
+//        'status_str' => '单据状态',
+//        'with_order.order_no' => __('with_order.order_no'),
+        'customer.name' => __('customer.name'),
+        'phone'=>__('phone'),
+//        'address.address' => '地址',
+        'drawee.name' => __('drawee_id'),
+        'other' => __('other'),
     ],
     'options' => [
     ],

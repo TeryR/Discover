@@ -31,7 +31,8 @@ class ProductResource extends JsonResource
             'name'         => $this->name,
             'unit'         => $this->unit->name ?? '',
             'product_attr' => $this->sku_id_text,
-            'type_str'     => $this->type_str
+            'type_str'     => $this->type_str,
+            'package'=>$this->package
         ];
     }
 }

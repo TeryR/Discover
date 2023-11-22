@@ -14,7 +14,7 @@
 
 return [
     'labels' => [
-        'SaleOrder' => '客户要货单',
+        'SaleOrder' => '客户订单/고객 주문',
     ],
 
     'fields' => [
@@ -24,7 +24,7 @@ return [
         'other' => '备注',
         'customer.name' => '客户',
         'address.address' => '地址',
-        'drawee.name' => '付款人'
+        'drawee.name' => '店铺编号/점포 번호'
     ],
     'options' => [
     ],

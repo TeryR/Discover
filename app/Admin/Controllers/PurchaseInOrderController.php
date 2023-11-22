@@ -16,7 +16,9 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Grid\BatchCreatePurInOrder;
 use App\Admin\Actions\Grid\BatchOrderPrint;
+use App\Admin\Actions\Grid\CaiGouTuiHuo;
 use App\Admin\Actions\Grid\EditOrder;
+use App\Admin\Actions\Grid\SunHuai;
 use App\Admin\Actions\Grid\TuiHuo;
 use App\Admin\Extensions\Form\Order\OrderController;
 use App\Admin\Repositories\PurchaseInOrder;
@@ -67,11 +69,17 @@ class PurchaseInOrderController extends OrderController
 //                    $actions->append(new TuiHuo());
 //                }
 //            });
-
             $grid->actions(EditOrder::make());
 //            $grid->tools(BatchOrderPrint::make());
             $grid->tools(BatchCreatePurInOrder::make());
             $grid->showRowSelector();
+
+            $grid->actions(function (Grid\Displayers\Actions $actions) {
+                // append一个操作
+                if($actions->row->review_status==1) {
+                    $actions->append(new CaiGouTuiHuo());
+                }
+            });
             $grid->filter(function (Grid\Filter $filter) {
             });
             if (get_user_role_id()==3){
@@ -95,9 +103,9 @@ class PurchaseInOrderController extends OrderController
             $order = $this->order;
             $review_statu_ok = $this->oredr_model::REVIEW_STATUS_OK;
             if ($order && $order->review_status === $review_statu_ok) {
-                $row->width(6)->select('with_id', __('with_id'))->options(PurchaseOrderModel::query()->pluck('order_no', 'id'))->disable();
+                $row->width(6)->select('with_id', __('with_order_no'))->options(PurchaseOrderModel::query()->pluck('order_no', 'id'))->disable();
             } else {
-                $row->width(6)->select('with_id', __('with_id'))->options($with_order)->default(0)->required()->with_order();
+                $row->width(6)->select('with_id', __('with_order_no'))->options($with_order)->default(0)->required()->with_order();
             }
         });
         $form->row(function (Form\Row $row) {
@@ -122,7 +130,7 @@ class PurchaseInOrderController extends OrderController
                 // $table->select('standard', '检验标准')->options(PurchaseOrderModel::STANDARD)->default(0);
                 $table->num('should_num', __('should_num'))->required();
                 $table->tableDecimal('price',__('purchase.price'))->default(0.00)->required();
-                $table->tableDecimal('msrp',__('msrp'))->default(0.00)->required();
+//                $table->tableDecimal('msrp',__('msrp'))->default(0.00)->required();
                 $table->select('position_id',__('position_id'))->options(PositionModel::orderBy('id', 'desc')->pluck('name', 'id'));
                 $table->ipt('batch_no', __('batch_no'))->rem(8)->default(function (){
                     $batch_no="PC".date('Ymd').rand(1000,9999);
@@ -180,13 +188,19 @@ class PurchaseInOrderController extends OrderController
         $grid->column('should_num', __('should_num'));
         $grid->column('actual_num', __('actual_num'))->if(function () use ($order,$review_statu_ok) {
             return $order->review_status !== $review_statu_ok;
+        })->edit()->else()->display(function ($val){
+            return $val;
         });
         $grid->column('price', __('purchase.price'))->if(function () use ($order,$review_statu_ok) {
             return $order->review_status !== $review_statu_ok;
-        });
-        $grid->column('msrp',__('msrp'))->if(function () use ($order,$review_statu_ok) {
-            return $order->review_status !== $review_statu_ok;
-        });
+        })->edit()->else()->display(function ($val){
+            return $val;
+        });;
+//        $grid->column('msrp',__('msrp'))->if(function () use ($order,$review_statu_ok) {
+//            return $order->review_status !== $review_statu_ok;
+//        })->edit()->else()->display(function ($val){
+//            return $val;
+//        });;
         $grid->column("_", __('_'))->display(function () {
             return bcmul($this->actual_num, $this->price, 2);
         });

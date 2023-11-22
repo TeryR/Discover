@@ -98,7 +98,6 @@ class SaleOutOrderObserver
                 $saleOutItemModel->profit = bcsub($saleOutItemModel->sum_price, $saleOutItemModel->sum_cost_price, 2);
                 $saleOutItemModel->stock_num=$saleOutItemModel->actual_num;
                 $saleOutItemModel->saveOrFail();
-//                dump($saleOutItemModel);
                 $saleOutItemModel->batchs->each(function (SaleOutBatchModel $saleOutBatchModel) use ($saleOutItemModel, $saleOutOrderModel) {
                     $init_num = SkuStockModel::where([
                         'sku_id' => $saleOutItemModel->sku_id,

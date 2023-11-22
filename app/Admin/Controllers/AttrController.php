@@ -30,9 +30,10 @@ class AttrController extends AdminController
     protected function grid()
     {
         return Grid::make(new Attr(), function (Grid $grid) {
+
             $grid->column('id')->sortable();
-            $grid->column('name');
-             $grid->column('value', '属性值')
+            $grid->column('name',__('attr_id'));
+             $grid->column('value', __('attr_value_ids'))
                  ->display('查看')
                  ->expand(AttrValue::class);
             $grid->column('created_at');

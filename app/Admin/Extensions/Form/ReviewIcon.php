@@ -23,10 +23,14 @@ class ReviewIcon extends Field
     {
         $show_status_img = store_order_img($this->value);
 
-        if ($show_status_img) {
-            Admin::style($this->style());
-            return "<i data-column='{$this->column}' data-value='{$this->value}' class=\"postImg\"><img src=\"{$show_status_img}\"></i>";
-        }
+//        if ($show_status_img) {
+//            Admin::style($this->style());
+//            return "<i data-column='{$this->column}' data-value='{$this->value}' class=\"postImg\"><img src=\"{$show_status_img}\"></i>";
+//        }
+//        if ($show_status_img) {
+//            Admin::style($this->style());
+//            return "<i data-column='{$this->column}' data-value='{$this->value}' class=\"postImg\"></i>";
+//        }
     }
 
     public function style()

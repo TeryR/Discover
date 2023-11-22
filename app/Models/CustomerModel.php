@@ -62,9 +62,9 @@ class CustomerModel extends BaseModel
     const PAY_ZFB = 2;
 
     const PAY = [
-        self::PAY_CASH   => '现金',
-        self::PAY_WECHAT => '微信',
-        self::PAY_ZFB    => '支付宝',
+        self::PAY_CASH   => '现金/현금',
+        self::PAY_WECHAT => '转账/이체',
+//        self::PAY_ZFB    => '',
     ];
 
     /**

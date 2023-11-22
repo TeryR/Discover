@@ -14,10 +14,10 @@
 
 return [
     'labels' => [
-        'Drawee' => '付款人信息',
+        'Drawee' => '店铺信息/점포 정보',
     ],
     'fields' => [
-        'name' => '付款人名称',
+        'name' => '店铺名称',
     ],
     'options' => [
     ],

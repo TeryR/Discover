@@ -318,6 +318,7 @@ namespace Dcat\Admin {
          * @var Grid\Column
          */
 //        public $PurchaseInOrderExpand;
+
     }
 
     class MiniGrid extends Grid

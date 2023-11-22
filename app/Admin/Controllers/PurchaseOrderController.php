@@ -50,7 +50,7 @@ class PurchaseOrderController extends OrderController
             $grid->column('other',__('other'))->emp();
             $grid->column('status', __('status'))->using(PurchaseOrderModel::STATUS)->label(PurchaseOrderModel::STATUS_COLOR);
             $grid->column('review_status', __('review_status'))->using(PurchaseOrderModel::REVIEW_STATUS)->label(PurchaseOrderModel::REVIEW_STATUS_COLOR);
-            $grid->column('supplier.name',__('supplier.name'))->emp();
+            $grid->column('supplier.code',__('supplier.code'))->emp();
             $grid->column('user.username', __('user.username'));
             $grid->column('created_at',__('created_at'));
             $grid->column('finished_at',__('finished_at'))->emp();
@@ -66,6 +66,7 @@ class PurchaseOrderController extends OrderController
                     $actions->disableDelete();
                 }
             });
+//            dump(Admin::user()->roles);
             if (get_user_role_id()==3){
                 $grid->model()->where('supplier_id',get_supplier_id());
             }
@@ -87,7 +88,7 @@ class PurchaseOrderController extends OrderController
             $grid->column('other')->emp();
             $grid->column('status',__('other'))->using(PurchaseOrderModel::STATUS)->label(PurchaseOrderModel::STATUS_COLOR);
             $grid->column('review_status', __('review_status'))->using(PurchaseOrderModel::REVIEW_STATUS)->label(PurchaseOrderModel::REVIEW_STATUS_COLOR);
-            $grid->column('supplier.name',__('supplier.name'))->emp();
+            $grid->column('supplier.code',__('supplier.code'))->emp();
             $grid->column('user.username', __('user.username'));
 
             $grid->column('created_at',__('created_at'));
@@ -116,7 +117,8 @@ class PurchaseOrderController extends OrderController
                 $row->width(6)->select('status', __('status'))->options([PurchaseOrderModel::STATUS_WAIT => '待收货'])->default(PurchaseOrderModel::STATUS_WAIT)->required();
             }
             $supplier = SupplierRepository::pluck();
-            $row->width(6)->select('supplier_id', __('supplier_id'))->options($supplier)->default(head($supplier->keys()->toArray()))->required();
+//            dump($supplier);
+            $row->width(6)->select('supplier_id', __('supplier.code'))->options($supplier)->default(head($supplier->keys()->toArray()))->required();
         });
         $form->row(function (Form\Row $row) {
             $row->width(6)->text('other', __('other'))->saveAsString();
@@ -130,15 +132,16 @@ class PurchaseOrderController extends OrderController
 //                dump(admin_route('api.product.find'));
                 $table->select('product_id', __('product_id'))->options(ProductModel::pluck('name', 'id'))->loadpku(admin_route('api.product.find'))->required();
                 $table->ipt('unit', __('unit'))->rem(3)->default('-')->disable();
-////                $table->display('');
-                $table->ipt('type', '类型')->rem(5)->default('-')->disable();
-                $table->select('sku_id', '属性选择')->options();
+                $table->ipt('package',__('package'))->rem(5)->default('-')->disable();
+                $table->ipt('type', __('product_type'))->rem(5)->default('-')->disable();
+                $table->select('sku_id', __('attr_id'))->options();
+
 
 //                // $table->tableDecimal('percent', '含绒量')->default(0);
 //                // $table->select('standard', '检验标准')->options(PurchaseOrderModel::STANDARD)->default(0);
                 $table->num('should_num', __("should_num"))->required();
                 $table->tableDecimal('price', __('purchase.price'))->default(0.00)->required();
-                $table->tableDecimal('msrp',__('msrp'))->default(0.00)->required();
+//                $table->tableDecimal('msrp',__('msrp'))->default(0.00)->required();
 //                $table->select('position_id',__('position_id'))->options(PositionModel::pluck('name', 'id'));
             })->useTable()->width(12)->enableHorizontal();
         });
@@ -151,6 +154,7 @@ class PurchaseOrderController extends OrderController
 //        dump($order);
         $grid->column('sku.product.name', __('sku.product.name'));
         $grid->column('sku.product.unit.name', __('sku.product.unit.name'));
+        $grid->column('sku.product.package',__('package'));
         // $grid->column('sku.product.type_str', '类型');
 //         $grid->column('sku_id', '属性')->if(function () use ($order) {
 //             return $order->review_status === PurchaseOrderModel::REVIEW_STATUS_OK;
@@ -159,9 +163,9 @@ class PurchaseOrderController extends OrderController
 //             })->else()->selectplus(function ($order) {
 //////             dump($fluent);
 //             return $order->sku['product']['sku_key_value'];
-//         });
-        // $grid->column('percent', '含绒量')->if(function () use ($order) {
-        //     return $order->review_status !== PurchaseOrderModel::REVIEW_STATUS_OK;
+        ////         });
+        //        // $grid->column('percent', '含绒量')->if(function () use ($order) {
+        //        //     return $order->review_status !== PurchaseOrderModel::REVIEW_STATUS_OK;
         // })->edit();
 
         // $grid->column('standard', '检验标准')->if(function () use ($order) {
@@ -176,12 +180,12 @@ class PurchaseOrderController extends OrderController
         $grid->column('price', __('purchase.price'))->if(function () use ($order) {
             return $order->review_status !== PurchaseOrderModel::REVIEW_STATUS_OK;
         });
-        $grid->column('msrp',__('msrp'))->if(function () use ($order) {
-            return $order->review_status !== PurchaseOrderModel::REVIEW_STATUS_OK;
-        });
+//        $grid->column('msrp',__('msrp'))->if(function () use ($order) {
+//            return $order->review_status !== PurchaseOrderModel::REVIEW_STATUS_OK;
+//        });
         $grid->column("_", __('_'))->display(function () {
             return bcmul($this->should_num, $this->price, 2);
         });
 //        $grid->disableRowSelector();
-    }
+}
 }

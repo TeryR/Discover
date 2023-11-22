@@ -15,9 +15,11 @@
 use App\Models\AttrValueModel;
 use App\Models\BaseModel;
 use App\Models\OrderNoGeneratorModel;
+use App\Models\ProductModel;
 use App\Models\SkuStockBatchModel;
 use App\Models\SupplierModel;
 use Dcat\Admin\Admin;
+use Dcat\Admin\Models\Role;
 use Illuminate\Support\Facades\DB;
 
 if (! file_exists("lower_pinyin_abbr")) {
@@ -46,6 +48,30 @@ if (! function_exists('build_order_no')) {
         ])->value('number');
 
         return $prefix . $date . str_pad($number + 1, "4", "0", STR_PAD_LEFT);
+    }
+}
+if (! function_exists('build_supplier_code')) {
+    /**
+     * @param string $prefix
+     * @return string
+     */
+    function build_supplier_code(string $name="默认"): string
+    {
+        $prefix="SP-";
+        $name=up_pinyin_abbr($name);
+        while (1){
+            if ($name=="默认"){
+                $second=substr(strval(time()),-4);
+            }
+            else{
+                $second=substr(strval(time()),-2);
+            }
+            $supplierCode=$prefix . $name . $second;
+            if (SupplierModel::query()->where('code','=',$supplierCode)->count()==0){
+                break;
+            }
+        }
+        return $supplierCode;
     }
 }
 if (! function_exists('crossJoin')) {
@@ -159,5 +185,101 @@ if(!file_exists("get_supplier_id")){
         }else{
             return 0;
         }
+    }
+}
+
+//判断库管身份
+if (! function_exists('is_warehouse_management')) {
+    /**
+     * @return bool
+     */
+    function is_warehouse_management(): bool
+    {
+        $roleName=Role::query()->whereIn('id',Admin::user()->roles->toArray())->get('slug')->toArray();
+        foreach ($roleName as $item) {
+            $res = in_array('Warehouse_management', $item);
+//            dump($item);
+            if ($res) return $res;
+        }
+        return $res;
+    }
+}
+//判断代理身份
+if (! function_exists('is_representative')) {
+    /**
+     * @return bool
+     */
+    function is_representative(): bool
+    {
+        $roleName=Role::query()->whereIn('id',Admin::user()->roles->toArray())->get('slug')->toArray();
+        foreach ($roleName as $item) {
+            $res = in_array( 'representative',$item);
+//            dump($item);
+            if ($res) return $res;
+        }
+        return $res;
+    }
+}
+//判断操作员身份
+if (! function_exists('is_operator')) {
+    /**
+     * @return bool
+     */
+    function is_operator(): bool
+    {
+        $roleName=Role::query()->whereIn('id',Admin::user()->roles->toArray())->get('slug')->toArray();
+        foreach ($roleName as $item) {
+            $res = in_array( 'operator',$item);
+//            dump($item);
+            if ($res) return $res;
+        }
+        return $res;
+    }
+}
+//判断供应商身份
+if (! function_exists('is_supplier')) {
+    /**
+     * @return bool
+     */
+    function is_supplier(): bool
+    {
+        $roleName=Role::query()->whereIn('id',Admin::user()->roles->toArray())->get('slug')->toArray();
+        foreach ($roleName as $item) {
+            $res = in_array( 'supplier',$item);
+//            dump($item);
+            if ($res) return $res;
+        }
+        return $res;
+    }
+}
+
+if(!function_exists('getAvailableProduct')){
+    function getAvailableProduct(): \Illuminate\Support\Collection
+    {
+        return ProductModel::query()->join('product_sku','product.id','=','product_sku.product_id')
+            ->join('sku_stock_batch','product_sku.id','=','sku_stock_batch.sku_id')
+            ->where('sku_stock_batch.num','>',0)
+            ->pluck('product.name','sku_stock_batch.sku_id');
+
+    }
+}
+if (!function_exists('total')){
+    function total(\Dcat\Admin\Grid $grid, string $model,string $text,string $column){
+        $grid->footer(function ($collection) use ($grid,$text,$model,$column) {
+            $query = $model::query();
+            // 拿到表格筛选 where 条件数组进行遍历
+            $grid->model()->getQueries()->unique()->each(function ($value) use (&$query) {
+                if (in_array($value['method'], ['paginate', 'get', 'orderBy', 'orderByDesc'], true)) {
+                    return;
+                }
+
+                $query = call_user_func_array([$query, $value['method']], $value['arguments'] ?? []);
+            });
+
+            // 查出统计数据
+            $data = $query->sum($column);
+
+            return "<div style='padding: 10px;'>$text ： $data</div>";
+        });
     }
 }

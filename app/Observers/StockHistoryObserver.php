@@ -49,6 +49,7 @@ class StockHistoryObserver
                 ], [
                     'num'        => DB::raw("num + $stockHistoryModel->in_num"),
                     'cost_price' => $stockHistoryModel->cost_price,
+                    'batch_balance_num'=>DB::raw("num + $stockHistoryModel->in_num"),
                     'msrp'=>$msrp
                 ]);
                 break;
@@ -71,6 +72,7 @@ class StockHistoryObserver
                 ], [
                     'num'        => DB::raw("num + $stockHistoryModel->in_num"),
                     'cost_price' => $stockHistoryModel->cost_price,
+                    'batch_balance_num'=>DB::raw("num + $stockHistoryModel->in_num"),
                     'msrp'=>$msrp
                 ]);
                 break;

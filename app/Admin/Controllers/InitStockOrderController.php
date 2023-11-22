@@ -87,7 +87,7 @@ class InitStockOrderController extends OrderController
                 // $table->select('standard', '检验标准')->options(InitStockOrderModel::STANDARD)->default(0);
                 $table->tableDecimal('actual_num', __('origin_actual_num'))->default(0.00)->required();
                 $table->tableDecimal('cost_price', __('cost_single_price'))->default(0.00)->required();
-                $table->tableDecimal('msrp',__('msrp'))->default(0.00)->required();
+//                $table->tableDecimal('msrp',__('msrp'))->default(0.00)->required();
                 $table->select('position_id', __('position_id'))->options(PositionModel::orderBy('id', 'desc')->pluck('name', 'id'))->required();
                 $supplier = SupplierRepository::pluck();
                 $table->width(6)->select('supplier_id', __('supplier_id'))->options($supplier)->default(head($supplier->keys()->toArray()))->required();
@@ -116,12 +116,8 @@ class InitStockOrderController extends OrderController
         $grid->column('sku.product.unit.name', __('sku.product.unit.name'));
         $grid->column('sku.product.type_str', __('product_type'));
 
-         $grid->column('sku_id', '属性')->if(function () use ($order,$review_statu_ok) {
-             return $order->review_status === $review_statu_ok;
-         })->display(function () {
+         $grid->column('sku_id', '属性')->display(function () {
              return $this->sku['attr_value_ids_str'] ?? '';
-         })->else()->selectplus(function (Fluent $fluent) {
-             return $fluent->sku['product']['sku_key_value'];
          });
 
 

@@ -12,19 +12,18 @@
  * // +----------------------------------------------------------------------
  */
 
-return [
-    'labels' => [
-        'PurchaseInOrder' => '采购入库单/입고표',
-    ],
+namespace App\Repositories;
 
-    'fields' => [
-        'order_no' => __('order_no'),
-        'created_at' => __('created_at'),
-//        'status_str' => '单据状态',
-        'with_order.order_no' => __('with_order.order_no'),
-        'supplier.name' => __('supplier.name'),
-        'other' => __('other'),
-    ],
-    'options' => [
-    ],
-];
+use App\Models\ProductModel;
+use App\Models\SkuStockBatchModel;
+use App\Models\StockHistoryModel;
+use Yxx\LaravelQuick\Repositories\BaseRepository;
+
+class SkuStockBatchRepository extends BaseRepository
+{
+    public function getBatchAndSkuInfo(int $skuid){
+//        return StockHistoryModel::whereWithOrderNo($skuid)->get();
+        return SkuStockBatchModel::whereSkuId($skuid)->get();
+    }
+}
+

@@ -15,14 +15,15 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Grid\Delete;
-use App\Admin\Repositories\Unit;
+use App\Admin\Repositories\PriceHistory;
+use App\Models\ProductModel;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Auth;
 
-class UnitController extends AdminController
+class PriceHistoryController extends AdminController
 {
     /**
      * Make a grid builder.
@@ -31,13 +32,21 @@ class UnitController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new Unit(), function (Grid $grid) {
+        return Grid::make(new PriceHistory(['product']), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('name',__('unit.name'));
-            $grid->column('created_at',__('created_at'));
-            $grid->column('updated_at',__('updated_at'))->sortable();
-            $grid->tools(Delete::make());
+            $grid->column('product.name',__('sku.product.name'));
+            $grid->column('product.item_no',__('item_no'));
+            $grid->column('price',__('a_price'))->sortable();
+            $grid->column('remark',__('other'));
+            $grid->column('created_at',__('created_at'))->sortable();
+//            $grid->column('updated_at',__('updated_at'))->sortable();
+//            $grid->tools(Delete::make());
+            $grid->disableDeleteButton();
+//            $grid->disableQuickEditButton();
+//            $grid->quickSearch();
             $grid->filter(function (Grid\Filter $filter) {
+                $filter->like('product.name',__('sku.product.name'));
+                $filter->like('product.item_no',__('item_no'));
             });
         });
     }
@@ -51,9 +60,11 @@ class UnitController extends AdminController
      */
     protected function detail($id)
     {
-        return Show::make($id, new Unit(), function (Show $show) {
+        return Show::make($id, new PriceHistory(), function (Show $show) {
             $show->field('id');
-            $show->field('name',__('unit.name'));
+            $show->field('product_id',__('sku.product.name'));
+            $show->field('price',__('a_price'));
+            $show->field('remark',__('remark'));
             $show->field('created_at',__('created_at'));
             $show->field('updated_at',__('updated_at'));
         });
@@ -66,24 +77,8 @@ class UnitController extends AdminController
      */
     protected function form()
     {
-        return Form::make(new Unit(), function (Form $form) {
-            $form->display('id');
-            $form->hidden('name');
-            $form->text('name_zh',__('name_zh'))->required();
-            $form->text('name_ko',__('name_ko'))->required();
-
-            $form->display('created_at',__('created_at'));
-            $form->display('updated_at',__('updated_at'));
-
-
-            $form->saving(function (Form $form){
-                $name_zh=$form->name_zh;
-                $name_ko=$form->name_ko;
-                $name = $name_zh.'__'.$name_ko;
-                $form->name = $name;
-                $form->deleteInput('name_zh');
-                $form->deleteInput('name_ko');
-            });
+        return Form::make(new PriceHistory(), function (Form $form) {
+            $form->text('remark',__('other'));
         });
     }
 }

@@ -13,6 +13,8 @@
  */
 
 use App\Models\PurchaseInItemModel;
+use App\Models\SaleItemModel;
+use App\Models\SaleOutItemModel;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use Dcat\Admin\Admin;
@@ -26,6 +28,7 @@ Route::group([
     $router->get('api/get-attr-value', 'ApiController@getAttrValue')->name('api.attrvalue.find');
     $router->get('api/get-product-unit', 'ApiController@getUnitByProductId')->name('api.productunit.find');
     $router->get('api/get-product', 'ApiController@getProductInfo')->name('api.product.find');
+    $router->get('api/get-more-product','ApiController@getMoreProductInfo')->name('api.product.more');
     $router->post('api/with/order', 'ApiController@withOrder')->name('api.with.order');
     $router->get('api/get-customer-address', 'ApiController@getCustomerAddress')->name('api.customer.address.find');
     $router->get('api/get-customer-drawee', 'ApiController@getCustomerDrawee')->name('api.customer.drawee.find');
@@ -56,19 +59,50 @@ Route::group([
     $router->get('make-product-report/summary', 'MakeProductReportController@summary')->name('make-product-report.summary');
 
     //入库单仓库修改
-    $router->any('purchase-in-orders/{purchaseInOrdersId}/edit/{purchaseInItemId}',function ($purchaseInOrdersId,$purchaseInItemId,\Illuminate\Http\Request $request){
-        PurchaseInItemModel::whereOrderId($purchaseInOrdersId)->where('id','=',$purchaseInItemId)->update(['position_id'=>$request->get('position_id')]);
+    $router->any('purchase-in-orders/{purchaseInOrdersId}/edit/{purchaseInItemId}',function (\Illuminate\Http\Request $request,$purchaseInOrdersId,$purchaseInItemId){
+        try {
+            if ($request->exists('position_id'))
+                PurchaseInItemModel::whereOrderId($purchaseInOrdersId)->where('id','=',$purchaseInItemId)->update(['position_id'=>$request->post('position_id')]);
+            elseif ($request->exists('actual_num'))
+                PurchaseInItemModel::whereOrderId($purchaseInOrdersId)->where('id','=',$purchaseInItemId)->update(['actual_num'=>$request->post('actual_num')]);
+            elseif ($request->exists('price'))
+                PurchaseInItemModel::whereOrderId($purchaseInOrdersId)->where('id','=',$purchaseInItemId)->update(['price'=>$request->post('price')]);
+            elseif ($request->exists('msrp'))
+                PurchaseInItemModel::whereOrderId($purchaseInOrdersId)->where('id','=',$purchaseInItemId)->update(['msrp'=>$request->post('msrp')]);
+
+            admin_toastr('success');
+        }catch (Exception $exception){
+            admin_toastr($exception);
+        }
+
     });
     //销售单数量、价格修改
     $router->any('sale-orders/{saleOrdersId}/edit/{saleOutItemId}',function ($saleOrdersId,$saleItemId,\Illuminate\Http\Request $request){
         try{
         if($request->exists('should_num')){
-            \App\Models\SaleItemModel::whereOrderId($saleOrdersId)->where('id','=',$saleItemId)->update(['should_num'=>$request->get('should_num')]);
+            SaleItemModel::whereOrderId($saleOrdersId)->where('id','=',$saleItemId)->update(['should_num'=>$request->get('should_num')]);
         }
         else{
-            \App\Models\SaleItemModel::whereOrderId($saleOrdersId)->where('id','=',$saleItemId)->update(['price'=>$request->get('price')]);
+            SaleItemModel::whereOrderId($saleOrdersId)->where('id','=',$saleItemId)->update(['price'=>$request->get('price')]);
         }
 //            return back(-1);
+
+        }catch (Exception $e){
+//            dump($e);
+            return $e->getMessage();
+        }
+        return back();
+    });
+    $router->any('sale-out-orders/{aleOutOrdersId}/edit/{saleOutItemId}',function ($saleOrdersId,$saleItemId,\Illuminate\Http\Request $request){
+        try{
+            if($request->exists('should_num')){
+                SaleOutItemModel::whereOrderId($saleOrdersId)->where('id','=',$saleItemId)->update(['should_num'=>$request->get('should_num')]);
+            }
+            else{
+                SaleOutItemModel::whereOrderId($saleOrdersId)->where('id','=',$saleItemId)->update(['price'=>$request->get('price')]);
+            }
+//            return back(-1);
+
         }catch (Exception $e){
 //            dump($e);
             return $e->getMessage();
@@ -132,5 +166,6 @@ Route::group([
 
     $router->resource('return-order', 'ReturnOrderController');
 
+    $router->resource('price-history','PriceHistoryController');
 
 });

@@ -186,9 +186,11 @@ class OrderReview extends AbstractTool
      */
     public function html(): string
     {
+        if (admin_controller_name()!='SaleOrder'){
         return <<<HTML
 <a {$this->formatHtmlAttributes()}><button class="btn btn-primary btn-mini"><i class="feather icon-user-check"></i> {$this->title()}</button></a>
-HTML;
+HTML;}else
+    return '';
     }
 
     /**

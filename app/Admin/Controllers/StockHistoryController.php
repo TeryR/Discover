@@ -118,7 +118,7 @@ class StockHistoryController extends AdminController
                 // $filter->like('percent', "含绒量")->decimal()->width(3);
                 // $filter->equal('standard', "检验标准")->select(SkuStockBatchModel::STANDARD)->width(3);
                 $filter->like('batch_no', __('batch_no'))->width(3);
-                $filter->between('created_at', 'created_at')->datetime();
+                $filter->between('created_at', __('created_at'))->datetime()->width(5);
             });
         });
     }

@@ -98,15 +98,15 @@ class StockHistoryModel extends BaseModel
     const TYPE = [
         self::OUT_STOCK_PUCHASE => "采购退货/구매 반품",
         self::IN_STOCK_PUCHASE => "采购入库/구매 입고",
-        self::INVENTORY_TYPE => "库存盘点",
-        self::PRO_STOCK_TYPE => "生产入库",
-        self::COLLECTION_TYPE => "物料申领",
-        self::TRANSFER_TYPE => "库存调拨",
+//        self::INVENTORY_TYPE => "库存盘点",
+//        self::PRO_STOCK_TYPE => "生产入库",
+//        self::COLLECTION_TYPE => "物料申领",
+//        self::TRANSFER_TYPE => "库存调拨",
         self::STORE_OUT_TYPE => "销售出库/영업 출고",
         self::INIT_TYPE => "期初建账/기초 장부 작성",
         self::SCRAP_TYPE => '物料报废/자재 폐기',
-        self::CHECK_IN_TYPE => '检验入库',
-        self::CHECK_OUT_TYPE => '检验出库',
+//        self::CHECK_IN_TYPE => '检验入库',
+//        self::CHECK_OUT_TYPE => '检验出库',
         self::IN_STOCK_SALE=>'销售退货/영업 반품',
     ];
 
@@ -117,8 +117,8 @@ class StockHistoryModel extends BaseModel
     const FLAG = [
         self::IN => "入库/입고",
         self::OUT => "出库/출고",
-        self::INVENTORY => "盘点",
-        self::TRANSFER => '调拨',
+//        self::INVENTORY => "盘点",
+//        self::TRANSFER => '调拨',
     ];
 
     /**

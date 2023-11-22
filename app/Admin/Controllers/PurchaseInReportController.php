@@ -160,8 +160,8 @@ class PurchaseInReportController extends Controller
                 ->select([
                     'purchase_in_order.supplier_id as supplier_id',
                     'purchase_in_item.sku_id as sku_id',
-//                    'purchase_in_item.standard as standard',
-//                    'purchase_in_item.percent as percent',
+                    'purchase_in_item.standard as standard',
+                    'purchase_in_item.percent as percent',
                     DB::raw('sum(purchase_in_item.should_num) as sum_should_num'),
                     DB::raw('sum(purchase_in_item.actual_num) as sum_actual_num'),
                 ])
@@ -169,9 +169,9 @@ class PurchaseInReportController extends Controller
                 ->where('purchase_in_order.review_status', PurchaseInOrderModel::REVIEW_STATUS_OK)
                 ->groupBy(
                     'purchase_in_order.supplier_id',
-                    'purchase_in_item.sku_id'
-//                    'purchase_in_item.standard',
-//                    'purchase_in_item.percent'
+                    'purchase_in_item.sku_id',
+                    'purchase_in_item.standard',
+                    'purchase_in_item.percent'
                 );
 
             $grid->column('supplier_id', '供应商')->display(function ($val) {

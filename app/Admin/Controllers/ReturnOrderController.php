@@ -18,6 +18,8 @@ use App\Admin\Actions\Grid\Statement;
 use App\Admin\Renderables\ReturnOrderExpend;
 use App\Admin\Repositories\ReturnOrder;
 use App\Models\CustomerModel;
+use App\Models\ProductModel;
+use App\Models\ProductSkuModel;
 use App\Models\PurchaseOrderModel;
 use App\Models\ReturnOrderModel;
 use App\Models\SaleOrderModel;
@@ -43,7 +45,9 @@ class ReturnOrderController extends AdminController
             $grid->column('batch_no',__('batch_no'))->emp();
 
             $grid->column('other_no',__('other_no'))->emp();
-            $grid->column('sku_id',__('item_no'))->expand(function (){
+            $grid->column('sku_id',__('item_no'))->display(function ($id){
+                return ProductModel::whereId(ProductSkuModel::whereId($id)->first()->product_id)->first()->item_no;
+            })->expand(function (){
                 return ReturnOrderExpend::make(['sku_id' => $this->sku_id]);
             })->emp();
             $grid->column('num',__('return_num'))->emp();
@@ -77,6 +81,16 @@ class ReturnOrderController extends AdminController
             $grid->disableCreateButton();
             $grid->disableDeleteButton();
             $grid->disableActions();
+            $grid->export()->xlsx()
+            ->rows(function ($rows){
+                foreach ($rows as $index => &$row) {
+                    $type = [0=>__('purchase_order'),1=>__('sale_order')];
+                    $row['sku_id']=ProductModel::whereId(ProductSkuModel::whereId($row['sku_id'])->first()->product_id)->first()->item_no;
+                    $row['return_type']=$type[$row['return_type']];
+                }
+
+                return $rows;
+            });
         });
     }
 

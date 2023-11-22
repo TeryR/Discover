@@ -17,6 +17,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Renderables\SkuStockBatchTable;
 use App\Admin\Repositories\SkuStock;
 use App\Models\SkuStockBatchModel;
+use App\Models\SkuStockModel;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Http\Controllers\AdminController;
 use Illuminate\Database\Eloquent\Builder;
@@ -48,6 +49,7 @@ class SkuStockController extends AdminController
 //                dump(SkuStockBatchTable::make(['sku_id' => $this->sku_id]));
                 return SkuStockBatchTable::make(['sku_id' => $this->sku_id]);
             });
+            total($grid,SkuStockModel::class,'总数量','batch_num');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
             $grid->disableRowSelector();

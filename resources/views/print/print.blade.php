@@ -35,7 +35,7 @@
     @foreach($orders as $order)
         <div class="card ">
             <table class="table table-bordered">
-                <i class="postImg"><img src="{{store_order_img($order->review_status)}}"/></i>
+{{--                <i class="postImg"><img src="{{store_order_img($order->review_status)}}"/></i>--}}
 
                 <caption class="text-center"><h3>{{ $orderName }}</h3></caption>
                 <thead>

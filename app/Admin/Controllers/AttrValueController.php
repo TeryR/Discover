@@ -29,9 +29,11 @@ class AttrValueController extends AdminController
     protected function grid()
     {
         return Grid::make(new AttrValue(), function (Grid $grid) {
+
+
             $grid->column('id')->sortable();
-            $grid->column('attr_id');
-            $grid->column('name');
+            $grid->column('attr_id',__('attr_id'));
+            $grid->column('name',__('attr_value_ids'));
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
 
@@ -48,8 +50,8 @@ class AttrValueController extends AdminController
     {
         return Form::make(new AttrValue(), function (Form $form) {
             $form->display('id');
-            $form->text('attr_id');
-            $form->text('name');
+            $form->text('attr_id',__('attr_id'));
+            $form->text('name',__('attr_value_ids'));
 
             $form->display('created_at');
             $form->display('updated_at');

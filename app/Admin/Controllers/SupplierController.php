@@ -22,6 +22,7 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Models\Administrator;
+use Dcat\Admin\Models\Role;
 use Illuminate\Support\Facades\DB;
 
 class SupplierController extends AdminController
@@ -35,14 +36,9 @@ class SupplierController extends AdminController
     protected function grid()
     {
         return Grid::make(new Supplier(), function (Grid $grid) {
-            $grid->column('id')->sortable();
-            $grid->column('link',__('link'))->emp();
-            $grid->column('name',__('name'))->emp();
 
-            $grid->column('pay_method',__('pay_method'))->using(SupplierModel::PAY_METHOD);
-            $grid->column('phone',__('phone'))->emp();
-            $grid->column('other',__('other'))->emp();
-            $grid->column('created_at',__('created_at'));
+            $this->extracted($grid);
+
             $grid->disableDeleteButton();
             $grid->filter(function (Grid\Filter $filter) {
             });
@@ -52,14 +48,7 @@ class SupplierController extends AdminController
     protected function iFrameGrid()
     {
         return Grid::make(new Supplier(), function (Grid $grid) {
-            $grid->column('id')->sortable();
-            $grid->column('link',__('link'))->emp();
-            $grid->column('name',__('name'))->emp();
-
-            $grid->column('pay_method',__('pay_method'))->using(SupplierModel::PAY_METHOD);
-            $grid->column('phone',__('phone'))->emp();
-            $grid->column('other',__('other'))->emp();
-            $grid->column('created_at',__('created_at'));
+            $this->extracted($grid);
             $grid->tools(Statement::make());
 
             $grid->disableCreateButton();
@@ -79,6 +68,7 @@ class SupplierController extends AdminController
             $form->row(function (Form\Row $row) use ($form){
                 $row->hidden('link');
                 $row->hidden('name');
+                $row->hidden('code',__('supplier_code'));
                 $row->text('link_zh',__('link_zh'))->required();
                 $row->text('link_ko',__('link_ko'))->required();
                 $row->text('name_zh',__('name_zh'))->required();
@@ -87,7 +77,7 @@ class SupplierController extends AdminController
             // $form->text('link',__('link'))->required();
             $form->row(function (Form\Row $row) use ($form){
                 $row->select('pay_method',__('pay_method'))->options(SupplierModel::PAY_METHOD)->default(0)->required();
-                $row->text('phone',__('phone'))->rules('phone:CN,mobile')->required();
+                $row->text('phone',__('phone'))->required();
                 $row->text('other',__('other'))->saveAsString();
             });
 
@@ -98,7 +88,7 @@ class SupplierController extends AdminController
                 $name_ko = $form->name_ko;
                 $name = $name_zh.'__'.$name_ko;
 
-
+                $form->code=build_supplier_code($name_zh);
                 $form->name = $name;
                 $form->deleteInput('name_zh');
                 $form->deleteInput('name_ko');
@@ -117,7 +107,9 @@ class SupplierController extends AdminController
                     $data=[
                         'username'=>$form->phone,
                         'password'=>bcrypt($form->phone),
-                        'name'=>$form->name
+                        'name'=>$form->name,
+                        'created_at'=>date('Y-m-d H:i:s'),
+                        'updated_at'=>date('Y-m-d H:i:s')
                     ];
                     $userId=DB::table('admin_users')->insertGetId($data);
                     DB::table('admin_role_users')->insert(['role_id'=>3,'user_id'=>$userId]);
@@ -125,5 +117,29 @@ class SupplierController extends AdminController
             });
             });
         });
+    }
+
+    /**
+     * @param Grid $grid
+     * @return void
+     */
+    protected function extracted(Grid $grid): void
+    {
+        if (is_warehouse_management() || is_representative()) {
+//                dump(Admin::user()->roles->toArray());
+            $grid->column('id')->sortable();
+            $grid->column('code', __('code'))->emp();
+            $grid->disableCreateButton();
+        } else {
+//            dump(is_representative());
+            $grid->column('id')->sortable();
+            $grid->column('link', __('link'))->emp();
+            $grid->column('code', __('code'))->emp();
+            $grid->column('name', __('name'))->emp();
+            $grid->column('pay_method', __('pay_method'))->using(SupplierModel::PAY_METHOD);
+            $grid->column('phone', __('phone'))->emp();
+            $grid->column('other', __('other'))->emp();
+            $grid->column('created_at', __('created_at'));
+        }
     }
 }

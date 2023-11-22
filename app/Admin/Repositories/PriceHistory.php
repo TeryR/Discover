@@ -12,19 +12,17 @@
  * // +----------------------------------------------------------------------
  */
 
-return [
-    'labels' => [
-        'PurchaseInOrder' => '采购入库单/입고표',
-    ],
+namespace App\Admin\Repositories;
 
-    'fields' => [
-        'order_no' => __('order_no'),
-        'created_at' => __('created_at'),
-//        'status_str' => '单据状态',
-        'with_order.order_no' => __('with_order.order_no'),
-        'supplier.name' => __('supplier.name'),
-        'other' => __('other'),
-    ],
-    'options' => [
-    ],
-];
+use App\Models\PriceHistoryModel as Model;
+use Dcat\Admin\Repositories\EloquentRepository;
+
+class PriceHistory extends EloquentRepository
+{
+    /**
+     * Model.
+     *
+     * @var string
+     */
+    protected $eloquentClass = Model::class;
+}

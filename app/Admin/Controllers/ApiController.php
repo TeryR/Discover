@@ -17,7 +17,10 @@ namespace App\Admin\Controllers;
 use App\Admin\Repositories\Customer;
 use App\Http\Requests\WithOrderRequest;
 use App\Http\Resources\ProductResource;
+use App\Models\ProductModel;
+use App\Models\ProductSkuModel;
 use App\Models\PurchaseInItemModel;
+use App\Models\SkuStockBatchModel;
 use App\Repositories\AttrValueRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\StockHistoryRepository;
@@ -65,6 +68,7 @@ class ApiController extends Controller
     public function getProductInfo(Request $request, ProductRepository $repository): ProductResource
     {
         $product_id = $request->get('q');
+//        dump(ProductResource::make($repository->getInfoById($product_id)));
         return ProductResource::make($repository->getInfoById($product_id));
     }
     public function getBatchNoFromPurchaseInNo(Request $request, StockHistoryRepository $repository){
@@ -106,9 +110,20 @@ class ApiController extends Controller
         $data        = $customer->draweeIdText($customer_id)->textIdtoArray('id', 'name');
         return Response::json($data);
     }
-//    public function editPurchaseInItemPosition($purchaseInOrdersId,$purchaseInItemId,Request $request):void
-//    {
-//        $res= PurchaseInItemModel::whereOrderId($purchaseInOrdersId)->where('id','=',$purchaseInItemId)->update(['position_id'=>$request->get('position_id')]);
-//
-//    }
+    public function getMoreProductInfo(Request $request,ProductRepository $repository)
+    {
+        $sku_id=$request->get('q');
+        $product_id=ProductSkuModel::whereId($sku_id)->first()->product_id;
+        $can_sale = SkuStockBatchModel::whereSkuId($sku_id)->sum('num');
+        $price = ProductModel::whereId($product_id)->first()->price;
+//        $batch_no = SkuStockBatchModel::whereSkuId($sku_id)->pluck('batch_no','id')->toArray();
+        return ProductResource::make($repository->getInfoById($product_id))->additional([
+            'data'=>[
+                'can_sale_num'=>$can_sale,
+                'price'=>$price
+            ]
+        ]);
+
+    }
+
 }

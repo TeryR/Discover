@@ -25,6 +25,6 @@ class SupplierRepository extends BaseRepository
      */
     public static function pluck():Collection
     {
-        return SupplierModel::orderBy('id', 'desc')->pluck('name', 'id');
+        return SupplierModel::orderBy('id', 'desc')->pluck('code', 'id');
     }
 }

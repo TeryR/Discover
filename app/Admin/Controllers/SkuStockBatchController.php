@@ -80,7 +80,7 @@ class SkuStockBatchController extends AdminController
                 return bcmul($this->num, $this->cost_price, 2);
             });
             $grid->column('position.name', __('position.name'));
-            $grid->column('msrp',__('msrp'));
+//            $grid->column('msrp',__('msrp'));
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->where("product_name", function (Builder $query) {
                     $query->whereHasIn("sku.product", function (Builder $query) {
@@ -133,6 +133,7 @@ class SkuStockBatchController extends AdminController
 //             $grid->disableActions();
             $grid->disableCreateButton();
             $grid->export()->xlsx();
+
             if (get_user_role_id()==3) {
                 $rk_id = PurchaseInOrderModel::query()->where('supplier_id',get_supplier_id())->value('order_no');
 //                dump($rk_id);

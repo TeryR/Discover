@@ -72,7 +72,7 @@ class CustomerController extends AdminController
             $form->text('other')->required();
             $form->select('pay_method')->options(CustomerModel::PAY)->default(0)->required();
             $form->mobile('phone')->required();
-            $form->multipleSelect('drawee', '付款人')->options($form->repository()->drawee())->customFormat(function (array $v) {
+            $form->multipleSelect('drawee', __('drawee.name'))->options($form->repository()->drawee())->customFormat(function (array $v) {
                 return array_column($v, 'id');
             });
             $form->hasMany('address', '客户地址', function (Form\NestedForm $form) {

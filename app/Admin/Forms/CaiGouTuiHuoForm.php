@@ -39,7 +39,7 @@ use Dcat\Admin\Widgets\Form;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
-class TuiHuoForm extends Form implements LazyRenderable
+class CaiGouTuiHuoForm extends Form implements LazyRenderable
 {
     use LazyWidget;
     /**
@@ -88,52 +88,53 @@ class TuiHuoForm extends Form implements LazyRenderable
                     'batch_no'=>$input['batch_no']
                 ]);
 //                DB::rollBack();
-            }elseif($input['return_type']==1&&$input['sale_order']!="——"){
-                $type=1;
-                $return_num=$input['can_return_sale_num']-$input['operate_num'];
-//                dump($return_num,$input['can_return_sale_num']);
-                if ($return_num<0&&$input['can_return_sale_num']!=0){
-//                    dump($return_num,$input['can_return_sale_num']);
-                    return $this->response()->warning('可退数量不足');
-                }
-                $current_num=$input['sku_current_num']+$input['operate_num'];
-                SkuStockModel::query()->where(['sku_id'=>$input['sku_id']])->update(['num'=>$current_num]);
-                $sale_price=SaleOutItemModel::query()->where('sku_id',$input['sku_id']);
-                $sale_item_id=SaleOutItemModel::query()->join('sale_out_order','sale_out_order.id','=','order_id')
-                    ->where('sku_id',$input['sku_id'])
-                    ->where('sale_out_order.order_no',$input['sale_order'])->first()->id;
-//                    ->update(['stock_num'=>$return_num]);
-                SaleOutBatchModel::query()->where('stock_batch_id',SkuStockBatchModel::whereBatchNo($input['batch_no'])->first()->id)
-                    ->where('item_id',$sale_item_id)->update(['return_stock_num'=>$return_num]);
-                $returnOrder=ReturnOrderModel::query()->create([
-                    'order_no'=>'TH'.date('Ymd').rand(1000,9999),
-                    'batch_no'=>$input['batch_no'],
-                    'other_no'=>$input['sale_order'],
-                    'sku_id'=>$input['sku_id'],
-                    'num'=>$input['operate_num'],
-                    'price'=>$input['cost_price'],
-                    'return_type'=>$input['return_type']
-                ]);
-                StockHistoryModel::query()->create([
-                    'sku_id'=>$input['sku_id'],
-             'in_position_id'=>$input['position_id'],
-                    'out_position_id'=>0,
-                    'cost_price'=>$input['cost_price'],
-                    'type'=>StockHistoryModel::IN_STOCK_SALE,
-                    'flag'=>StockHistoryModel::IN,
-                    'with_order_no'=>$returnOrder->order_no,
-                    'init_num'=>StockHistoryModel::query()->where('sku_id',$input['sku_id'])->orderByDesc('id')->first()->balance_num,
-                    'in_num'=>$input['operate_num'],
-                    'in_price'=>$input['cost_price'],
-                    'out_num'=>0,
-                    'out_price'=>0,
-
-                    'balance_num'=>StockHistoryModel::query()->where('sku_id',$input['sku_id'])->orderByDesc('id')->first()->balance_num+$input['operate_num'],
-                    'user_id'=>Admin::user()->id,
-                    'batch_no'=>$input['batch_no']
-                ]);
-//                DB::rollBack();
-            }else{
+            }
+//            elseif($input['return_type']==1&&$input['sale_order']!="——"){
+//                $type=1;
+//                $return_num=$input['can_return_sale_num']-$input['operate_num'];
+////                dump($return_num,$input['can_return_sale_num']);
+//                if ($return_num<0&&$input['can_return_sale_num']!=0){
+//                    return $this->response()->warning('可退数量不足');
+//                }
+//                $current_num=$input['sku_current_num']+$input['operate_num'];
+//                SkuStockModel::query()->where(['sku_id'=>$input['sku_id']])->update(['num'=>$current_num]);
+//                $sale_price=SaleOutItemModel::query()->where('sku_id',$input['sku_id']);
+//                $sale_item_id=SaleOutItemModel::query()->join('sale_out_order','sale_out_order.id','=','order_id')
+//                    ->where('sku_id',$input['sku_id'])
+//                    ->where('sale_out_order.order_no',$input['sale_order'])->first()->id;
+////                    ->update(['stock_num'=>$return_num]);
+//                SaleOutBatchModel::query()->where('stock_batch_id',SkuStockBatchModel::whereBatchNo($input['batch_no'])->first()->id)
+//                    ->where('item_id',$sale_item_id)->update(['return_stock_num'=>$return_num]);
+//                $returnOrder=ReturnOrderModel::query()->create([
+//                    'order_no'=>'TH'.date('Ymd').rand(1000,9999),
+//                    'batch_no'=>$input['batch_no'],
+//                    'other_no'=>$input['sale_order'],
+//                    'sku_id'=>$input['sku_id'],
+//                    'num'=>$input['operate_num'],
+//                    'price'=>$input['cost_price'],
+//                    'return_type'=>$input['return_type']
+//                ]);
+//                StockHistoryModel::query()->create([
+//                    'sku_id'=>$input['sku_id'],
+//             'in_position_id'=>$input['position_id'],
+//                    'out_position_id'=>0,
+//                    'cost_price'=>$input['cost_price'],
+//                    'type'=>StockHistoryModel::IN_STOCK_SALE,
+//                    'flag'=>StockHistoryModel::IN,
+//                    'with_order_no'=>$returnOrder->order_no,
+//                    'init_num'=>StockHistoryModel::query()->where('sku_id',$input['sku_id'])->orderByDesc('id')->first()->balance_num,
+//                    'in_num'=>$input['operate_num'],
+//                    'in_price'=>$input['cost_price'],
+//                    'out_num'=>0,
+//                    'out_price'=>0,
+//
+//                    'balance_num'=>StockHistoryModel::query()->where('sku_id',$input['sku_id'])->orderByDesc('id')->first()->balance_num+$input['operate_num'],
+//                    'user_id'=>Admin::user()->id,
+//                    'batch_no'=>$input['batch_no']
+//                ]);
+////                DB::rollBack();
+//            }
+            else{
                 return $this->response()->warning('该类型没有可用明细');
             }
 
@@ -192,81 +193,81 @@ class TuiHuoForm extends Form implements LazyRenderable
                         }
                         return $purchase_id;
                     })->readOnly();
-                    $new=[];
-                    $with_order_no=StockHistoryModel::query()->where('batch_no',$skuStockBatch->batch_no)
-                        ->where('sku_id',$skuStockBatch->sku->id)
-                        ->where('type',6)
-                        ->where('flag',0)
-                        ->get()->toArray();
-                    if(!empty($with_order_no)){
-
-
-                    $res=$with_order_no[0]['with_order_no'];
-                    foreach ($with_order_no as $item)
-                        $res.=','.$item['with_order_no'];
-
-                    $res=explode(',',$res);
-                    array_shift($res);
-                    $id=SaleOutOrderModel::query()->whereIn('order_no',$res)->get('id')->toArray();
-//                    dump($id);
-                    $shengyu =SaleOutItemModel::query()
-                        ->join('sale_out_order','sale_out_order.id','=','order_id')
-                        ->whereIn('order_id',$id)
-                        ->select('order_no','stock_num')
-                        ->distinct()
-                        ->get();
-                    $shengyu1=SaleOutBatchModel::query()
-                        ->join('sale_out_item','sale_out_item.id','=','item_id')
-                        ->join('sale_out_order','sale_out_order.id','=','sale_out_item.order_id')
-                        ->whereIn('sale_out_item.order_id',$id)
-                        ->where('stock_batch_id',$skuStockBatch->id)
-                        ->select('order_no','sale_out_batch.return_stock_num')
-                        ->distinct()
-                        ->get();
-                    foreach ($shengyu1 as $value){
-
-                        $new[$value['order_no']]=$value['return_stock_num'];
-                    }
-                    $sale_order=$row->width(4)->select('sale_order',__('sale_order'))->options(function ()use($skuStockBatch){
-                        $with_order_no=StockHistoryModel::query()->where('batch_no',$skuStockBatch->batch_no)
-                            ->where('sku_id',$skuStockBatch->sku->id)
-                            ->where('type',6)
-                            ->where('flag',0)
-                            ->get()->toArray();
-                        $res=$with_order_no[0]['with_order_no'];
-                        foreach ($with_order_no as $item)
-                            $res.=','.$item['with_order_no'];
-
-                        $res=explode(',',$res);
-                        array_shift($res);
-                        $newarr=[];
-                        foreach ($res as $key=>$value){
-                            $newarr[$value]=$value;
-                        }
-                        return $newarr;
-                    })->readOnly();
-            $sale_order_arr=json_encode($new);
-            $can_return_sale_num=$row->width(4)->ipt('can_return_sale_num',__('can_return_sale_num'))->default('-')->readOnly();
-//            dump($shengyu);
-            Admin::script(
-                <<<JS
-                        $('{$sale_order->getElementClassSelector()}').on('change',function() {
-                          var a=JSON.stringify($sale_order_arr)
-                          a=JSON.parse(a)
-                            console.log(a[this.value]);
-                          $('{$can_return_sale_num->getElementClassSelector()}').attr('value',a[this.value]);
-                        })
-                   JS
-            );
-                        $row->width(4)->select('return_type',__('return_type'))
-                            ->options([0=>__('purchase_order'),1=>__('sale_order')])
-                            ->default(0);
-                    }
-            else{
-                $row->width(4)->select('return_type',__('return_type'))
-                    ->options([0=>__('purchase_order')])
-                    ->default(0);
-            }
+//                    $new=[];
+//                    $with_order_no=StockHistoryModel::query()->where('batch_no',$skuStockBatch->batch_no)
+//                        ->where('sku_id',$skuStockBatch->sku->id)
+//                        ->where('type',6)
+//                        ->where('flag',0)
+//                        ->get()->toArray();
+//                    if(!empty($with_order_no)){
+//
+//
+//                    $res=$with_order_no[0]['with_order_no'];
+//                    foreach ($with_order_no as $item)
+//                        $res.=','.$item['with_order_no'];
+//
+//                    $res=explode(',',$res);
+//                    array_shift($res);
+//                    $id=SaleOutOrderModel::query()->whereIn('order_no',$res)->get('id')->toArray();
+////                    dump($id);
+//                    $shengyu =SaleOutItemModel::query()
+//                        ->join('sale_out_order','sale_out_order.id','=','order_id')
+//                        ->whereIn('order_id',$id)
+//                        ->select('order_no','stock_num')
+//                        ->distinct()
+//                        ->get();
+//                    $shengyu1=SaleOutBatchModel::query()
+//                        ->join('sale_out_item','sale_out_item.id','=','item_id')
+//                        ->join('sale_out_order','sale_out_order.id','=','sale_out_item.order_id')
+//                        ->whereIn('sale_out_item.order_id',$id)
+//                        ->where('stock_batch_id',$skuStockBatch->id)
+//                        ->select('order_no','sale_out_batch.return_stock_num')
+//                        ->distinct()
+//                        ->get();
+//                    foreach ($shengyu1 as $value){
+//
+//                        $new[$value['order_no']]=$value['return_stock_num'];
+//                    }
+//                    $sale_order=$row->width(4)->select('sale_order',__('sale_order'))->options(function ()use($skuStockBatch){
+//                        $with_order_no=StockHistoryModel::query()->where('batch_no',$skuStockBatch->batch_no)
+//                            ->where('sku_id',$skuStockBatch->sku->id)
+//                            ->where('type',6)
+//                            ->where('flag',0)
+//                            ->get()->toArray();
+//                        $res=$with_order_no[0]['with_order_no'];
+//                        foreach ($with_order_no as $item)
+//                            $res.=','.$item['with_order_no'];
+//
+//                        $res=explode(',',$res);
+//                        array_shift($res);
+//                        $newarr=[];
+//                        foreach ($res as $key=>$value){
+//                            $newarr[$value]=$value;
+//                        }
+//                        return $newarr;
+//                    })->readOnly();
+//            $sale_order_arr=json_encode($new);
+//            $can_return_sale_num=$row->width(4)->ipt('can_return_sale_num',__('can_return_sale_num'))->default('-')->readOnly();
+////            dump($shengyu);
+//            Admin::script(
+//                <<<JS
+//                        $('{$sale_order->getElementClassSelector()}').on('change',function() {
+//                          var a=JSON.stringify($sale_order_arr)
+//                          a=JSON.parse(a)
+//                            console.log(a[this.value]);
+//                          $('{$can_return_sale_num->getElementClassSelector()}').attr('value',a[this.value]);
+//                        })
+//                   JS
+//            );
+//                        $row->width(4)->select('return_type',__('return_type'))
+//                            ->options([0=>__('purchase_order'),1=>__('sale_order')])
+//                            ->default(0);
+//                    }
+//            else{
+//                $row->width(4)->select('return_type',__('return_type'))
+//                    ->options([0=>__('purchase_order')])
+//                    ->default(0);
+//            }
             $row->width(4)->hidden('sku_id')->default($skuStockBatch->sku_id);
             $row->width(4)->hidden('id')->default($skuStockBatch->id);
             $row->width(4)->hidden('position_id')->default($skuStockBatch->position_id);

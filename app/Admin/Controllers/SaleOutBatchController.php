@@ -53,9 +53,9 @@ class SaleOutBatchController extends AdminController
             $grid->column('actual_num', __('#sale_actual_num'))->if(function () use ($order) {
                 return $order->review_status !== SaleOutOrderModel::REVIEW_STATUS_OK;
             })->edit();
-            $grid->column('stock_batch.cost_price', '成本价格');
-            $grid->column('stock_batch.batch_no', '批次');
-            $grid->column('stock_batch.position.name', '库位');
+            $grid->column('stock_batch.cost_price', __('purchase.price'));
+            $grid->column('stock_batch.batch_no', __('batch_no'));
+            $grid->column('stock_batch.position.name', __('position_id'));
             $grid->disableCreateButton();
             $grid->disableActions();
 

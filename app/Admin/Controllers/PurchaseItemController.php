@@ -34,7 +34,7 @@ class PurchaseItemController extends AdminController
             $grid->column('order_id');
             $grid->column('price');
             $grid->column('should_num');
-            $grid->column('msrp',__('msrp'));
+//            $grid->column('msrp',__('msrp'));
             $grid->column('sku_id');
             $grid->column('created_at');
 //            $grid->column('percent');

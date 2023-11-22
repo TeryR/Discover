@@ -319,7 +319,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 22,
                 'order'         => 24,
-                'title'         => '付款人信息/지불자 정보',
+                'title'         => '店铺信息/점포 정보',
                 'icon'          => '',
                 'uri'           => 'drawees',
                 'created_at'    => $createdAt,
@@ -327,7 +327,7 @@ class InitSeeder extends Seeder
             [
                 'parent_id'     => 22,
                 'order'         => 25,
-                'title'         => '客户要货单/고객 주문서',
+                'title'         => '客户订单/고객 주문서',
                 'icon'          => '',
                 'uri'           => 'sale-orders',
                 'created_at'    => $createdAt,

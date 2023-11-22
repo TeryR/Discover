@@ -31,8 +31,8 @@ class AttrValue extends LazyRenderable
             ];
         })->toArray();
         $titles = [
-            '序号',
-            '值名称',
+            'ID',
+            __('attr_value_ids'),
         ];
         return Table::make($titles, $data);
     }

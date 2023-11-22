@@ -41,7 +41,13 @@ class SaleOutOrderController extends OrderController
     {
         return Grid::make(new SaleOutOrder(['customer', 'user']), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('customer.name', __('customer.name'));
+//            $grid->actions(function (Grid\Displayers\Actions $actions)use($grid){
+//                $grid->column('customer.name', __('customer.name'))->display(function ()use($actions){
+//                $info=SaleOrderModel::whereId($actions->row->with_order)->first()->customer_info;
+//                return $info;
+//            });
+//            });
+
 
             $grid->column('order_no',__('order_no'));
             $grid->column('other',__('other'))->emp();
@@ -75,10 +81,10 @@ class SaleOutOrderController extends OrderController
             $review_status_ok = $this->oredr_model::REVIEW_STATUS_OK;
             if ($order && $order->review_status === $review_status_ok) {
                 $row->width(6)->select('status',__('status'))->options(SaleOutOrderModel::STATUS)->default($this->oredr_model::STATUS_SEND)->required();
-                $row->width(6)->select('with_id',__('with_id'))->options(SaleOrderModel::query()->pluck('order_no', 'id'))->disable();
+                $row->width(6)->select('with_id',__('with_order_no'))->options(SaleOrderModel::query()->pluck('order_no', 'id'))->disable();
             } else {
                 $row->width(6)->select('status',__('status'))->options([$this->oredr_model::STATUS_SEND => '已发送'])->default($this->oredr_model::STATUS_SEND)->required();
-                $row->width(6)->select('with_id',__('with_id'))->options($with_order)->default(0)->required()->with_order();
+                $row->width(6)->select('with_id',__('with_order_no'))->options($with_order)->default(0)->required()->with_order();
             }
         });
         $customer = $form->repository()->customer();
@@ -101,7 +107,7 @@ class SaleOutOrderController extends OrderController
         $order = $this->order;
         $grid->column('sku.product.name',__('sku.product.name'));
         $grid->column('sku.product.unit.name',__('sku.product.unit.name'));
-        // $grid->column('sku.product.type_str', '类型');
+         $grid->column('sku.product.type_str', __('type'));
 //         $grid->column('sku_id', '属性')->if(function () use ($order) {
 //             return $order->review_status === SaleOutOrderModel::REVIEW_STATUS_OK;
 //         })->display(function () {
@@ -142,6 +148,7 @@ class SaleOutOrderController extends OrderController
 
     protected function creating(Form &$form): void
     {
+
     }
 
     protected function form(): Form

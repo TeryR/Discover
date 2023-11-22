@@ -23,6 +23,7 @@ class Select
     {
         static::loadpku();
         static::with_order();
+        static::loadsale();
     }
 
     protected static function with_order(): void
@@ -89,6 +90,7 @@ JS;
             $unitClass  = static::FIELD_CLASS_PREFIX . 'unit';
             $skuIdClass = static::FIELD_CLASS_PREFIX . 'sku_id';
             $typeClass  = static::FIELD_CLASS_PREFIX . 'type';
+            $packageClass=static::FIELD_CLASS_PREFIX . 'package';
 
             $script = <<<JS
 $(document).off('change', "{$this->getElementClassSelector()}");
@@ -96,7 +98,7 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
      var unit = $(this).closest('.fields-group').find(".$unitClass");
      var sku_id = $(this).closest('.fields-group').find(".$skuIdClass");
      var type = $(this).closest('.fields-group').find(".$typeClass");
-
+    var packageClass = $(this).closest('.fields-group').find(".$packageClass");
 
     if (String(this.value) !== '0' && ! this.value) {
         return;
@@ -106,7 +108,58 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
         unit.val(data.data.unit);
         type.val(data.data.type_str);
         sku_id.find("option").remove();
+        packageClass.val(data.data.package);
 
+        $(sku_id).select2({
+            data: $.map(data.data.product_attr, function (d) {
+                d.id = d.id;
+                d.text = d.text;
+                return d;
+            })
+        }).val(sku_id.attr('data-value')).trigger('change');
+    });
+});
+$("{$this->getElementClassSelector()}").trigger('change');
+JS;
+
+            Admin::script($script);
+
+            return $this;
+        });
+    }
+    protected static function loadsale(): void
+    {
+        // 加载pku动态选择
+        Form\Field\Select::macro('loadsale', function ($sourceUrl) {
+            $sourceUrl  = admin_url($sourceUrl);
+            $unitClass  = static::FIELD_CLASS_PREFIX . 'unit';
+            $skuIdClass = static::FIELD_CLASS_PREFIX . 'sku_id';
+            $typeClass  = static::FIELD_CLASS_PREFIX . 'type';
+            $packageClass=static::FIELD_CLASS_PREFIX . 'package';
+            $cansalenumClass=static::FIELD_CLASS_PREFIX . 'can_sale_num';
+            $priceClass = static::FIELD_CLASS_PREFIX . 'price';
+
+                $script = <<<JS
+$(document).off('change', "{$this->getElementClassSelector()}");
+$(document).on('change', "{$this->getElementClassSelector()}", function () {
+     var unit = $(this).closest('.fields-group').find(".$unitClass");
+     var sku_id = $(this).closest('.fields-group').find(".$skuIdClass");
+     var type = $(this).closest('.fields-group').find(".$typeClass");
+    var packageClass = $(this).closest('.fields-group').find(".$packageClass");
+    var cansalenum = $(this).closest('.fields-group').find(".$cansalenumClass");
+    var price = $(this).closest('.fields-group').find(".$priceClass");
+
+    if (String(this.value) !== '0' && ! this.value) {
+        return;
+    }
+
+    $.ajax("$sourceUrl?q="+this.value).then(function (data) {
+        unit.val(data.data.unit);
+        type.val(data.data.type_str);
+        sku_id.find("option").remove();
+        packageClass.val(data.data.package);
+        cansalenum.val(data.data.can_sale_num);
+        price.val(data.data.price)
         $(sku_id).select2({
             data: $.map(data.data.product_attr, function (d) {
                 d.id = d.id;

@@ -38,6 +38,7 @@ class SaleOrderObserver
      */
     public function updated(SaleOrderModel $saleOrderModel)
     {
+//        dump($saleOrderModel);
         //
     }
 
@@ -64,7 +65,7 @@ class SaleOrderObserver
     }
 
     /**
-     * Handle the sale order model "force deleted" event.
+     *  Handle the sale order model "force deleted" event.
      *
      * @param  \App\Models\SaleOrderModel  $saleOrderModel
      * @return void
@@ -76,6 +77,7 @@ class SaleOrderObserver
 
     public function creating(SaleOrderModel $saleOrderModel)
     {
+//        dump($saleOrderModel);
         $saleOrderModel->user_id = Admin::user()->id;
     }
 }
